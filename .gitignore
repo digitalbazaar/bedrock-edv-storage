@@ -1,0 +1,9 @@
+*.log
+*.sw[nop]
+*~
+.project
+.settings
+TAGS
+coverage
+node_modules
+reports
