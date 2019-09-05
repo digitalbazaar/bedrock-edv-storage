@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 0.1.0 - 2019-09-xx
+## 1.0.0 - 2019-09-05
 
 ### Added
 - Added core files.
