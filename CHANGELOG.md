@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 1.1.0 - 2020-01-xx
+## 1.1.0 - 2020-01-10
 
 ### Added
 - Support zcaps for document collections and delegation by non-root
