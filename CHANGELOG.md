@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 1.1.1 - 2020-01-xx
+## 1.1.1 - 2020-01-11
 
 ### Fixed
 - Fix CORS support for queries.
