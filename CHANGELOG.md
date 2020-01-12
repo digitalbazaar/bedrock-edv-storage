@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 1.1.3 - 2020-01-xx
+
+### Fixed
+- Ensure local zcap storage is checked for invoked zcaps.
+
 ## 1.1.2 - 2020-01-12
 
 ### Fixed
