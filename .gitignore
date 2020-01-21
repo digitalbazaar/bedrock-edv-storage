@@ -3,6 +3,7 @@
 *~
 .project
 .settings
+.vscode
 TAGS
 coverage
 node_modules
