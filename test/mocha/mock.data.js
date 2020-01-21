@@ -20,7 +20,8 @@ accounts[email].account = helpers.createAccount(email);
 accounts[email].meta = {};
 accounts[email].meta.sysResourceRole = [{
   sysRole: 'bedrock-account.regular',
-  generateResource: 'id'
+  // FIXME: had to enable admin rights to create keyStore
+  // generateResource: 'id'
 }];
 
 data.baseUrl = config.server.baseUri;
@@ -34,10 +35,11 @@ data.config = {
     id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
     type: 'X25519KeyAgreementKey2019',
   },
-  "kek": {
-    "id": `${data.baseUrl}/${keyStore}/keys/z19rREpJY9J14W53mvhGHaTJo`,
-    "type": "AesKeyWrappingKey2019"
-  },
+  // FIXME: schema does not allow kek, oversight?
+  // "kek": {
+  //   "id": `${data.baseUrl}/${keyStore}/keys/z19rREpJY9J14W53mvhGHaTJo`,
+  //   "type": "AesKeyWrappingKey2019"
+  // },
   "hmac": {
     "id": `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
     "type": "Sha256HmacKey2019"
@@ -45,7 +47,7 @@ data.config = {
 };
 
 data.doc1 = {
-  "id": "foo",
+  "id": "z1ABxUcbcnSyMtnenFmeARhUn",
   "sequence": 0,
   "indexed": [
     {
@@ -76,7 +78,7 @@ data.doc1 = {
 };
 
 data.doc2 = {
-  "id": "foo2",
+  "id": "z19pjdSMQMkBqqJ5zsaagncfU",
   "sequence": 0,
   "indexed": [
     {
@@ -107,7 +109,7 @@ data.doc2 = {
 };
 
 data.docWithAttributes = {
-  "id": "hasAttributes1",
+  "id": "z19pjdSMQMkBqqJ5zsbbgbbbb",
   "sequence": 0,
   "indexed": [
     {
@@ -143,7 +145,7 @@ data.docWithAttributes = {
 };
 
 data.docWithUniqueAttributes = {
-  "id": "hasUniqueAttributes1",
+  "id": "z19pjdSMQMkBqqJ5zsbbgcccc",
   "sequence": 0,
   "indexed": [
     {
@@ -184,7 +186,7 @@ data.docWithUniqueAttributes = {
 };
 
 data.docWithUniqueAttributes2 = {
-  "id": "hasUniqueAttributes2",
+  "id": "z19pjdSMQMkBqqJ5zsbbggggg",
   "sequence": 0,
   "indexed": [
     {
@@ -226,3 +228,32 @@ data.docWithUniqueAttributes2 = {
   }
 };
 /* eslint-enable */
+
+const httpDocs = data.httpDocs = {};
+
+httpDocs.alpha = {
+  id: 'z19pjdSMQMkBqqJ5zsbbaaaaa',
+  content: {
+    apples: 1,
+    oranges: 2,
+    pears: 3,
+  }
+};
+
+httpDocs.beta = {
+  id: 'z19pjdSMQMkBqqJ5zsbbgbeta',
+  content: {
+    apples: 10,
+    oranges: 20,
+    pears: 30,
+  }
+};
+
+httpDocs.gamma = {
+  id: 'z19pjdSMQMkBqqJ5zsbbgcccc',
+  content: {
+    apples: 100,
+    oranges: 200,
+    pears: 300,
+  }
+};

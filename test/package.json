@@ -30,15 +30,24 @@
     "bedrock-did-client": "^1.1.2",
     "bedrock-edv-storage": "file:..",
     "bedrock-express": "^3.1.0",
+    "bedrock-https-agent": "^1.0.1",
     "bedrock-identity": "^7.0.1",
+    "bedrock-jsonld-document-loader": "^1.0.1",
     "bedrock-key": "^5.1.2",
+    "bedrock-kms": "^1.1.0",
+    "bedrock-kms-http": "^1.1.3",
     "bedrock-mongodb": "^6.0.2",
+    "bedrock-package-manager": "^1.0.1",
     "bedrock-passport": "^5.0.2",
     "bedrock-permission": "^2.5.0",
+    "bedrock-security-context": "^3.0.0",
     "bedrock-server": "^2.3.2",
+    "bedrock-ssm-mongodb": "^2.0.0",
     "bedrock-test": "^5.0.0",
     "bedrock-validation": "^4.1.0",
     "bedrock-zcap-storage": "^1.2.0",
-    "uuid-random": "^1.0.6"
+    "edv-client": "^2.1.0",
+    "uuid-random": "^1.0.6",
+    "webkms-client": "^1.1.0"
   }
 }

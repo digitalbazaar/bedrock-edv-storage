@@ -35,3 +35,11 @@ roles['bedrock-account.regular'] = {
     permissions.EDV_CONFIG_REMOVE.id
   ]
 };
+
+config['https-agent'].rejectUnauthorized = false;
+
+config.kms.allowedHost = config.server.host;
+
+// optionally require an authenticated session
+// this option may be set to false when operating behind an authenticated proxy
+config['kms-http'].requireAuthentication = false;
