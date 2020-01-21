@@ -24,6 +24,7 @@ accounts[email].meta.sysResourceRole = [{
 
 data.baseUrl = 'https://bedrock.localhost:18443';
 
+/* eslint-disable quotes, quote-props */
 data.config = {
   "id": `${data.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
   "sequence": 0,
@@ -218,3 +219,4 @@ data.docWithUniqueAttributes2 = {
     "tag": "pfZO0JulJcrc3trOZy8rjA"
   }
 };
+/* eslint-enable */
