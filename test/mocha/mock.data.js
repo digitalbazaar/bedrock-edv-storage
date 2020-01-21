@@ -5,6 +5,7 @@
 
 'use strict';
 
+const {config} = require('bedrock');
 const helpers = require('./helpers');
 
 const data = {};
@@ -22,18 +23,23 @@ accounts[email].meta.sysResourceRole = [{
   generateResource: 'id'
 }];
 
-data.baseUrl = 'https://bedrock.localhost:18443';
+data.baseUrl = config.server.baseUri;
+const keyStore = '/kms/keystores/z19tghrZEvcUY5YAG8tPi33P3';
 
 /* eslint-disable quotes, quote-props */
 data.config = {
   "id": `${data.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
   "sequence": 0,
+  keyAgreementKey: {
+    id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
+    type: 'X25519KeyAgreementKey2019',
+  },
   "kek": {
-    "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+    "id": `${data.baseUrl}/${keyStore}/keys/z19rREpJY9J14W53mvhGHaTJo`,
     "type": "AesKeyWrappingKey2019"
   },
   "hmac": {
-    "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+    "id": `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
     "type": "Sha256HmacKey2019"
   }
 };
