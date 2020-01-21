@@ -25,20 +25,20 @@
   "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
     "axios": "^0.18.0",
-    "bedrock": "^1.12.1",
+    "bedrock": "^3.1.0",
     "bedrock-account": "^2.1.0",
-    "bedrock-edv-storage": "file:..",
     "bedrock-did-client": "^1.1.2",
-    "bedrock-express": "^2.0.8",
-    "bedrock-identity": "^5.0.0",
+    "bedrock-edv-storage": "file:..",
+    "bedrock-express": "^3.1.0",
+    "bedrock-identity": "^7.0.1",
     "bedrock-key": "^5.1.2",
-    "bedrock-passport": "^4.0.2",
+    "bedrock-mongodb": "^6.0.2",
+    "bedrock-passport": "^5.0.2",
     "bedrock-permission": "^2.5.0",
-    "bedrock-mongodb": "^5.1.2",
     "bedrock-server": "^2.3.2",
+    "bedrock-test": "^5.0.0",
     "bedrock-validation": "^4.1.0",
-    "bedrock-test": "^2.0.0",
-    "bedrock-zcap-storage": "^1.0.0",
+    "bedrock-zcap-storage": "^1.2.0",
     "uuid-random": "^1.0.6"
   }
 }
