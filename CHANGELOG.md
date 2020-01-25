@@ -1,5 +1,8 @@
 # bedrock-edv-storage ChangeLog
 
+### Changed
+- Update dependencies.
+
 ## 1.1.3 - 2020-01-12
 
 ### Fixed
