@@ -27,7 +27,7 @@
     "crypto-ld": "^3.5.2",
     "http-signature-zcap-verify": "^2.0.0",
     "jsonld-signatures": "^5.0.0",
-    "ocapld": "^1.6.1"
+    "ocapld": "^1.7.0"
   },
   "peerDependencies": {
     "bedrock": "1.12.1 - 3.x",
