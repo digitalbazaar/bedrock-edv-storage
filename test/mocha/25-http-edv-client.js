@@ -4,13 +4,6 @@
 'use strict';
 
 require('bedrock-edv-storage');
-const https = require('https');
-// allow self-signed cert for tests
-const axios = require('axios').create({
-  httpsAgent: new https.Agent({
-    rejectUnauthorized: false
-  })
-});
 const bedrock = require('bedrock');
 const brHttpsAgent = require('bedrock-https-agent');
 const {util: {clone}} = bedrock;
@@ -18,13 +11,10 @@ const {config} = bedrock;
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {EdvClient} = require('edv-client');
-const {ControllerKey, KmsClient} = require('webkms-client');
+const {CapabilityAgent} = require('webkms-client');
 let actors;
 let accounts;
 let urls;
-
-const KMS_MODULE = 'ssm-v1';
-const DEFAULT_HEADERS = {Accept: 'application/ld+json, application/json'};
 
 // auto-pass authentication checks
 const brPassport = require('bedrock-passport');
@@ -61,24 +51,20 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
       const handle = 'testKey1';
 
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
 
-      const controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-
-      const keystore = await _createKeystore({controllerKey});
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
       // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
+      // controllerKey.kmsClient.keystore = keystore.id;
 
       let edvClient;
       let edvConfig;
       let err;
       try {
-        ({edvClient, edvConfig} = await _createEdv({controllerKey}));
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {capabilityAgent, keystoreAgent, urls}));
       } catch(e) {
         err = e;
       }
@@ -125,22 +111,18 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `insertConfig`
 
   describe('insert API', () => {
-    let controllerKey;
+    let capabilityAgent;
     let edvClient;
 
     before(async () => {
       const secret = '40762a17-1696-428f-a2b2-ddf9fe9b4987';
       const handle = 'testKey2';
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
-      controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-      const keystore = await _createKeystore({controllerKey});
-      // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
-      ({edvClient} = await _createEdv({controllerKey}));
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      ({edvClient} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls}));
     });
     it('should insert a document', async () => {
       let result;
@@ -148,7 +130,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc: mockData.httpDocs.alpha,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -175,7 +157,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc: mockData.httpDocs.beta,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -197,7 +179,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should return error on duplicate document', async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.gamma,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
 
       // attempt to insert gamma again
@@ -206,7 +188,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc: mockData.httpDocs.gamma,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -218,22 +200,18 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `insert`
 
   describe('update', () => {
-    let controllerKey;
+    let capabilityAgent;
     let edvClient;
 
     before(async () => {
       const secret = '9c727b65-8553-4275-9ac3-0ac89396efc0';
       const handle = 'testKey3';
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
-      controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-      const keystore = await _createKeystore({controllerKey});
-      // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
-      ({edvClient} = await _createEdv({controllerKey}));
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      ({edvClient} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls}));
     });
     it('should upsert a document', async () => {
       let result;
@@ -241,7 +219,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.update({
           doc: mockData.httpDocs.alpha,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -260,7 +238,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const firstDoc = clone(mockData.httpDocs.beta);
       const insertResult = await edvClient.insert({
         doc: firstDoc,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
 
       insertResult.content.apples = 1000;
@@ -270,7 +248,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.update({
           doc: insertResult,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -287,27 +265,23 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `update`
 
   describe('get', () => {
-    let controllerKey;
+    let capabilityAgent;
     let edvClient;
 
     before(async () => {
       const secret = '6f799a67-45ec-4bc7-960c-c2b79a3c0216';
       const handle = 'testKey4';
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
-      controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-      const keystore = await _createKeystore({controllerKey});
-      // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
-      ({edvClient} = await _createEdv({controllerKey}));
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      ({edvClient} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
     });
     it('should get a document', async () => {
@@ -316,7 +290,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -337,7 +311,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.get({
           id: 'does-not-exist',
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -355,7 +329,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result = await edvClient.get({
           // does not exist
           id: 'z1ABxUcbcnSyMtnenFmeARhxx',
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -367,22 +341,18 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `get`
 
   describe('find', () => {
-    let controllerKey;
+    let capabilityAgent;
     let edvClient;
 
     before(async () => {
       const secret = '6bc1fdf9-d454-4853-b776-3641314aa3b8';
       const handle = 'testKey5';
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
-      controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-      const keystore = await _createKeystore({controllerKey});
-      // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
-      ({edvClient} = await _createEdv({controllerKey}));
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      ({edvClient} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       // instruct client to index documents
@@ -390,12 +360,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
 
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.beta,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
     });
     it('should get a document by attribute', async () => {
@@ -406,7 +376,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           has: ['content.apples'],
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -428,7 +398,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -445,7 +415,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           equals: [{'content.foo': 'does-not-exist'}],
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -457,27 +427,23 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `find`
 
   describe('delete', () => {
-    let controllerKey;
+    let capabilityAgent;
     let edvClient;
 
     before(async () => {
       const secret = 'bbe5e472-f8ff-4ea8-8004-f04a63d641e6';
       const handle = 'testKey6';
-      const {httpsAgent} = brHttpsAgent;
-      // keystore in the kmsClient is set later
-      const kmsClient = new KmsClient({httpsAgent});
-      controllerKey = await ControllerKey.fromSecret({
-        secret, handle, kmsClient
-      });
-      const keystore = await _createKeystore({controllerKey});
-      // set the keystore in the kmsClient to the newly created store
-      controllerKey.kmsClient.keystore = keystore.id;
-      ({edvClient} = await _createEdv({controllerKey}));
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      ({edvClient} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: controllerKey,
+        invocationSigner: capabilityAgent.getSigner(),
       });
     });
     it('should delete a document', async () => {
@@ -486,7 +452,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.delete({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -500,7 +466,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         getResult = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -516,7 +482,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result = await edvClient.delete({
           // does not exist
           id: 'z1ABxUcbcnSyMtnenFmeARhxx',
-          invocationSigner: controllerKey,
+          invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
         err = e;
@@ -527,72 +493,3 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
   }); // end `delete`
 }); // end bedrock-edv-storage
-
-async function _createEdv({controllerKey, kmsModule = KMS_MODULE}) {
-  // create KAK and HMAC keys for edv config
-  // const {controllerKey, kmsModule} = this;
-  const [keyAgreementKey, hmac] = await Promise.all([
-    controllerKey.generateKey({type: 'keyAgreement', kmsModule}),
-    controllerKey.generateKey({type: 'hmac', kmsModule})
-  ]);
-
-  // create edv
-  const newEdvConfig = {
-    sequence: 0,
-    controller: controllerKey.handle,
-    // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
-    // this is a profile's edv, the profile ID
-    invoker: controllerKey.id,
-    delegator: controllerKey.id,
-    keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
-    hmac: {id: hmac.id, type: hmac.type}
-  };
-
-  const {httpsAgent} = brHttpsAgent;
-  const edvConfig = await EdvClient.createEdv({
-    config: newEdvConfig,
-    httpsAgent,
-    url: urls.edvs,
-  });
-
-  const edvClient = new EdvClient({
-    id: edvConfig.id,
-    keyResolver: _keyResolver,
-    keyAgreementKey,
-    hmac,
-    httpsAgent
-  });
-
-  return {edvClient, edvConfig};
-}
-
-async function _createKeystore({controllerKey, referenceId}) {
-  // create keystore
-  const config = {
-    sequence: 0,
-    controller: controllerKey.id,
-    invoker: controllerKey.id,
-    delegator: controllerKey.id
-  };
-  // if(recoveryHost) {
-  //   config.invoker = [config.invoker, recoveryHost];
-  // }
-  if(referenceId) {
-    config.referenceId = referenceId;
-  }
-  const kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`;
-  const {httpsAgent} = brHttpsAgent;
-  return await KmsClient.createKeystore({
-    url: `${kmsBaseUrl}/keystores`,
-    config,
-    httpsAgent,
-  });
-}
-
-// FIXME: make more restrictive, support `did:key` and `did:v1`
-async function _keyResolver({id}) {
-  const response = await axios.get(id, {
-    headers: DEFAULT_HEADERS
-  });
-  return response.data;
-}
