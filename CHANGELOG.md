@@ -1,5 +1,7 @@
 # bedrock-edv-storage ChangeLog
 
+## 1.1.4 - 2020-02-xx
+
 ### Changed
 - Update dependencies.
 
