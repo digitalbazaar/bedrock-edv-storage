@@ -27,7 +27,7 @@
     "crypto-ld": "^3.5.2",
     "express-async-handler": "^1.1.4",
     "http-signature-zcap-verify": "^1.0.0",
-    "jsonld-signatures": "^4.1.1",
+    "jsonld-signatures": "^5.0.0",
     "ocapld": "^1.6.1"
   },
   "peerDependencies": {
