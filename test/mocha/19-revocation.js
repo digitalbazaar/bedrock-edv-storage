@@ -24,6 +24,11 @@ describe('revocation API', function() {
     bob: null,
     carol: null
   };
+  const keystoreAgents = {
+    alice: null,
+    bob: null,
+    carol: null
+  };
   beforeEach(async function() {
     capabilityAgents.alice = await CapabilityAgent.fromSecret({
       secret: '40762a17-1696-428f-a2b2-ddf9fe9b4987',
@@ -38,8 +43,10 @@ describe('revocation API', function() {
       handle: 'carolKey'
     });
     await helpers.prepareDatabase(mockData);
+    // {alice, bob, carol} @example.com are in here.
     actors = await helpers.getActors(mockData);
     accounts = mockData.accounts;
+    console.log({actors, accounts});
   });
 
   it('should delegate & revoke write access', async function() {
@@ -53,18 +60,22 @@ describe('revocation API', function() {
     //
     // We are testing these methods:
     //      await helpers.authorize({
-    //        req, expectedTarget, expectedRootCapability, expectedAction: 'write'
+    //        req, expectedTarget, expectedRootCapability, expectedAction
     //      });
     // await brEdvStorage.update({actor, edvId: mockEdvId, doc: mockData.doc2});
     // await helpers.verifyDelegation({edvId, controller, capability});
     // await brZCapStorage.revocations.insert({controller, capability});
-    
-    
+
     // test the default behavior that Alice can write to her own EDV,
     // but that bob and carol can not. 
     const doc = {
-    
-    }
+
+    };
+    let record = await brEdvStorage.insert({
+      actor: actors['alice@example.com'],
+      edvId: mockEdvId,
+      doc,
+    });
 
   });
 });
