@@ -15,6 +15,9 @@ const uuid = require('uuid/v4');
 const {EdvClient} = require('edv-client');
 const {KeystoreAgent, KmsClient} = require('webkms-client');
 const didKeyDriver = require('did-method-key').driver();
+const {suites, sign} = require('jsonld-signatures');
+const {CapabilityDelegation} = require('ocapld');
+const {Ed25519Signature2018, RsaSignature2018} = suites;
 
 exports.createAccount = email => {
   const newAccount = {
@@ -163,3 +166,39 @@ async function _keyResolver({id}) {
   });
   return response.data;
 }
+
+/**
+ * Delegates a zCap.
+ *
+ * @param {object} options - Options to use.
+ * @param {object} options.zcap - A valid zCap with another user
+ *   as the invoker and delegator.
+ * @param {object} options.signer - A capabilityAgent.getSigner()
+ *   from the someone higher in the capabilityChain than the invoker.
+ * @param {Array<string>} options.capabilityChain = An array of ids
+ *   that must start with the rootCapability first.
+ *
+ * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
+ */
+exports.delegate = async ({zcap, signer, capabilityChain}) => {
+  let Suite = null;
+  if(/^Ed25519/i.test(signer.type)) {
+    Suite = Ed25519Signature2018;
+  }
+  if(/^RSA/i.test(signer.test)) {
+    Suite = RsaSignature2018;
+  }
+  if(!Suite) {
+    throw new Error(`Unsupported key type ${signer.type}`);
+  }
+  // attach capability delegation proof
+  return sign(zcap, {
+    // TODO: map `signer.type` to signature suite
+    suite: new Suite({
+      signer,
+      verificationMethod: signer.id
+    }),
+    purpose: new CapabilityDelegation({capabilityChain}),
+    compactProof: false
+  });
+};
