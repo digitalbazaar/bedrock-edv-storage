@@ -23,6 +23,20 @@ accounts[email].meta.sysResourceRole = [{
   generateResource: 'id'
 }];
 
+// this will create the 3 users for the delegation / revoke
+// tests.
+for(const name of ['alice', 'bob', 'carol']) {
+  const _email = `${name}@example.com`;
+  accounts[_email] = {};
+  accounts[_email].account = helpers.createAccount(_email);
+  accounts[_email].meta = {};
+  accounts[_email].meta.sysResourceRole = [{
+    sysRole: 'bedrock-account.regular',
+    // FIXME: had to enable admin rights to create keyStore
+    // generateResource: 'id'
+  }];
+}
+
 data.baseUrl = config.server.baseUri;
 const keyStore = '/kms/keystores/z19tghrZEvcUY5YAG8tPi33P3';
 
