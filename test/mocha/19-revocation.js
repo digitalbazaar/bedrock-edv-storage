@@ -5,26 +5,41 @@
 
 const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
-const {constants} = require('jsonld-signatures');
+const {AsymmetricKey, CapabilityAgent} = require('webkms-client');
+const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-
-const {SECURITY_CONTEXT_V2_URL} = constants;
 
 let actors;
 let accounts;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
-
+// all tests involve write
+const expectedAction = 'write';
 
 describe('revocation API', function() {
   // first create 3 keys alice, bob, and carol
-  let aliceKey, bobKey, carolKey = null;
+  const capabilityAgents = {
+    alice: null,
+    bob: null,
+    carol: null
+  };
 
   beforeEach(async function() {
-
+    capabilityAgents.alice = await CapabilityAgent.fromSecret({
+      secret: '40762a17-1696-428f-a2b2-ddf9fe9b4987',
+      handle: 'aliceKey'
+    });
+    capabilityAgents.bob = await CapabilityAgent.fromSecret({
+      secret: '34f2afd1-34ef-4d46-a998-cdc5462dc0d2',
+      handle: 'bobKey'
+    });
+    capabilityAgents.carol = await CapabilityAgent.fromSecret({
+      secret: 'ae806cd9-2765-4232-b955-01e1024ac032',
+      handle: 'carolKey'
+    });
   });
 
   it('should delegate & revoke write access', async function() {

@@ -49,5 +49,6 @@
     "jsonld-signatures": "^5.0.0",
     "uuid-random": "^1.0.6",
     "webkms-client": "^2.0.0"
-  }
+  },
+  "devDependencies": {}
 }
