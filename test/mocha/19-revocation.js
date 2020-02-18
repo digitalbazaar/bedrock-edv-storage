@@ -61,6 +61,14 @@ describe('revocation API', function() {
   beforeEach(async function() {
     // first create 3 testers alice, bob, and carol
     testers = await makeTestData({testers: ['alice', 'bob', 'carol']});
+    const {account, actor} = testers.alice;
+    const edvConfig = {
+      ...mockData.config,
+      controller: account.account.id
+    };
+    edvConfig.id = mockEdvId;
+    console.log('mockEdvId', mockEdvId);
+    await brEdvStorage.insertConfig({actor, config: edvConfig});
   });
 
   it('should delegate & revoke write access', async function() {
