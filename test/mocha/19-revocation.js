@@ -15,7 +15,10 @@ const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
 // all tests involve write
 const expectedAction = 'write';
+// algorithm required for the jwe headers
 const JWE_ALG = 'ECDH-ES+A256KW';
+// a unique id for the single document in this test
+const docId = 'z19pjAGaCdp2EkKzUcvdSf9wG';
 
 describe('revocation API', function() {
   let actors, accounts = null;
@@ -63,6 +66,8 @@ describe('revocation API', function() {
       capabilityAgent: testers.alice.capabilityAgent,
       referenceId: testers.alice.secret
     });
+    testers.alice.actor = actors[testers.alice.email];
+    testers.alice.account = accounts[testers.alice.email];
     testers.bob.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testers.bob.secret,
       handle: testers.bob.handle
@@ -71,6 +76,8 @@ describe('revocation API', function() {
       capabilityAgent: testers.bob.capabilityAgent,
       referenceId: testers.bob.secret
     });
+    testers.bob.actor = actors[testers.bob.email];
+    testers.bob.account = accounts[testers.bob.email];
     testers.carol.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testers.carol.secret,
       handle: testers.carol.handle
@@ -79,7 +86,9 @@ describe('revocation API', function() {
       capabilityAgent: testers.carol.capabilityAgent,
       referenceId: testers.carol.secret
     });
-    console.log({actors, accounts});
+    testers.carol.actor = actors[testers.carol.email];
+    testers.carol.account = accounts[testers.carol.email];
+    console.log({testers});
   });
 
   it('should delegate & revoke write access', async function() {
@@ -102,7 +111,11 @@ describe('revocation API', function() {
     // test the default behavior that Alice can write to her own EDV,
     // but that bob and carol can not. 
     const doc = {
-
+      id: docId,
+      sequence: 0,
+      content: {
+        modifier: testers.alice.email
+      }
     };
     let record = await brEdvStorage.insert({
       actor: actors['alice@example.com'],
