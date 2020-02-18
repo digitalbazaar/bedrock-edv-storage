@@ -11,7 +11,8 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
-const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
+// a unique id for the EDV itself
+const mockEdvId = `${config.server.baseUri}/edvs/z1A2RmqSkhYHcnH1UkZamKF1D`;
 const hashedMockEdvId = database.hash(mockEdvId);
 // all tests involve write
 const expectedAction = 'write';
@@ -22,8 +23,9 @@ const docId = 'z19pjAGaCdp2EkKzUcvdSf9wG';
 
 describe('revocation API', function() {
   let actors, accounts = null;
-  // first create 3 keys alice, bob, and carol
+  // first create 3 testers alice, bob, and carol
   const testers = {
+    // alice is the rootCapability
     alice: {
       email: 'alice@example.com',
       secret: '40762a17-1696-428f-a2b2-ddf9fe9b4987',
@@ -33,6 +35,7 @@ describe('revocation API', function() {
       actor: null,
       account: null
     },
+    // bob is delegated write access to alice's EDV
     bob: {
       email: 'bob@example.com',
       secret: '34f2afd1-34ef-4d46-a998-cdc5462dc0d2',
@@ -42,6 +45,7 @@ describe('revocation API', function() {
       actor: null,
       account: null
     },
+    // bob delegates his write capability for alice's EDV to carol
     carol: {
       email: 'carol@example.com',
       secret: 'ae806cd9-2765-4232-b955-01e1024ac032',
@@ -109,12 +113,22 @@ describe('revocation API', function() {
     // await brZCapStorage.revocations.insert({controller, capability});
 
     // test the default behavior that Alice can write to her own EDV,
-    // but that bob and carol can not. 
+    // but that bob and carol can not.
     const doc = {
       id: docId,
       sequence: 0,
       content: {
         modifier: testers.alice.email
+      },
+      jwe: {
+        recipients: [
+          {
+            header: {
+              alg: JWE_ALG,
+              kid: `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+            }
+          }
+        ]
       }
     };
     let record = await brEdvStorage.insert({
