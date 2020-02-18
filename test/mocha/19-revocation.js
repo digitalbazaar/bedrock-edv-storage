@@ -18,6 +18,8 @@ const hashedMockEdvId = database.hash(mockEdvId);
 const expectedAction = 'write';
 // algorithm required for the jwe headers
 const JWE_ALG = 'ECDH-ES+A256KW';
+// for key generation
+const KMS_MODULE = 'ssm-v1';
 // a unique id for the single document in this test
 const docId = 'z19pjAGaCdp2EkKzUcvdSf9wG';
 
@@ -31,7 +33,8 @@ describe('revocation API', function() {
       secret: '40762a17-1696-428f-a2b2-ddf9fe9b4987',
       handle: 'aliceKey',
       capabilityAgent: null,
-      keyStoreAgent: null,
+      keystoreAgent: null,
+      keyAgreementKey: null,
       actor: null,
       account: null
     },
@@ -41,7 +44,7 @@ describe('revocation API', function() {
       secret: '34f2afd1-34ef-4d46-a998-cdc5462dc0d2',
       handle: 'bobKey',
       capabilityAgent: null,
-      keyStoreAgent: null,
+      keystoreAgent: null,
       actor: null,
       account: null
     },
@@ -51,7 +54,7 @@ describe('revocation API', function() {
       secret: 'ae806cd9-2765-4232-b955-01e1024ac032',
       handle: 'carolKey',
       capabilityAgent: null,
-      keyStoreAgent: null,
+      keystoreAgent: null,
       actor: null,
       account: null
     }
@@ -66,27 +69,31 @@ describe('revocation API', function() {
       secret: testers.alice.secret,
       handle: testers.alice.handle
     });
-    testers.alice.keyStoreAgent = await helpers.createKeystore({
+    testers.alice.keystoreAgent = await helpers.createKeystore({
       capabilityAgent: testers.alice.capabilityAgent,
       referenceId: testers.alice.secret
     });
+    testers.alice.keyAgreementKey = await testers.alice.keystoreAgent.
+      generateKey({type: 'keyAgreement', kmsModule: KMS_MODULE});
     testers.alice.actor = actors[testers.alice.email];
     testers.alice.account = accounts[testers.alice.email];
     testers.bob.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testers.bob.secret,
       handle: testers.bob.handle
     });
-    testers.bob.keyStoreAgent = await helpers.createKeystore({
+    testers.bob.keystoreAgent = await helpers.createKeystore({
       capabilityAgent: testers.bob.capabilityAgent,
       referenceId: testers.bob.secret
     });
+    testers.bob.keyAgreementKey = await testers.bob.keystoreAgent.
+      generateKey({type: 'keyAgreement', kmsModule: KMS_MODULE});
     testers.bob.actor = actors[testers.bob.email];
     testers.bob.account = accounts[testers.bob.email];
     testers.carol.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testers.carol.secret,
       handle: testers.carol.handle
     });
-    testers.carol.keyStoreAgent = await helpers.createKeystore({
+    testers.carol.keystoreAgent = await helpers.createKeystore({
       capabilityAgent: testers.carol.capabilityAgent,
       referenceId: testers.carol.secret
     });
@@ -125,7 +132,13 @@ describe('revocation API', function() {
           {
             header: {
               alg: JWE_ALG,
-              kid: `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+              kid: testers.alice.keyAgreementKey.id
+            }
+          },
+          {
+            header: {
+              alg: JWE_ALG,
+              kid: testers.bob.keyAgreementKey.id
             }
           }
         ]
@@ -136,6 +149,5 @@ describe('revocation API', function() {
       edvId: mockEdvId,
       doc,
     });
-
   });
 });
