@@ -15,37 +15,70 @@ const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
 // all tests involve write
 const expectedAction = 'write';
+const JWE_ALG = 'ECDH-ES+A256KW';
 
 describe('revocation API', function() {
   let actors, accounts = null;
   // first create 3 keys alice, bob, and carol
-  const capabilityAgents = {
-    alice: null,
-    bob: null,
-    carol: null
-  };
-  const keystoreAgents = {
-    alice: null,
-    bob: null,
-    carol: null
-  };
-  beforeEach(async function() {
-    capabilityAgents.alice = await CapabilityAgent.fromSecret({
+  const testers = {
+    alice: {
+      email: 'alice@example.com',
       secret: '40762a17-1696-428f-a2b2-ddf9fe9b4987',
-      handle: 'aliceKey'
-    });
-    capabilityAgents.bob = await CapabilityAgent.fromSecret({
+      handle: 'aliceKey',
+      capabilityAgent: null,
+      keyStoreAgent: null,
+      actor: null,
+      account: null
+    },
+    bob: {
+      email: 'bob@example.com',
       secret: '34f2afd1-34ef-4d46-a998-cdc5462dc0d2',
-      handle: 'bobKey'
-    });
-    capabilityAgents.carol = await CapabilityAgent.fromSecret({
+      handle: 'bobKey',
+      capabilityAgent: null,
+      keyStoreAgent: null,
+      actor: null,
+      account: null
+    },
+    carol: {
+      email: 'carol@example.com',
       secret: 'ae806cd9-2765-4232-b955-01e1024ac032',
-      handle: 'carolKey'
-    });
+      handle: 'carolKey',
+      capabilityAgent: null,
+      keyStoreAgent: null,
+      actor: null,
+      account: null
+    }
+  };
+
+  beforeEach(async function() {
     await helpers.prepareDatabase(mockData);
     // {alice, bob, carol} @example.com are in here.
     actors = await helpers.getActors(mockData);
     accounts = mockData.accounts;
+    testers.alice.capabilityAgent = await CapabilityAgent.fromSecret({
+      secret: testers.alice.secret,
+      handle: testers.alice.handle
+    });
+    testers.alice.keyStoreAgent = await helpers.createKeystore({
+      capabilityAgent: testers.alice.capabilityAgent,
+      referenceId: testers.alice.secret
+    });
+    testers.bob.capabilityAgent = await CapabilityAgent.fromSecret({
+      secret: testers.bob.secret,
+      handle: testers.bob.handle
+    });
+    testers.bob.keyStoreAgent = await helpers.createKeystore({
+      capabilityAgent: testers.bob.capabilityAgent,
+      referenceId: testers.bob.secret
+    });
+    testers.carol.capabilityAgent = await CapabilityAgent.fromSecret({
+      secret: testers.carol.secret,
+      handle: testers.carol.handle
+    });
+    testers.carol.keyStoreAgent = await helpers.createKeystore({
+      capabilityAgent: testers.carol.capabilityAgent,
+      referenceId: testers.carol.secret
+    });
     console.log({actors, accounts});
   });
 
