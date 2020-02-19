@@ -54,6 +54,8 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
   return testData;
 };
 
+exports.clone = doc => JSON.parse(JSON.stringify(doc));
+
 exports.createAccount = email => {
   const newAccount = {
     id: 'urn:uuid:' + uuid(),

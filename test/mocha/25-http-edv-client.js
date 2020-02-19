@@ -229,9 +229,11 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       // instruct client to index documents
       edvClient.ensureIndex({attribute: 'content.apples'});
+      const doc = helpers.clone(mockData.httpDocs.beta);
+      doc.id = await EdvClient.generateId();
       try {
         result = await edvClient.insert({
-          doc: mockData.httpDocs.beta,
+          doc,
           invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
