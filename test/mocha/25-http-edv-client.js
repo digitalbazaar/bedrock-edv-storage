@@ -157,8 +157,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `insertConfig`
 
   describe('insert API', () => {
-    let capabilityAgent;
-    let edvClient;
+    let capabilityAgent, edvClient, testers = null;
 
     before(async () => {
       const secret = '40762a17-1696-428f-a2b2-ddf9fe9b4987';
@@ -172,7 +171,11 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const actor = actors['alpha@example.com'];
 
       ({edvClient} = await helpers.createEdv(
-        {actor, capabilityAgent, keystoreAgent, urls}));
+        {capabilityAgent, keystoreAgent, urls}));
+      testers = await helpers.makeDelegationTesters({
+        testers: ['alice', 'bob', 'carol'],
+        mockData
+      });
     });
     it('should insert a document', async () => {
       let result;
@@ -199,13 +202,35 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.indexed[0].attributes.should.have.length(0);
       result.should.have.property('content');
     });
-    it.skip('should enable a capability', async () => {
+    it('should enable a capability', async () => {
       let result;
       let err;
+      const {edvClient: aliceEdvClient} = await helpers.createEdv({
+        capabilityAgent: testers.alice.capabilityAgent,
+        keystoreAgent: testers.alice.keystoreAgent,
+        urls
+      });
+      const doc = helpers.clone(mockData.httpDocs.alpha);
+      doc.id = await EdvClient.generateId();
+      const invocationSigner = testers.alice.capabilityAgent.getSigner();
       try {
-        result = await edvClient.insert({
-          doc: mockData.httpDocs.alpha,
-          invocationSigner: capabilityAgent.getSigner(),
+        result = await aliceEdvClient.insert({
+          doc,
+          recipients: [
+            {
+              header: {
+                alg: helpers.JWE_ALG,
+                kid: testers.alice.keyAgreementKey.id
+              }
+            },
+            {
+              header: {
+                alg: helpers.JWE_ALG,
+                kid: testers.bob.keyAgreementKey.id
+              }
+            }
+          ],
+          invocationSigner
         });
       } catch(e) {
         err = e;

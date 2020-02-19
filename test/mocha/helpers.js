@@ -133,10 +133,9 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
   return new KeystoreAgent({capabilityAgent, keystore, kmsClient});
 };
 
-const KMS_MODULE = 'ssm-v1';
 exports.createEdv = async ({
   actor, capabilityAgent, invocationSigner, keystoreAgent,
-  kmsModule = KMS_MODULE, urls
+  kmsModule = exports.KMS_MODULE, urls
 }) => {
   // create KAK and HMAC keys for edv config
   const [keyAgreementKey, hmac] = await Promise.all([
