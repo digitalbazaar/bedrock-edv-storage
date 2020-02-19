@@ -199,6 +199,59 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.indexed[0].attributes.should.have.length(0);
       result.should.have.property('content');
     });
+    it.skip('should enable a capability', async () => {
+      let result;
+      let err;
+      try {
+        result = await edvClient.insert({
+          doc: mockData.httpDocs.alpha,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      // not a comprehensive list
+      result.should.have.property('id');
+      result.should.have.property('sequence');
+      result.sequence.should.equal(0);
+      result.should.have.property('indexed');
+      result.indexed.should.be.an('array');
+      result.indexed.should.have.length(1);
+      result.indexed[0].attributes.should.be.an('array');
+      // no indexed attributes
+      result.indexed[0].attributes.should.have.length(0);
+      result.should.have.property('content');
+    });
+    it('should insert a document with attributes', async () => {
+      let result;
+      let err;
+      // instruct client to index documents
+      edvClient.ensureIndex({attribute: 'content.apples'});
+      try {
+        result = await edvClient.insert({
+          doc: mockData.httpDocs.beta,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      // not a comprehensive list
+      result.should.have.property('id');
+      result.should.have.property('sequence');
+      result.sequence.should.equal(0);
+      result.should.have.property('indexed');
+      result.indexed.should.be.an('array');
+      result.indexed.should.have.length(1);
+      result.indexed[0].attributes.should.be.an('array');
+      // there is one indexed attribute
+      result.indexed[0].attributes.should.have.length(1);
+      result.should.have.property('content');
+    });
+
     it('should insert a document with attributes', async () => {
       let result;
       let err;

@@ -13,11 +13,46 @@ const database = require('bedrock-mongodb');
 const {promisify} = require('util');
 const uuid = require('uuid/v4');
 const {EdvClient} = require('edv-client');
-const {KeystoreAgent, KmsClient} = require('webkms-client');
 const didKeyDriver = require('did-method-key').driver();
 const {suites, sign} = require('jsonld-signatures');
+const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
+
+// for key generation
+exports.KMS_MODULE = 'ssm-v1';
+// algorithm required for the jwe headers
+exports.JWE_ALG = 'ECDH-ES+A256KW';
+
+exports.makeDelegationTesters = async ({testers = [], mockData}) => {
+  const actors = await exports.getActors(mockData);
+  const accounts = mockData.accounts;
+  const testData = {};
+  for(const tester of testers) {
+    const email = `${tester}@example.com`;
+    const testerData = testData[tester] = {
+      email,
+      secret: uuid(),
+      handle: `${tester}Key`,
+      actor: actors[email],
+      account: accounts[email]
+    };
+    testerData.capabilityAgent = await CapabilityAgent.fromSecret({
+      secret: testerData.secret,
+      handle: testerData.handle
+    });
+    testerData.keystoreAgent = await exports.createKeystore({
+      capabilityAgent: testerData.capabilityAgent,
+      referenceId: testerData.secret
+    });
+    testerData.keyAgreementKey = await testerData.keystoreAgent.
+      generateKey({type: 'keyAgreement', kmsModule: exports.KMS_MODULE});
+    testerData.verificationKey = await testerData.keystoreAgent.
+      generateKey(
+        {type: 'Ed25519VerificationKey2018', kmsModule: exports.KMS_MODULE});
+  }
+  return testData;
+};
 
 exports.createAccount = email => {
   const newAccount = {
