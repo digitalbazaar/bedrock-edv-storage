@@ -202,80 +202,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.indexed[0].attributes.should.have.length(0);
       result.should.have.property('content');
     });
-    it('should enable a capability', async () => {
-      let result;
-      let err;
-      const {edvClient: aliceEdvClient} = await helpers.createEdv({
-        capabilityAgent: testers.alice.capabilityAgent,
-        keystoreAgent: testers.alice.keystoreAgent,
-        urls
-      });
-      const allowedAction = 'write';
-      const doc = helpers.clone(mockData.httpDocs.alpha);
-      doc.id = await EdvClient.generateId();
-      const invocationSigner = testers.alice.capabilityAgent.getSigner();
-      // alice delegates a `write` capability to bob with bob as a delegator
-      // this will be stored in authorizations
-      const writeZcap = {
-        allowedAction,
-        invoker: testers.bob.verificationKey.id,
-        delegator: testers.bob.verificationKey.id,
-        // Documents are not zCaps so this route stores all zCaps
-        // for a document.
-        parentCapability: `${aliceEdvClient.id}/zcaps/documents/${doc.id}`,
-        invocationTarget: {
-          type: 'urn:datahub:document',
-          id: `${aliceEdvClient.id}/documents/${doc.id}`
-        }
-      };
-      try {
-        result = await aliceEdvClient.insert({
-          doc,
-          recipients: [
-            {
-              header: {
-                alg: helpers.JWE_ALG,
-                kid: testers.alice.keyAgreementKey.id
-              }
-            },
-            {
-              header: {
-                alg: helpers.JWE_ALG,
-                kid: testers.bob.keyAgreementKey.id
-              }
-            }
-          ],
-          invocationSigner
-        });
-        const capabilityToEnable = await helpers.delegate({
-          zcap: writeZcap,
-          signer: invocationSigner,
-          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`]
-        });
-        should.exist(capabilityToEnable);
-        capabilityToEnable.should.be.an('object');
-        should.exist(capabilityToEnable.id);
-        should.exist(capabilityToEnable['@context']);
-        should.exist(capabilityToEnable.proof);
-        await aliceEdvClient.enableCapability(
-          {capabilityToEnable, invocationSigner});
-      } catch(e) {
-        err = e;
-      }
-      assertNoError(err);
-      should.exist(result);
-      // not a comprehensive list
-      result.should.have.property('id');
-      result.should.have.property('sequence');
-      result.sequence.should.equal(0);
-      result.should.have.property('indexed');
-      result.indexed.should.be.an('array');
-      result.indexed.should.have.length(1);
-      result.indexed[0].attributes.should.be.an('array');
-      // no indexed attributes
-      result.indexed[0].attributes.should.have.length(0);
-      result.should.have.property('content');
-    });
     it('should insert a document with attributes', async () => {
       let result;
       let err;
@@ -594,7 +520,89 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.should.have.length(0);
     });
   }); // end `find`
-
+  describe('capabilities', () => {
+    let testers = null;
+    beforeEach(async () => {
+      testers = await helpers.makeDelegationTesters({
+        testers: ['alice', 'bob', 'carol'],
+        mockData
+      });
+    });
+    it('should enable a capability', async () => {
+      let result;
+      let err;
+      const {edvClient: aliceEdvClient} = await helpers.createEdv({
+        capabilityAgent: testers.alice.capabilityAgent,
+        keystoreAgent: testers.alice.keystoreAgent,
+        urls
+      });
+      const allowedAction = 'write';
+      const doc = helpers.clone(mockData.httpDocs.alpha);
+      doc.id = await EdvClient.generateId();
+      const invocationSigner = testers.alice.capabilityAgent.getSigner();
+      // alice delegates a `write` capability to bob with bob as a delegator
+      // this will be stored in authorizations
+      const writeZcap = {
+        allowedAction,
+        invoker: testers.bob.verificationKey.id,
+        delegator: testers.bob.verificationKey.id,
+        // Documents are not zCaps so this route stores all zCaps
+        // for a document.
+        parentCapability: `${aliceEdvClient.id}/zcaps/documents/${doc.id}`,
+        invocationTarget: {
+          type: 'urn:datahub:document',
+          id: `${aliceEdvClient.id}/documents/${doc.id}`
+        }
+      };
+      try {
+        result = await aliceEdvClient.insert({
+          doc,
+          recipients: [
+            {
+              header: {
+                alg: helpers.JWE_ALG,
+                kid: testers.alice.keyAgreementKey.id
+              }
+            },
+            {
+              header: {
+                alg: helpers.JWE_ALG,
+                kid: testers.bob.keyAgreementKey.id
+              }
+            }
+          ],
+          invocationSigner
+        });
+        const capabilityToEnable = await helpers.delegate({
+          zcap: writeZcap,
+          signer: invocationSigner,
+          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`]
+        });
+        should.exist(capabilityToEnable);
+        capabilityToEnable.should.be.an('object');
+        should.exist(capabilityToEnable.id);
+        should.exist(capabilityToEnable['@context']);
+        should.exist(capabilityToEnable.proof);
+        await aliceEdvClient.enableCapability(
+          {capabilityToEnable, invocationSigner});
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      // not a comprehensive list
+      result.should.have.property('id');
+      result.should.have.property('sequence');
+      result.sequence.should.equal(0);
+      result.should.have.property('indexed');
+      result.indexed.should.be.an('array');
+      result.indexed.should.have.length(1);
+      result.indexed[0].attributes.should.be.an('array');
+      // no indexed attributes
+      result.indexed[0].attributes.should.have.length(0);
+      result.should.have.property('content');
+    });
+  });
   describe('delete', () => {
     let capabilityAgent;
     let edvClient;
