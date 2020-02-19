@@ -17,57 +17,26 @@ const mockEdvId = `${config.server.baseUri}/edvs/z1A2RmqSkhYHcnH1UkZamKF1D`;
 const hashedMockEdvId = database.hash(mockEdvId);
 // all tests involve write
 const allowedAction = 'write';
-// algorithm required for the jwe headers
-const JWE_ALG = 'ECDH-ES+A256KW';
-// for key generation
-const KMS_MODULE = 'ssm-v1';
 // a unique id for the single document in this test
 const docId = 'z19pjAGaCdp2EkKzUcvdSf9wG';
 
 describe('revocation API', function() {
   // TODO: Rename this.
   // TODO: Move this to helpers.
-  const makeTestData = async ({testers = []}) => {
-    const actors = await helpers.getActors(mockData);
-    const accounts = mockData.accounts;
-    const testData = {};
-    for(const tester of testers) {
-      const email = `${tester}@example.com`;
-      const testerData = testData[tester] = {
-        email,
-        secret: uuid(),
-        handle: `${tester}Key`,
-        actor: actors[email],
-        account: accounts[email]
-      };
-      testerData.capabilityAgent = await CapabilityAgent.fromSecret({
-        secret: testerData.secret,
-        handle: testerData.handle
-      });
-      testerData.keystoreAgent = await helpers.createKeystore({
-        capabilityAgent: testerData.capabilityAgent,
-        referenceId: testerData.secret
-      });
-      testerData.keyAgreementKey = await testerData.keystoreAgent.
-        generateKey({type: 'keyAgreement', kmsModule: KMS_MODULE});
-      testerData.verificationKey = await testerData.keystoreAgent.
-        generateKey(
-          {type: 'Ed25519VerificationKey2018', kmsModule: KMS_MODULE});
-    }
-    return testData;
-  };
   let testers = null;
 
   beforeEach(async function() {
     // first create 3 testers alice, bob, and carol
-    testers = await makeTestData({testers: ['alice', 'bob', 'carol']});
+    testers = await helpers.makeDelegationTesters({
+      testers: ['alice', 'bob', 'carol'],
+      mockData
+    });
     const {account, actor} = testers.alice;
     const edvConfig = {
       ...mockData.config,
       controller: account.account.id
     };
     edvConfig.id = mockEdvId;
-    console.log('mockEdvId', mockEdvId);
     await brEdvStorage.insertConfig({actor, config: edvConfig});
   });
 
@@ -79,16 +48,7 @@ describe('revocation API', function() {
     // Alice revoke's Bob's capability
     // Only Alice can write to the EDV.
     //
-    // We are testing these methods:
-    //      await helpers.authorize({
-    //        req, expectedTarget, expectedRootCapability, expectedAction
-    //      });
-    // await brEdvStorage.update({actor, edvId: mockEdvId, doc: mockData.doc2});
-    // await helpers.verifyDelegation({edvId, controller, capability});
-    // await brZCapStorage.revocations.insert({controller, capability});
 
-    // test the default behavior that Alice can write to her own EDV,
-    // but that bob and carol can not.
     const doc = {
       id: docId,
       sequence: 0,
@@ -99,13 +59,13 @@ describe('revocation API', function() {
         recipients: [
           {
             header: {
-              alg: JWE_ALG,
+              alg: helpers.JWE_ALG,
               kid: testers.alice.keyAgreementKey.id
             }
           },
           {
             header: {
-              alg: JWE_ALG,
+              alg: helpers.JWE_ALG,
               kid: testers.bob.keyAgreementKey.id
             }
           }
@@ -113,17 +73,34 @@ describe('revocation API', function() {
       }
     };
     // alice delegates a `write` capability to bob with bob as a delegator
+    // this will be stored in authorizations
     const writeZcap = {
-      id: 'urn:zcap:delegate:alice:bob',
+      id: `urn:zcap:${uuid()}`,
       '@context': SECURITY_CONTEXT_V2_URL,
       allowedAction,
       invoker: testers.bob.verificationKey.id,
-      delegator: testers.bob.verificationKey.id
+      delegator: testers.bob.verificationKey.id,
+      // Documents are not zCaps so this route stores all zCaps
+      // for a document.
+      parentCapability: `${mockEdvId}/zcaps/documents/${docId}`,
+      invocationTarget: {
+        type: 'urn:datahub:document',
+        id: `${mockEdvId}/documents/${docId}`
+      }
     };
     let record = await brEdvStorage.insert({
       actor: testers.alice.actor,
       edvId: mockEdvId,
       doc,
     });
+    // We are testing these methods:
+    //      await helpers.authorize({
+    //        req, expectedTarget, expectedRootCapability, expectedAction
+    //      });
+    // await brEdvStorage.update({actor, edvId: mockEdvId, doc: mockData.doc2});
+    // await helpers.verifyDelegation({edvId, controller, capability});
+    // await brZCapStorage.revocations.insert({controller, capability});
+    // test the default behavior that Alice can write to her own EDV,
+    // but that bob and carol can not.
   });
 });
