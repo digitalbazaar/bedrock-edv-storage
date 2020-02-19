@@ -210,9 +210,24 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         keystoreAgent: testers.alice.keystoreAgent,
         urls
       });
+      const allowedAction = 'write';
       const doc = helpers.clone(mockData.httpDocs.alpha);
       doc.id = await EdvClient.generateId();
       const invocationSigner = testers.alice.capabilityAgent.getSigner();
+      // alice delegates a `write` capability to bob with bob as a delegator
+      // this will be stored in authorizations
+      const writeZcap = {
+        allowedAction,
+        invoker: testers.bob.verificationKey.id,
+        delegator: testers.bob.verificationKey.id,
+        // Documents are not zCaps so this route stores all zCaps
+        // for a document.
+        parentCapability: `${aliceEdvClient.id}/zcaps/documents/${doc.id}`,
+        invocationTarget: {
+          type: 'urn:datahub:document',
+          id: `${aliceEdvClient.id}/documents/${doc.id}`
+        }
+      };
       try {
         result = await aliceEdvClient.insert({
           doc,
@@ -232,6 +247,18 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
           ],
           invocationSigner
         });
+        const capabilityToEnable = await helpers.delegate({
+          zcap: writeZcap,
+          signer: invocationSigner,
+          capabilityChain: [testers.alice.verificationKey.kmsId]
+        });
+        should.exist(capabilityToEnable);
+        capabilityToEnable.should.be.an('object');
+        should.exist(capabilityToEnable.id);
+        should.exist(capabilityToEnable['@context']);
+        should.exist(capabilityToEnable.proof);
+        await aliceEdvClient.enableCapability(
+          {capabilityToEnable, invocationSigner});
       } catch(e) {
         err = e;
       }
