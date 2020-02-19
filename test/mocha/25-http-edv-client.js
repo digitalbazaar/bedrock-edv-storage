@@ -250,7 +250,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         const capabilityToEnable = await helpers.delegate({
           zcap: writeZcap,
           signer: invocationSigner,
-          capabilityChain: [testers.alice.verificationKey.kmsId]
+          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`]
         });
         should.exist(capabilityToEnable);
         capabilityToEnable.should.be.an('object');
