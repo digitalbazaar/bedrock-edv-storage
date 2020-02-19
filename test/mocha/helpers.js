@@ -14,7 +14,7 @@ const {promisify} = require('util');
 const uuid = require('uuid/v4');
 const {EdvClient} = require('edv-client');
 const didKeyDriver = require('did-method-key').driver();
-const {suites, sign} = require('jsonld-signatures');
+const {suites, sign, SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
@@ -217,6 +217,12 @@ async function _keyResolver({id}) {
  * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
  */
 exports.delegate = async ({zcap, signer, capabilityChain}) => {
+  if(!zcap['@context']) {
+    zcap['@context'] = SECURITY_CONTEXT_V2_URL;
+  }
+  if(!zcap.id) {
+    zcap.id = `urn:zcap:${uuid()}`;
+  }
   let Suite = null;
   if(/^Ed25519/i.test(signer.type)) {
     Suite = Ed25519Signature2018;
