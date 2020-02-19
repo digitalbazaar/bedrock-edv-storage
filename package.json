@@ -26,7 +26,7 @@
     "cors": "^2.8.4",
     "crypto-ld": "^3.5.2",
     "express-async-handler": "^1.1.4",
-    "http-signature-zcap-verify": "^1.0.0",
+    "http-signature-zcap-verify": "^2.0.0",
     "jsonld-signatures": "^5.0.0",
     "ocapld": "^1.6.1"
   },
