@@ -20,8 +20,7 @@ accounts[email].account = helpers.createAccount(email);
 accounts[email].meta = {};
 accounts[email].meta.sysResourceRole = [{
   sysRole: 'bedrock-account.regular',
-  // FIXME: had to enable admin rights to create keyStore
-  // generateResource: 'id'
+  generateResource: 'id'
 }];
 
 data.baseUrl = config.server.baseUri;

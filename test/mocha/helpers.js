@@ -94,7 +94,7 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
 
 const KMS_MODULE = 'ssm-v1';
 exports.createEdv = async ({
-  capabilityAgent, keystoreAgent, kmsModule = KMS_MODULE, urls
+  actor, capabilityAgent, keystoreAgent, kmsModule = KMS_MODULE, urls
 }) => {
   // create KAK and HMAC keys for edv config
   const [keyAgreementKey, hmac] = await Promise.all([
@@ -105,7 +105,7 @@ exports.createEdv = async ({
   // create edv
   const newEdvConfig = {
     sequence: 0,
-    controller: capabilityAgent.handle,
+    controller: actor.id,
     // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
     // this is a profile's edv, the profile ID
     invoker: capabilityAgent.id,
