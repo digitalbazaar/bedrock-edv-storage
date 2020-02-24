@@ -12,6 +12,7 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {EdvClient} = require('edv-client');
 const {CapabilityAgent} = require('webkms-client');
+const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 let actors;
 let accounts;
 let urls;
@@ -46,7 +47,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     };
   });
 
-  describe.only('insertConfig API', () => {
+  describe('insertConfig API', () => {
     describe('account based permissions', () => {
       it('should create an EDV', async () => {
         const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
@@ -115,7 +116,54 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       });
     }); // end account based permissions
     describe('zCap based permissions', () => {
-      it('should work');
+      it('should create an EDV', async () => {
+        const secret = ' ce774116-0178-4c72-8c4a-3cd687883025';
+        const handle = 'testKey-ce774116-0178-4c72-8c4a-3cd687883025';
+
+        const capabilityAgent = await CapabilityAgent.fromSecret(
+          {secret, handle});
+
+        const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+        // set the keystore in the kmsClient to the newly created store
+        // controllerKey.kmsClient.keystore = keystore.id;
+
+        // corresponds to the passport authenticated user
+        const actor = actors['alpha@example.com'];
+
+        const capability = {
+          '@context': SECURITY_CONTEXT_V2_URL,
+          id: `${config.server.baseUri}/edvs/zcaps/configs`,
+          // invocationTarget: target,
+          controller: capabilityAgent.id,
+        };
+
+        let edvClient;
+        let edvConfig;
+        let err;
+        try {
+          ({edvClient, edvConfig} = await helpers.createEdv({
+            actor, capability, capabilityAgent, keystoreAgent, urls,
+            invocationSigner: capabilityAgent.getSigner()
+          }));
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        should.exist(edvClient);
+        should.exist(edvConfig);
+
+        edvConfig.should.have.property('id');
+        edvConfig.should.have.property('sequence');
+        edvConfig.should.have.property('controller');
+        edvConfig.should.have.property('invoker');
+        edvConfig.should.have.property('delegator');
+        edvConfig.should.have.property('keyAgreementKey');
+        edvConfig.should.have.property('hmac');
+
+        urls.documents = `${edvConfig.id}/documents`;
+        urls.query = `${edvConfig.id}/query`;
+      });
     });
   }); // end `insertConfig`
 

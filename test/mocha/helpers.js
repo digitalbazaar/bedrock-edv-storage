@@ -94,7 +94,8 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
 
 const KMS_MODULE = 'ssm-v1';
 exports.createEdv = async ({
-  actor, capabilityAgent, keystoreAgent, kmsModule = KMS_MODULE, urls
+  actor, capability, capabilityAgent, invocationSigner, keystoreAgent,
+  kmsModule = KMS_MODULE, urls
 }) => {
   // create KAK and HMAC keys for edv config
   const [keyAgreementKey, hmac] = await Promise.all([
@@ -103,21 +104,37 @@ exports.createEdv = async ({
   ]);
 
   // create edv
-  const newEdvConfig = {
-    sequence: 0,
-    controller: actor.id,
-    // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
-    // this is a profile's edv, the profile ID
-    invoker: capabilityAgent.id,
-    delegator: capabilityAgent.id,
-    keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
-    hmac: {id: hmac.id, type: hmac.type}
-  };
+  let newEdvConfig;
+  if(!capability) {
+    newEdvConfig = {
+      sequence: 0,
+      controller: actor.id,
+      // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
+      // this is a profile's edv, the profile ID
+      invoker: capabilityAgent.id,
+      delegator: capabilityAgent.id,
+      keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
+      hmac: {id: hmac.id, type: hmac.type}
+    };
+  } else {
+    newEdvConfig = {
+      sequence: 0,
+      controller: capabilityAgent.id,
+      // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
+      // this is a profile's edv, the profile ID
+      invoker: capabilityAgent.id,
+      delegator: capabilityAgent.id,
+      keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
+      hmac: {id: hmac.id, type: hmac.type}
+    };
+  }
 
   const {httpsAgent} = brHttpsAgent;
   const edvConfig = await EdvClient.createEdv({
+    capability,
     config: newEdvConfig,
     httpsAgent,
+    invocationSigner,
     url: urls.edvs,
   });
 
@@ -126,7 +143,8 @@ exports.createEdv = async ({
     keyResolver: _keyResolver,
     keyAgreementKey,
     hmac,
-    httpsAgent
+    httpsAgent,
+    invocationSigner,
   });
 
   return {edvClient, edvConfig};
