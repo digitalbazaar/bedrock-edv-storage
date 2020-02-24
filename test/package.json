@@ -27,7 +27,6 @@
     "axios": "^0.19.0",
     "bedrock": "^3.1.0",
     "bedrock-account": "^2.1.0",
-    "bedrock-did-client": "^1.1.2",
     "bedrock-edv-storage": "file:..",
     "bedrock-express": "^3.1.0",
     "bedrock-https-agent": "^1.0.1",
@@ -47,6 +46,7 @@
     "bedrock-validation": "^4.1.0",
     "bedrock-zcap-storage": "digitalbazaar/bedrock-zcap-storage",
     "edv-client": "digitalbazaar/edv-client#create-capability",
+    "jsonld-signatures": "^5.0.0",
     "uuid-random": "^1.0.6",
     "webkms-client": "^2.0.0"
   }
