@@ -46,70 +46,76 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     };
   });
 
-  describe('insertConfig API', () => {
-    it('should create an EDV', async () => {
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
-      const handle = 'testKey1';
+  describe.only('insertConfig API', () => {
+    describe('account based permissions', () => {
+      it('should create an EDV', async () => {
+        const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
+        const handle = 'testKey1';
 
-      const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        const capabilityAgent = await CapabilityAgent.fromSecret(
+          {secret, handle});
 
-      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+        const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
-      // set the keystore in the kmsClient to the newly created store
-      // controllerKey.kmsClient.keystore = keystore.id;
+        // set the keystore in the kmsClient to the newly created store
+        // controllerKey.kmsClient.keystore = keystore.id;
 
-      // corresponds to the passport authenticated user
-      const actor = actors['alpha@example.com'];
+        // corresponds to the passport authenticated user
+        const actor = actors['alpha@example.com'];
 
-      let edvClient;
-      let edvConfig;
-      let err;
-      try {
-        ({edvClient, edvConfig} = await helpers.createEdv(
-          {actor, capabilityAgent, keystoreAgent, urls}));
-      } catch(e) {
-        err = e;
-      }
-      assertNoError(err);
-      should.exist(edvClient);
-      should.exist(edvConfig);
+        let edvClient;
+        let edvConfig;
+        let err;
+        try {
+          ({edvClient, edvConfig} = await helpers.createEdv(
+            {actor, capabilityAgent, keystoreAgent, urls}));
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        should.exist(edvClient);
+        should.exist(edvConfig);
 
-      edvConfig.should.have.property('id');
-      edvConfig.should.have.property('sequence');
-      edvConfig.should.have.property('controller');
-      edvConfig.should.have.property('invoker');
-      edvConfig.should.have.property('delegator');
-      edvConfig.should.have.property('keyAgreementKey');
-      edvConfig.should.have.property('hmac');
+        edvConfig.should.have.property('id');
+        edvConfig.should.have.property('sequence');
+        edvConfig.should.have.property('controller');
+        edvConfig.should.have.property('invoker');
+        edvConfig.should.have.property('delegator');
+        edvConfig.should.have.property('keyAgreementKey');
+        edvConfig.should.have.property('hmac');
 
-      urls.documents = `${edvConfig.id}/documents`;
-      urls.query = `${edvConfig.id}/query`;
-    });
-    // FIXME: alpha user currently has admin rights and is allowed to do this
-    // alpha has admin rights because of permission issues in the kms system
-    // that need to be resolved
-    it('should fail for another account', async () => {
-      // controller must match the authenticated user which is alpha@example.com
-      let err;
-      let edv;
-      try {
-        const mockConfig =
-          {...mockData.config, controller: 'urn:other:account'};
-        const {httpsAgent} = brHttpsAgent;
-        edv = await EdvClient.createEdv({
-          url: urls.edvs,
-          config: mockConfig,
-          httpsAgent
-        });
-      } catch(e) {
-        err = e;
-      }
-      should.not.exist(edv);
-      should.exist(err);
-      should.exist(err.response);
-      err.response.status.should.equal(403);
-      err.response.data.type.should.equal('PermissionDenied');
+        urls.documents = `${edvConfig.id}/documents`;
+        urls.query = `${edvConfig.id}/query`;
+      });
+      // FIXME: alpha user currently has admin rights and is allowed to do this
+      // alpha has admin rights because of permission issues in the kms system
+      // that need to be resolved
+      it('should fail for another account', async () => {
+        // controller must match the authenticated user which is
+        // alpha@example.com
+        let err;
+        let edv;
+        try {
+          const mockConfig =
+            {...mockData.config, controller: 'urn:other:account'};
+          const {httpsAgent} = brHttpsAgent;
+          edv = await EdvClient.createEdv({
+            url: urls.edvs,
+            config: mockConfig,
+            httpsAgent
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.not.exist(edv);
+        should.exist(err);
+        should.exist(err.response);
+        err.response.status.should.equal(403);
+        err.response.data.type.should.equal('PermissionDenied');
+      });
+    }); // end account based permissions
+    describe('zCap based permissions', () => {
+      it('should work');
     });
   }); // end `insertConfig`
 
