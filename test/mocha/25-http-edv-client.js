@@ -59,12 +59,15 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       // set the keystore in the kmsClient to the newly created store
       // controllerKey.kmsClient.keystore = keystore.id;
 
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       let edvClient;
       let edvConfig;
       let err;
       try {
         ({edvClient, edvConfig} = await helpers.createEdv(
-          {capabilityAgent, keystoreAgent, urls}));
+          {actor, capabilityAgent, keystoreAgent, urls}));
       } catch(e) {
         err = e;
       }
@@ -121,8 +124,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       ({edvClient} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls}));
+        {actor, capabilityAgent, keystoreAgent, urls}));
     });
     it('should insert a document', async () => {
       let result;
@@ -210,8 +217,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       ({edvClient} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls}));
+        {actor, capabilityAgent, keystoreAgent, urls}));
     });
     it('should upsert a document', async () => {
       let result;
@@ -275,8 +286,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       ({edvClient} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls}));
+        {actor, capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       await edvClient.insert({
@@ -351,8 +366,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       ({edvClient} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls}));
+        {actor, capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       // instruct client to index documents
@@ -437,8 +456,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
       ({edvClient} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls}));
+        {actor, capabilityAgent, keystoreAgent, urls}));
     });
     before(async () => {
       await edvClient.insert({
