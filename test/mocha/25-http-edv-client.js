@@ -89,7 +89,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     // FIXME: alpha user currently has admin rights and is allowed to do this
     // alpha has admin rights because of permission issues in the kms system
     // that need to be resolved
-    it.skip('should fail for another account', async () => {
+    it('should fail for another account', async () => {
       // controller must match the authenticated user which is alpha@example.com
       let err;
       let edv;
