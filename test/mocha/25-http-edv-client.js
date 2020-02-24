@@ -116,7 +116,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       });
     }); // end account based permissions
     describe('zCap based permissions', () => {
-      it('should create an EDV', async () => {
+      it.only('should create an EDV', async () => {
         const secret = ' ce774116-0178-4c72-8c4a-3cd687883025';
         const handle = 'testKey-ce774116-0178-4c72-8c4a-3cd687883025';
 
@@ -134,7 +134,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         const capability = {
           '@context': SECURITY_CONTEXT_V2_URL,
           id: `${config.server.baseUri}/edvs/zcaps/configs`,
-          // invocationTarget: target,
           controller: capabilityAgent.id,
         };
 
