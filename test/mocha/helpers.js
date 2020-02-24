@@ -153,7 +153,7 @@ exports.createEdv = async ({
 const DEFAULT_HEADERS = {Accept: 'application/ld+json, application/json'};
 // FIXME: make more restrictive, support `did:key` and `did:v1`
 async function _keyResolver({id}) {
-  if(id.startsWith('did:key')) {
+  if(id.startsWith('did:key:')) {
     return didKeyDriver.get({url: id});
   }
   const {httpsAgent} = brHttpsAgent;
