@@ -14,6 +14,7 @@ const {promisify} = require('util');
 const uuid = require('uuid/v4');
 const {EdvClient} = require('edv-client');
 const {KeystoreAgent, KmsClient} = require('webkms-client');
+const didKeyDriver = require('did-method-key').driver();
 
 exports.createAccount = email => {
   const newAccount = {
@@ -152,6 +153,9 @@ exports.createEdv = async ({
 const DEFAULT_HEADERS = {Accept: 'application/ld+json, application/json'};
 // FIXME: make more restrictive, support `did:key` and `did:v1`
 async function _keyResolver({id}) {
+  if(id.startsWith('did:key')) {
+    return didKeyDriver.get({url: id});
+  }
   const {httpsAgent} = brHttpsAgent;
   const response = await axios.get(id, {
     headers: DEFAULT_HEADERS,
