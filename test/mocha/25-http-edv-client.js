@@ -87,9 +87,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         urls.documents = `${edvConfig.id}/documents`;
         urls.query = `${edvConfig.id}/query`;
       });
-      // FIXME: alpha user currently has admin rights and is allowed to do this
-      // alpha has admin rights because of permission issues in the kms system
-      // that need to be resolved
       it('should fail for another account', async () => {
         // controller must match the authenticated user which is
         // alpha@example.com
