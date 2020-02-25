@@ -109,7 +109,7 @@ exports.createEdv = async ({
     newEdvConfig = {
       sequence: 0,
       controller: actor.id,
-      // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
+      // TODO: add `invoker` and `delegator` using capabilityAgent.id *or*, if
       // this is a profile's edv, the profile ID
       invoker: capabilityAgent.id,
       delegator: capabilityAgent.id,
