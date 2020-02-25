@@ -27,6 +27,7 @@
     "axios": "^0.19.0",
     "bedrock": "^3.1.0",
     "bedrock-account": "^2.1.0",
+    "bedrock-did-context": "^1.0.0",
     "bedrock-edv-storage": "file:..",
     "bedrock-express": "^3.1.0",
     "bedrock-https-agent": "^1.0.1",
