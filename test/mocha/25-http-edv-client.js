@@ -12,7 +12,6 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {EdvClient} = require('edv-client');
 const {CapabilityAgent} = require('webkms-client');
-const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 let actors;
 let accounts;
 let urls;
@@ -131,18 +130,12 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         // corresponds to the passport authenticated user
         const actor = actors['alpha@example.com'];
 
-        const capability = {
-          '@context': SECURITY_CONTEXT_V2_URL,
-          id: `${config.server.baseUri}/edvs/zcaps/configs`,
-          controller: capabilityAgent.id,
-        };
-
         let edvClient;
         let edvConfig;
         let err;
         try {
           ({edvClient, edvConfig} = await helpers.createEdv({
-            actor, capability, capabilityAgent, keystoreAgent, urls,
+            actor, capabilityAgent, keystoreAgent, urls,
             invocationSigner: capabilityAgent.getSigner()
           }));
         } catch(e) {

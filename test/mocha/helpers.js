@@ -94,7 +94,7 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
 
 const KMS_MODULE = 'ssm-v1';
 exports.createEdv = async ({
-  actor, capability, capabilityAgent, invocationSigner, keystoreAgent,
+  actor, capabilityAgent, invocationSigner, keystoreAgent,
   kmsModule = KMS_MODULE, urls
 }) => {
   // create KAK and HMAC keys for edv config
@@ -105,7 +105,7 @@ exports.createEdv = async ({
 
   // create edv
   let newEdvConfig;
-  if(!capability) {
+  if(!invocationSigner) {
     newEdvConfig = {
       sequence: 0,
       controller: actor.id,
@@ -131,7 +131,6 @@ exports.createEdv = async ({
 
   const {httpsAgent} = brHttpsAgent;
   const edvConfig = await EdvClient.createEdv({
-    capability,
     config: newEdvConfig,
     httpsAgent,
     invocationSigner,
