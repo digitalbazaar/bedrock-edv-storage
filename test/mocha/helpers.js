@@ -9,6 +9,7 @@ const axios = require('axios');
 const bedrock = require('bedrock');
 const brAccount = require('bedrock-account');
 const brHttpsAgent = require('bedrock-https-agent');
+const brPassport = require('bedrock-passport');
 const database = require('bedrock-mongodb');
 const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
@@ -18,6 +19,7 @@ const {suites, sign, SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
+const sinon = require('sinon');
 
 // for key generation
 exports.KMS_MODULE = 'ssm-v1';
@@ -243,4 +245,16 @@ exports.delegate = async ({zcap, signer, capabilityChain}) => {
     purpose: new CapabilityDelegation({capabilityChain}),
     compactProof: false
   });
+};
+
+exports.stubPassport = ({actor}) => {
+  const passportStub = sinon.stub(brPassport, 'optionallyAuthenticated');
+  passportStub.callsFake((req, res, next) => {
+    req.user = {
+      account: {},
+      actor,
+    };
+    next();
+  });
+  return passportStub;
 };

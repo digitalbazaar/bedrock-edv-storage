@@ -19,8 +19,9 @@ accounts[email] = {};
 accounts[email].account = helpers.createAccount(email);
 accounts[email].meta = {};
 accounts[email].meta.sysResourceRole = [{
-  sysRole: 'bedrock-account.regular',
-  generateResource: 'id'
+  sysRole: 'bedrock-test.regular',
+  // FIXME: had to enable admin rights to create keyStore
+  // generateResource: 'id'
 }];
 
 // this will create the 3 users for the delegation / revoke
@@ -31,7 +32,7 @@ for(const name of ['alice', 'bob', 'carol']) {
   accounts[_email].account = helpers.createAccount(_email);
   accounts[_email].meta = {};
   accounts[_email].meta.sysResourceRole = [{
-    sysRole: 'bedrock-account.regular',
+    sysRole: 'bedrock-test.regular',
     // FIXME: had to enable admin rights to create keyStore
     // generateResource: 'id'
   }];

@@ -14,28 +14,14 @@ const mockData = require('./mock.data');
 const {EdvClient} = require('edv-client');
 const {CapabilityAgent} = require('webkms-client');
 let actors;
-let accounts;
 let urls;
 
-// auto-pass authentication checks
-const brPassport = require('bedrock-passport');
-brPassport.authenticateAll = (/*{req}*/) => {
-  // const email = req.get('x-test-account');
-  const email = 'alpha@example.com';
-  return {
-    user: {
-      actor: actors[email],
-      account: accounts[email].account
-    }
-  };
-};
-
 describe('bedrock-edv-storage HTTP API - edv-client', () => {
+  let passportStub;
+
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
-    accounts = mockData.accounts;
-
     // common URLs
     const {baseUri} = config.server;
     const root = `${baseUri}/edvs`;
@@ -45,6 +31,14 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       invalidDocuments: `${invalid}/documents`,
       invalidQuery: `${invalid}/query`
     };
+  });
+
+  before(() => {
+    passportStub = helpers.stubPassport({actor: actors['alpha@example.com']});
+  });
+
+  after(() => {
+    passportStub.restore();
   });
 
   describe('insertConfig API', () => {
