@@ -22,9 +22,9 @@ config.mongodb.dropCollections = {};
 config.mongodb.dropCollections.onInit = true;
 config.mongodb.dropCollections.collections = [];
 
-roles['bedrock-account.regular'] = {
-  id: 'bedrock-account.regular',
-  label: 'Account Test Role',
+roles['bedrock-test.regular'] = {
+  id: 'bedrock-test.regular',
+  label: 'Test Role',
   comment: 'Role for Test User',
   sysPermission: [
     permissions.ACCOUNT_ACCESS.id,
