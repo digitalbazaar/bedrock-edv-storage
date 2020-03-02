@@ -3,7 +3,9 @@
   "version": "1.1.4-0",
   "description": "Bedrock Encrypted Data Vault Storage",
   "main": "./lib",
-  "scripts": {"test": "cd ./test && npm test"},
+  "scripts": {
+    "test": "cd ./test && npm test"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/digitalbazaar/bedrock-edv-storage"
@@ -41,7 +43,7 @@
     "bedrock-mongodb": "3.x - 6.x",
     "bedrock-server": "^2.3.2",
     "bedrock-validation": "^4.1.0",
-    "bedrock-zcap-storage": "^1.2.0"
+    "bedrock-zcap-storage": "^2.0.0"
   },
   "directories": {
     "lib": "./lib"
