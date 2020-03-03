@@ -141,7 +141,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       // instruct client to index documents
       edvClient.ensureIndex({attribute: 'content.apples'});
-      const doc = helpers.clone(mockData.httpDocs.beta);
+      const doc = clone(mockData.httpDocs.beta);
       doc.id = await EdvClient.generateId();
       try {
         result = await edvClient.insert({
@@ -427,7 +427,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         urls
       });
       const allowedAction = 'write';
-      const doc = helpers.clone(mockData.httpDocs.alpha);
+      const doc = clone(mockData.httpDocs.alpha);
       doc.id = await EdvClient.generateId();
       const invocationSigner = testers.alice.capabilityAgent.getSigner();
       // alice delegates a `write` capability to bob with bob as a delegator
