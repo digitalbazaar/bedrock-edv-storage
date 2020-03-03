@@ -5,17 +5,15 @@
 
 const {config, util: {uuid}} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
+const brHttpsAgent = require('bedrock-https-agent');
 // const {AsymmetricKey, CapabilityAgent} = require('webkms-client');
 const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 // const {CapabilityDelegation} = require('ocapld');
 // const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-// const {EdvClient} = require('edv-client');
+const {EdvClient} = require('edv-client');
 
-// a unique id for the EDV itself
-const mockEdvId = `${config.server.baseUri}/edvs/z1A2RmqSkhYHcnH1UkZamKF1D`;
-// const hashedMockEdvId = database.hash(mockEdvId);
 // all tests involve write
 const allowedAction = 'write';
 // a unique id for the single document in this test
@@ -31,11 +29,15 @@ const urls = {
   invalidQuery: `${invalid}/query`
 };
 
+const JWE_ALG = 'ECDH-ES+A256KW';
+
 describe('revocation API', function() {
   // TODO: Rename this.
   // TODO: Move this to helpers.
   let testers = null;
   let passportStub;
+  let aliceEdvClient;
+  let aliceEdvConfig;
 
   before(async () => {
     await helpers.prepareDatabase(mockData);
@@ -47,38 +49,34 @@ describe('revocation API', function() {
       testers: ['alice', 'bob', 'carol'],
       mockData
     });
-    // const {account, actor} = testers.alice;
-    // const edvConfig = {
-    //   ...mockData.config,
-    //   controller: account.account.id
-    // };
-    // edvConfig.id = mockEdvId;
     passportStub = helpers.stubPassport({actor: testers.alice.actor});
-    await helpers.createEdv({
-      capabilityAgent: testers.alice.capabilityAgent,
-      keystoreAgent: testers.alice.keystoreAgent,
-      urls,
-    });
+    ({edvClient: aliceEdvClient, edvConfig: aliceEdvConfig} =
+      await helpers.createEdv({
+        capabilityAgent: testers.alice.capabilityAgent,
+        hmac: testers.alice.hmac,
+        keyAgreementKey: testers.alice.keyAgreementKey,
+        urls,
+      }));
   });
 
   after(() => {
     passportStub.restore();
   });
 
-  it('should delegate & revoke write access', async () => {
+  it('should delegate & revoke access', async () => {
+    // convert bob's key ID to a did:key:
+    await helpers.setKeyId(testers.bob.verificationKey);
+
     // alice is the controller of the EDV
     const capabilityDelegation = {
       id: `urn:zcap:${uuid()}`,
       '@context': SECURITY_CONTEXT_V2_URL,
-      allowedAction,
+      allowedAction: 'read',
       invoker: testers.bob.verificationKey.id,
-      delegator: testers.bob.verificationKey.id,
-      // Documents are not zCaps so this route stores all zCaps
-      // for a document.
-      parentCapability: `${mockEdvId}/zcaps/documents/${docId}`,
+      parentCapability: `${aliceEdvConfig.id}/zcaps/documents/${docId}`,
       invocationTarget: {
         type: 'urn:datahub:document',
-        id: `${mockEdvId}/documents/${docId}`
+        id: `${aliceEdvConfig.id}/documents/${docId}`
       }
     };
     await helpers.delegate({
@@ -88,8 +86,77 @@ describe('revocation API', function() {
         capabilityDelegation.parentCapability,
       ]
     });
-    console.log('DDDDDd', JSON.stringify(capabilityDelegation, null, 2));
 
+    const docContent = {
+      foo: 'bar',
+    };
+
+    // alice creates a document in the EDV
+    await aliceEdvClient.insert({
+      doc: {
+        id: docId,
+        content: docContent,
+      },
+      invocationSigner: testers.alice.capabilityAgent.getSigner(),
+      recipients: [{header: {
+        kid: testers.alice.keyAgreementKey.id,
+        alg: JWE_ALG
+      }}, {header: {
+        kid: testers.bob.keyAgreementKey.id,
+        alg: JWE_ALG
+      }}],
+    });
+
+    let resultAliceGet;
+    let err;
+    try {
+      // alice can read the document she created
+      resultAliceGet = await aliceEdvClient.get({
+        id: docId,
+        invocationSigner: testers.alice.capabilityAgent.getSigner(),
+      });
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(err);
+    resultAliceGet.content.should.eql(docContent);
+
+    // create and EdvClient for bob
+    const {httpsAgent} = brHttpsAgent;
+    const bobEdvClient = new EdvClient({
+      keyAgreementKey: testers.bob.keyAgreementKey,
+      httpsAgent
+    });
+
+    // bob can read the document alice created
+    const resultBobGet = await bobEdvClient.get({
+      id: docId,
+      capability: capabilityDelegation,
+      invocationSigner: testers.bob.verificationKey,
+    });
+    resultBobGet.content.should.eql(docContent);
+
+    // alice revokes bob's capability
+    await aliceEdvClient.revokeCapability({
+      capabilityToRevoke: capabilityDelegation,
+      invocationSigner: testers.alice.capabilityAgent.getSigner(),
+    });
+
+    // bob can no longer read the document alice created
+    let resultBobGetAfterRevocation;
+    err = null;
+    try {
+      resultBobGetAfterRevocation = await bobEdvClient.get({
+        id: docId,
+        capability: capabilityDelegation,
+        invocationSigner: testers.bob.verificationKey,
+      });
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(resultBobGetAfterRevocation);
+    should.exist(err);
+    err.response.data.type.should.equal('NotAllowedError');
   });
 
   // TODO: this more comprehensive test is to be completed later
