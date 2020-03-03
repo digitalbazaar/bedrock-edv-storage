@@ -160,6 +160,7 @@ describe('revocation API', function() {
   });
 
   // TODO: this more comprehensive test is to be completed later
+  /* eslint-disable */
   it.skip('should delegate & revoke write access II', async () => {
     // bob delegates his write capability from alice to carol.
     // all 3 of them are able to write to the same EDV.
@@ -223,4 +224,5 @@ describe('revocation API', function() {
     // test the default behavior that Alice can write to her own EDV,
     // but that bob and carol can not.
   });
+  /* eslint-enable */
 });
