@@ -98,7 +98,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   }); // end `insertConfig`
 
   describe('insert API', () => {
-    let capabilityAgent, edvClient = null;
+    let capabilityAgent;
+    let edvClient;
 
     before(async () => {
       const secret = '40762a17-1696-428f-a2b2-ddf9fe9b4987';
