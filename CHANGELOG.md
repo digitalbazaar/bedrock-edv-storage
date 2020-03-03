@@ -1,6 +1,9 @@
 # bedrock-edv-storage ChangeLog
 
-## 1.1.4 - 2020-02-xx
+## 1.2.0 - 2020-03-03
+
+### Added
+- HTTP revocations API.
 
 ### Changed
 - Update dependencies.
