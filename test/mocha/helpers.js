@@ -20,6 +20,7 @@ const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
 const sinon = require('sinon');
+const {Ed25519KeyPair} = require('crypto-ld');
 
 // for key generation
 exports.KMS_MODULE = 'ssm-v1';
@@ -43,15 +44,17 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
       secret: testerData.secret,
       handle: testerData.handle
     });
-    testerData.keystoreAgent = await exports.createKeystore({
-      capabilityAgent: testerData.capabilityAgent,
-      referenceId: testerData.secret
-    });
-    testerData.keyAgreementKey = await testerData.keystoreAgent.
-      generateKey({type: 'keyAgreement', kmsModule: exports.KMS_MODULE});
-    testerData.verificationKey = await testerData.keystoreAgent.
-      generateKey(
-        {type: 'Ed25519VerificationKey2018', kmsModule: exports.KMS_MODULE});
+    const keystoreAgent = testerData.keystoreAgent =
+      await exports.createKeystore({
+        capabilityAgent: testerData.capabilityAgent,
+        referenceId: testerData.secret
+      });
+    testerData.keyAgreementKey = await keystoreAgent.generateKey(
+      {type: 'keyAgreement', kmsModule: exports.KMS_MODULE});
+    testerData.verificationKey = await keystoreAgent.generateKey(
+      {type: 'Ed25519VerificationKey2018', kmsModule: exports.KMS_MODULE});
+    testerData.hmac = await keystoreAgent.generateKey(
+      {type: 'hmac', kmsModule: exports.KMS_MODULE});
   }
   return testData;
 };
@@ -136,14 +139,16 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
 };
 
 exports.createEdv = async ({
-  actor, capabilityAgent, invocationSigner, keystoreAgent,
-  kmsModule = exports.KMS_MODULE, urls
+  actor, capabilityAgent, keystoreAgent, kmsModule = exports.KMS_MODULE, urls,
+  keyAgreementKey, hmac, invocationSigner
 }) => {
-  // create KAK and HMAC keys for edv config
-  const [keyAgreementKey, hmac] = await Promise.all([
-    keystoreAgent.generateKey({type: 'keyAgreement', kmsModule}),
-    keystoreAgent.generateKey({type: 'hmac', kmsModule})
-  ]);
+  if(!(keyAgreementKey && hmac) && keystoreAgent) {
+    // create KAK and HMAC keys for edv config
+    ([keyAgreementKey, hmac] = await Promise.all([
+      keystoreAgent.generateKey({type: 'keyAgreement', kmsModule}),
+      keystoreAgent.generateKey({type: 'hmac', kmsModule})
+    ]));
+  }
 
   // create edv
   let newEdvConfig;
@@ -257,4 +262,14 @@ exports.stubPassport = ({actor}) => {
     next();
   });
   return passportStub;
+};
+
+exports.setKeyId = async key => {
+  // the keyDescription is required to get publicKeyBase58
+  const keyDescription = await key.getKeyDescription();
+  // create public ID (did:key) for bob's key
+  // TODO: do not use did:key but support a did:v1 based key.
+  const fingerprint = Ed25519KeyPair.fingerprintFromPublicKey(keyDescription);
+  // invocationTarget.verificationMethod = `did:key:${fingerprint}`;
+  key.id = `did:key:${fingerprint}#${fingerprint}`;
 };
