@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 1.2.1 - 2020-03-03
+
+### Fixed
+- Fix `baseUri` calculation.
+
 ## 1.2.0 - 2020-03-03
 
 ### Added
