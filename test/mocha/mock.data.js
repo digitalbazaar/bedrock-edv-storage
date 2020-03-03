@@ -1,8 +1,6 @@
 /*!
  * Copyright (c) 2018-2020 Digital Bazaar, Inc. All rights reserved.
  */
-/* jshint node: true */
-
 'use strict';
 
 const {config} = require('bedrock');
@@ -20,8 +18,7 @@ accounts[email].account = helpers.createAccount(email);
 accounts[email].meta = {};
 accounts[email].meta.sysResourceRole = [{
   sysRole: 'bedrock-test.regular',
-  // FIXME: had to enable admin rights to create keyStore
-  // generateResource: 'id'
+  generateResource: 'id'
 }];
 
 // this will create the 3 users for the delegation / revoke
@@ -33,8 +30,7 @@ for(const name of ['alice', 'bob', 'carol']) {
   accounts[_email].meta = {};
   accounts[_email].meta.sysResourceRole = [{
     sysRole: 'bedrock-test.regular',
-    // FIXME: had to enable admin rights to create keyStore
-    // generateResource: 'id'
+    generateResource: 'id'
   }];
 }
 
