@@ -55,6 +55,7 @@ describe('revocation API', function() {
         capabilityAgent: testers.alice.capabilityAgent,
         hmac: testers.alice.hmac,
         keyAgreementKey: testers.alice.keyAgreementKey,
+        invocationSigner: testers.alice.capabilityAgent.getSigner(),
         urls,
       }));
   });
