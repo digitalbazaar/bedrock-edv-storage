@@ -3,9 +3,6 @@
   "version": "1.1.4-0",
   "description": "Bedrock Encrypted Data Vault Storage",
   "main": "./lib",
-  "scripts": {
-    "test": "cd ./test && npm test"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/digitalbazaar/bedrock-edv-storage"
