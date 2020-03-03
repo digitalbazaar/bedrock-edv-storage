@@ -61,7 +61,7 @@ describe('remove API', () => {
   });
   // FIXME: the current implementation does not check evd id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
-  it.skip('should fail for another account', async () => {
+  it.skip('should fail for another EDV', async () => {
     const actor = actors['alpha@example.com'];
     let err;
     let records;

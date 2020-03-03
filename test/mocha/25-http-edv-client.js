@@ -51,9 +51,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
-      // set the keystore in the kmsClient to the newly created store
-      // controllerKey.kmsClient.keystore = keystore.id;
-
       // corresponds to the passport authenticated user
       const actor = actors['alpha@example.com'];
 
@@ -73,10 +70,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       urls.documents = `${edvConfig.id}/documents`;
       urls.query = `${edvConfig.id}/query`;
     });
-    // FIXME: alpha user currently has admin rights and is allowed to do this
-    // alpha has admin rights because of permission issues in the kms system
-    // that need to be resolved
-    it.skip('should fail for another account', async () => {
+    it('should fail for another account', async () => {
       // controller must match the authenticated user which is alpha@example.com
       let err;
       let edv;
