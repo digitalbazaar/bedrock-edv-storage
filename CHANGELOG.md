@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 1.3.0 - 2020-03-04
+
+### Added
+- Implement zCap auth in `findConfig` API.
+
 ## 1.2.1 - 2020-03-03
 
 ### Fixed
