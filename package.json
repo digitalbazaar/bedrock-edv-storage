@@ -25,7 +25,7 @@
     "cors": "^2.8.4",
     "crypto-ld": "^3.5.2",
     "did-method-key": "^0.5.0",
-    "http-signature-zcap-verify": "digitalbazaar/http-signature-zcap-verify#ocapld-next",
+    "http-signature-zcap-verify": "^3.0.0",
     "jsonld-signatures": "^5.0.0",
     "ocapld": "^2.0.0"
   },
