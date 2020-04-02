@@ -4,7 +4,7 @@
 
 ### Changed
 - **BREAKING**: Use ocapld@2.
-- **BREAKING**: Use Use http-signature-zcap-verify@3.
+- **BREAKING**: Use http-signature-zcap-verify@3.
 
 ## 1.3.0 - 2020-03-04
 
