@@ -132,6 +132,10 @@ data.docWithAttributes = {
         {
           "name": "CUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloY",
           "value": "QV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUBro"
+        },
+        {
+          "name": "CUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloY",
+          "value": "QV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUSis"
         }
       ]
     }
@@ -244,7 +248,7 @@ const httpDocs = data.httpDocs = {};
 httpDocs.alpha = {
   id: 'z19pjdSMQMkBqqJ5zsbbaaaaa',
   content: {
-    apples: 1,
+    apples: [1, 6],
     oranges: 2,
     pears: 3,
   }
