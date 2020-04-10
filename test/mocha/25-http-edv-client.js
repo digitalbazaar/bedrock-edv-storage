@@ -16,7 +16,7 @@ const {CapabilityAgent} = require('webkms-client');
 let actors;
 let urls;
 
-describe('bedrock-edv-storage HTTP API - edv-client', () => {
+describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
   let passportStub;
 
   before(async () => {
@@ -390,6 +390,28 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertions.shouldBeEdvDocument({doc: result[0]});
       result[0].content.should.eql(mockData.httpDocs.beta.content);
       result[0].id.should.equal(mockData.httpDocs.beta.id);
+    });
+    it('should get a document by attribute and value where multiple values ' +
+      'exist for an attribute via an array', async () => {
+      // both alpha and beta have `apples` attribute
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          equals: [{
+            'content.apples': mockData.httpDocs.alpha.content.apples[1]
+          }],
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result.should.be.an('array');
+      result.should.have.length(1);
+      assertions.shouldBeEdvDocument({doc: result[0]});
+      result[0].content.should.eql(mockData.httpDocs.alpha.content);
+      result[0].id.should.equal(mockData.httpDocs.alpha.id);
     });
     it('should find no results on non-indexed attribute', async () => {
       let result;

@@ -76,6 +76,29 @@ describe('find API', () => {
     record.edvId.should.equal(hashedMockEdvId);
     record.doc.should.eql(mockData.docWithAttributes);
   });
+  it('should get a document by attribute and value when multiple ' +
+    'values exist for the attribute via an array', async () => {
+    const actor = actors['alpha@example.com'];
+    const entry = mockData.docWithAttributes.indexed[0];
+    const [, attribute] = entry.attributes;
+    const records = await brEdvStorage.find({
+      actor,
+      edvId: mockEdvId,
+      query: {
+        $or: [{
+          'doc.indexed.hmac.id': entry.hmac.id,
+          'doc.indexed.attributes': {
+            $elemMatch: attribute
+          }
+        }]
+      }
+    });
+    should.exist(records);
+    records.should.have.length(1);
+    const [record] = records;
+    record.edvId.should.equal(hashedMockEdvId);
+    record.doc.should.eql(mockData.docWithAttributes);
+  });
   it('should find no results', async () => {
     const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
