@@ -16,7 +16,7 @@ const {CapabilityAgent} = require('webkms-client');
 let actors;
 let urls;
 
-describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
+describe('bedrock-edv-storage HTTP API - edv-client', () => {
   let passportStub;
 
   before(async () => {
@@ -338,6 +338,10 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
     before(async () => {
       // instruct client to index documents
       edvClient.ensureIndex({attribute: 'content.apples'});
+      edvClient.ensureIndex({
+        attribute: ['content.group', 'content.subgroup', 'content.id'],
+        unique: true
+      });
 
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
@@ -346,6 +350,16 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
 
       await edvClient.insert({
         doc: mockData.httpDocs.beta,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.gamma,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.delta,
         invocationSigner: capabilityAgent.getSigner(),
       });
     });
@@ -364,13 +378,19 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       }
       assertNoError(err);
       result.should.be.an('array');
-      result.should.have.length(2);
+      result.should.have.length(4);
       const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
       assertions.shouldBeEdvDocument({doc: alpha});
       alpha.content.should.eql(mockData.httpDocs.alpha.content);
       const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
       assertions.shouldBeEdvDocument({doc: beta});
       beta.content.should.eql(mockData.httpDocs.beta.content);
+      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      assertions.shouldBeEdvDocument({doc: gamma});
+      gamma.content.should.eql(mockData.httpDocs.gamma.content);
+      const delta = result.find(r => r.id === mockData.httpDocs.delta.id);
+      assertions.shouldBeEdvDocument({doc: delta});
+      delta.content.should.eql(mockData.httpDocs.delta.content);
     });
     it('should get a document by attribute and value', async () => {
       // both alpha and beta have `apples` attribute
@@ -428,6 +448,136 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       result.should.be.an('array');
       result.should.have.length(0);
     });
+    it('should get a document by attribute 1 in a compound index', async () => {
+      // NOTE: the client was instructed to create a compound index
+      // with ['content.group', 'content.subgroup', 'content.id']
+      // before the documents were inserted
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          has: ['content.group'],
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result.should.be.an('array');
+      result.should.have.length(3);
+      const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+      assertions.shouldBeEdvDocument({doc: alpha});
+      alpha.content.should.eql(mockData.httpDocs.alpha.content);
+      const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+      assertions.shouldBeEdvDocument({doc: beta});
+      beta.content.should.eql(mockData.httpDocs.beta.content);
+      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      assertions.shouldBeEdvDocument({doc: gamma});
+      gamma.content.should.eql(mockData.httpDocs.gamma.content);
+    });
+    it('should get a document by attribute 1 and value via compound index',
+      async () => {
+        // both alpha and beta and gamma are in the same group
+        let result;
+        let err;
+        try {
+          result = await edvClient.find({
+            equals: [{'content.group': 'group1'}],
+            invocationSigner: capabilityAgent.getSigner(),
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        result.should.be.an('array');
+        result.should.have.length(3);
+        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        assertions.shouldBeEdvDocument({doc: alpha});
+        alpha.content.should.eql(mockData.httpDocs.alpha.content);
+        const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+        assertions.shouldBeEdvDocument({doc: beta});
+        beta.content.should.eql(mockData.httpDocs.beta.content);
+        const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+        assertions.shouldBeEdvDocument({doc: gamma});
+        gamma.content.should.eql(mockData.httpDocs.gamma.content);
+      });
+    it('should get a document by attribute 2 in a compound index', async () => {
+      // NOTE: the client was instructed to create a compound index
+      // with ['content.group', 'content.subgroup', 'content.id']
+      // before the documents were inserted
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          has: ['content.subgroup'],
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result.should.be.an('array');
+      result.should.have.length(3);
+      const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+      assertions.shouldBeEdvDocument({doc: alpha});
+      alpha.content.should.eql(mockData.httpDocs.alpha.content);
+      const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+      assertions.shouldBeEdvDocument({doc: beta});
+      beta.content.should.eql(mockData.httpDocs.beta.content);
+      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      assertions.shouldBeEdvDocument({doc: gamma});
+      gamma.content.should.eql(mockData.httpDocs.gamma.content);
+    });
+    it('should get a document by attribute 2 and value via compound index',
+      async () => {
+        // both alpha and beta and gamma are in the same group
+        let result;
+        let err;
+        try {
+          result = await edvClient.find({
+            equals: [{
+              'content.group': 'group1',
+              'content.subgroup': 'subgroup1'
+            }],
+            invocationSigner: capabilityAgent.getSigner(),
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        result.should.be.an('array');
+        result.should.have.length(2);
+        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        assertions.shouldBeEdvDocument({doc: alpha});
+        alpha.content.should.eql(mockData.httpDocs.alpha.content);
+        const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+        assertions.shouldBeEdvDocument({doc: beta});
+        beta.content.should.eql(mockData.httpDocs.beta.content);
+      });
+    it('should get a document by attribute 3 and value via compound index',
+      async () => {
+        // both alpha and beta and gamma are in the same group
+        let result;
+        let err;
+        try {
+          result = await edvClient.find({
+            equals: [{
+              'content.group': 'group1',
+              'content.subgroup': 'subgroup1',
+              'content.id': 'alpha'
+            }],
+            invocationSigner: capabilityAgent.getSigner(),
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        result.should.be.an('array');
+        result.should.have.length(1);
+        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        assertions.shouldBeEdvDocument({doc: alpha});
+        alpha.content.should.eql(mockData.httpDocs.alpha.content);
+      });
   }); // end `find`
   describe('capabilities', () => {
     let testers = null;
