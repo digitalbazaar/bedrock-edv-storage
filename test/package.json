@@ -46,7 +46,7 @@
     "bedrock-validation": "^4.1.0",
     "bedrock-zcap-storage": "^2.0.0",
     "crypto-ld": "^3.7.0",
-    "edv-client": "^2.4.0",
+    "edv-client": "github:digitalbazaar/edv-client#fix-compound-indexes",
     "jsonld-signatures": "^5.0.0",
     "sinon": "^9.0.0",
     "webkms-client": "^2.0.0"
