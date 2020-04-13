@@ -251,6 +251,9 @@ httpDocs.alpha = {
     apples: [1, 6],
     oranges: 2,
     pears: 3,
+    group: 'group1',
+    subgroup: 'subgroup1',
+    id: 'alpha',
   }
 };
 
@@ -260,6 +263,9 @@ httpDocs.beta = {
     apples: 10,
     oranges: 20,
     pears: 30,
+    group: 'group1',
+    subgroup: 'subgroup1',
+    id: 'beta',
   }
 };
 
@@ -269,5 +275,17 @@ httpDocs.gamma = {
     apples: 100,
     oranges: 200,
     pears: 300,
+    group: 'group1',
+    subgroup: 'subgroup2',
+    id: 'gamma',
+  }
+};
+
+httpDocs.delta = {
+  id: 'z19pjdSMQMkBqqJ5zsbbgdddd',
+  content: {
+    apples: 1000,
+    oranges: 2000,
+    pears: 3000,
   }
 };
