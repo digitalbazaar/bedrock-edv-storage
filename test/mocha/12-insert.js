@@ -46,6 +46,28 @@ describe('insert API', () => {
     });
     record.doc.should.eql(doc);
   });
+  it('should insert a document with a large sequence', async () => {
+    const actor = actors['alpha@example.com'];
+    const {doc1} = mockData;
+    const doc = {...doc1};
+    doc.id = await helpers.generateRandom();
+    doc.sequence = helpers.largeNumber();
+    const hashedDocId = database.hash(doc.id);
+    let record = await brEdvStorage.insert({
+      actor,
+      edvId: mockEdvId,
+      doc,
+    });
+    should.exist(record);
+    record.edvId.should.equal(hashedMockEdvId);
+    record.id.should.equal(hashedDocId);
+    record.doc.should.eql(doc);
+    record = await database.collections.edvDoc.findOne({
+      edvId: hashedMockEdvId,
+      id: hashedDocId
+    });
+    record.doc.should.eql(doc);
+  });
   it('should insert a document with an attribute', async () => {
     const actor = actors['alpha@example.com'];
     const {docWithAttributes: doc} = mockData;
