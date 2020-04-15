@@ -47,20 +47,7 @@ describe('insert API', () => {
     record.doc.should.eql(doc);
   });
 
-  const largeNumbers = [{
-    title: 'should insert a document with max 32-Bit sequence number',
-    sequence: Math.pow(2, 31) - 1
-  }, {
-    title: 'should insert a document with the minimum 64-Bit sequence number',
-    sequence: Math.pow(2, 32)
-  }, {
-    title: 'should insert a document with a random 64-Bit sequence number',
-    sequence: helpers.largeNumber()
-  }, {
-    title: 'should insert a document with MAX_SAFE_INTEGER as sequence number',
-    sequence: Number.MAX_SAFE_INTEGER
-  }];
-  for(const test of largeNumbers) {
+  for(const test of helpers.largeNumbers) {
     it(test.title, async () => {
       const actor = actors['alpha@example.com'];
       const {doc1} = mockData;
