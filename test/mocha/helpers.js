@@ -27,6 +27,14 @@ exports.KMS_MODULE = 'ssm-v1';
 // algorithm required for the jwe headers
 exports.JWE_ALG = 'ECDH-ES+A256KW';
 
+const largeRange = Number.MAX_SAFE_INTEGER - Math.pow(2, 32);
+
+// gets a number between MAX_SAFE_INTEGER & 2^32.
+exports.largeNumber = () => {
+  // if Math.random is 1 the number will be 2^32 otherwise it will be larger.
+  return Number.MAX_SAFE_INTEGER - Math.floor(largeRange * Math.random());
+};
+
 exports.makeDelegationTesters = async ({testers = [], mockData}) => {
   const actors = await exports.getActors(mockData);
   const accounts = mockData.accounts;
