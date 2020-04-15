@@ -3,5 +3,6 @@ module.exports = {
     node: true
   },
   extends: ['digitalbazaar'],
-  root: true
+  root: true,
+  ignorePatterns: ['node_modules/']
 };
