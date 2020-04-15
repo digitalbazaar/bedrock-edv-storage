@@ -31,7 +31,10 @@ exports.KMS_MODULE = 'ssm-v1';
 // algorithm required for the jwe headers
 exports.JWE_ALG = 'ECDH-ES+A256KW';
 
-const largeRange = Number.MAX_SAFE_INTEGER - Math.pow(2, 32);
+const min64Bit = Math.pow(2, 32);
+const largeRange = Number.MAX_SAFE_INTEGER - min64Bit;
+// this should get the middle 64 bit sequence number
+const middle64Bit = Math.ceil(largeRange / 2) + min64Bit;
 
 // gets a number between MAX_SAFE_INTEGER & 2^32.
 exports.largeNumber = () => {
@@ -39,6 +42,22 @@ exports.largeNumber = () => {
   return Number.MAX_SAFE_INTEGER - Math.floor(largeRange * Math.random());
 };
 
+exports.largeNumbers = [{
+  title: 'should insert a document with max 32-Bit sequence number',
+  sequence: Math.pow(2, 31) - 1
+}, {
+  title: 'should insert a document with the minimum 64-Bit sequence number',
+  sequence: min64Bit
+}, {
+  title: 'should insert a document with the middle 64-bit sequence number',
+  sequence: middle64Bit
+}, {
+  title: 'should insert a document with a random 64-Bit sequence number',
+  sequence: exports.largeNumber()
+}, {
+  title: 'should insert a document with MAX_SAFE_INTEGER as sequence number',
+  sequence: Number.MAX_SAFE_INTEGER
+}];
 exports.generateRandom = async () => {
   // 128-bit random number, multibase encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)
