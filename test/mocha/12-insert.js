@@ -46,28 +46,45 @@ describe('insert API', () => {
     });
     record.doc.should.eql(doc);
   });
-  it('should insert a document with a large sequence', async () => {
-    const actor = actors['alpha@example.com'];
-    const {doc1} = mockData;
-    const doc = {...doc1};
-    doc.id = await helpers.generateRandom();
-    doc.sequence = helpers.largeNumber();
-    const hashedDocId = database.hash(doc.id);
-    let record = await brEdvStorage.insert({
-      actor,
-      edvId: mockEdvId,
-      doc,
+
+  const largeNumbers = [{
+    title: 'should insert a document with max 32-Bit sequence number',
+    sequence: Math.pow(2, 31) - 1
+  }, {
+    title: 'should insert a document with the minimum 64-Bit sequence number',
+    sequence: Math.pow(2, 32)
+  }, {
+    title: 'should insert a document with a random 64-Bit sequence number',
+    sequence: helpers.largeNumber()
+  }, {
+    title: 'should insert a document with MAX_SAFE_INTEGER as sequence number',
+    sequence: Number.MAX_SAFE_INTEGER
+  }];
+  for(const test of largeNumbers) {
+    it(test.title, async () => {
+      const actor = actors['alpha@example.com'];
+      const {doc1} = mockData;
+      const doc = {...doc1};
+      doc.id = await helpers.generateRandom();
+      doc.sequence = test.sequence;
+      const hashedDocId = database.hash(doc.id);
+      let record = await brEdvStorage.insert({
+        actor,
+        edvId: mockEdvId,
+        doc,
+      });
+      should.exist(record);
+      record.edvId.should.equal(hashedMockEdvId);
+      record.id.should.equal(hashedDocId);
+      record.doc.should.eql(doc);
+      record = await database.collections.edvDoc.findOne({
+        edvId: hashedMockEdvId,
+        id: hashedDocId
+      });
+      record.doc.should.eql(doc);
     });
-    should.exist(record);
-    record.edvId.should.equal(hashedMockEdvId);
-    record.id.should.equal(hashedDocId);
-    record.doc.should.eql(doc);
-    record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
-      id: hashedDocId
-    });
-    record.doc.should.eql(doc);
-  });
+
+  }
   it('should insert a document with an attribute', async () => {
     const actor = actors['alpha@example.com'];
     const {docWithAttributes: doc} = mockData;
