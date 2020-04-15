@@ -7,9 +7,11 @@
 
 const axios = require('axios');
 const bedrock = require('bedrock');
+const base58 = require('bs58');
 const brAccount = require('bedrock-account');
 const brHttpsAgent = require('bedrock-https-agent');
 const brPassport = require('bedrock-passport');
+const crypto = require('crypto');
 const database = require('bedrock-mongodb');
 const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
@@ -21,6 +23,8 @@ const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
 const sinon = require('sinon');
 const {Ed25519KeyPair} = require('crypto-ld');
+
+const getRandomBytes = promisify(crypto.randomBytes);
 
 // for key generation
 exports.KMS_MODULE = 'ssm-v1';
@@ -35,6 +39,16 @@ exports.largeNumber = () => {
   return Number.MAX_SAFE_INTEGER - Math.floor(largeRange * Math.random());
 };
 
+exports.generateRandom = async () => {
+  // 128-bit random number, multibase encoded
+  // 0x00 = identity tag, 0x10 = length (16 bytes)
+  const buf = Buffer.concat([
+    Buffer.from([0x00, 0x10]),
+    await getRandomBytes(16)
+  ]);
+  // multibase encoding for base58 starts with 'z'
+  return 'z' + base58.encode(buf);
+};
 exports.makeDelegationTesters = async ({testers = [], mockData}) => {
   const actors = await exports.getActors(mockData);
   const accounts = mockData.accounts;
