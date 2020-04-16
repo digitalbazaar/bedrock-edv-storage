@@ -47,7 +47,8 @@ describe('insert API', () => {
     record.doc.should.eql(doc);
   });
 
-  for(const test of helpers.largeNumbers) {
+  // test various sequence numbers
+  for(const test of helpers.sequenceNumberTests) {
     it(test.title, async () => {
       const actor = actors['alpha@example.com'];
       const {doc1} = mockData;

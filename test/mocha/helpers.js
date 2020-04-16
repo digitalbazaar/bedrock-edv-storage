@@ -31,33 +31,41 @@ exports.KMS_MODULE = 'ssm-v1';
 // algorithm required for the jwe headers
 exports.JWE_ALG = 'ECDH-ES+A256KW';
 
-const min64Bit = Math.pow(2, 32);
-const largeRange = Number.MAX_SAFE_INTEGER - min64Bit;
-// this should get the middle 64 bit sequence number
-const middle64Bit = Math.ceil(largeRange / 2) + min64Bit;
+/* eslint-disable-next-line max-len */
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  // The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-// gets a number between MAX_SAFE_INTEGER & 2^32.
-exports.largeNumber = () => {
-  // if Math.random is 1 the number will be 2^32 otherwise it will be larger.
-  return Number.MAX_SAFE_INTEGER - Math.floor(largeRange * Math.random());
-};
+// test various sequence numbers at edge case zones
+exports.sequenceNumberTests = [
+  // low values
+  ['0', 0],
+  ['1', 1],
+  // near INT32_MAX
+  ['2**31-1', Math.pow(2, 31) - 1],
+  ['2**31', Math.pow(2, 31)],
+  ['2**31+1', Math.pow(2, 31) + 1],
+  // near UINT32_MAX
+  ['2**32-1', Math.pow(2, 32) - 1],
+  ['2**32', Math.pow(2, 32)],
+  ['2**32+1', Math.pow(2, 32) + 1],
+  // betwixt UINT32_MAX and Number.MAX_SAFE_INTEGER
+  ['middle betwixt 2**32-1 and MAX_SAFE_INTEGER',
+    (Number.MAX_SAFE_INTEGER - Math.pow(2, 32) - 1) / 2],
+  ['random betwixt 2**31-1 and MAX_SAFE_INTEGER',
+    getRandomIntInclusive(Math.pow(2, 32), Number.MAX_SAFE_INTEGER)],
+  // near Number.MAX_SAFE_INTEGER
+  ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
+  ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
+].map(d => ({
+  title: `should insert a document with sequence number of ${d[0]}`,
+  sequence: d[1]
+}));
 
-exports.largeNumbers = [{
-  title: 'should insert a document with max 32-Bit sequence number',
-  sequence: Math.pow(2, 31) - 1
-}, {
-  title: 'should insert a document with the minimum 64-Bit sequence number',
-  sequence: min64Bit
-}, {
-  title: 'should insert a document with the middle 64-bit sequence number',
-  sequence: middle64Bit
-}, {
-  title: 'should insert a document with a random 64-Bit sequence number',
-  sequence: exports.largeNumber()
-}, {
-  title: 'should insert a document with MAX_SAFE_INTEGER as sequence number',
-  sequence: Number.MAX_SAFE_INTEGER
-}];
 exports.generateRandom = async () => {
   // 128-bit random number, multibase encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)
@@ -68,6 +76,7 @@ exports.generateRandom = async () => {
   // multibase encoding for base58 starts with 'z'
   return 'z' + base58.encode(buf);
 };
+
 exports.makeDelegationTesters = async ({testers = [], mockData}) => {
   const actors = await exports.getActors(mockData);
   const accounts = mockData.accounts;
