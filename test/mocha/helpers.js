@@ -46,18 +46,18 @@ exports.sequenceNumberTests = [
   ['0', 0],
   ['1', 1],
   // near INT32_MAX
-  ['2**31-1', Math.pow(2, 31) - 1],
-  ['2**31', Math.pow(2, 31)],
-  ['2**31+1', Math.pow(2, 31) + 1],
+  ['2**31-1', 2 ** 31 - 1],
+  ['2**31', 2 ** 31],
+  ['2**31+1', 2 ** 31 + 1],
   // near UINT32_MAX
-  ['2**32-1', Math.pow(2, 32) - 1],
-  ['2**32', Math.pow(2, 32)],
-  ['2**32+1', Math.pow(2, 32) + 1],
+  ['2**32-1', 2 ** 32 - 1],
+  ['2**32', 2 ** 32],
+  ['2**32+1', 2 ** 32 + 1],
   // betwixt UINT32_MAX and Number.MAX_SAFE_INTEGER
   ['middle betwixt 2**32-1 and MAX_SAFE_INTEGER',
-    (Number.MAX_SAFE_INTEGER - Math.pow(2, 32) - 1) / 2],
-  ['random betwixt 2**31-1 and MAX_SAFE_INTEGER',
-    getRandomIntInclusive(Math.pow(2, 32), Number.MAX_SAFE_INTEGER)],
+    (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
+  ['random betwixt 2**32-1 and MAX_SAFE_INTEGER',
+    getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
   // near Number.MAX_SAFE_INTEGER
   ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
   ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
