@@ -43,9 +43,8 @@ function getRandomIntInclusive(min, max) {
 // test various sequence numbers at edge case zones
 
 exports.sequenceNumberTests = ({update = false}) => {
-  const up = 'update';
-  const ins = 'insert';
-  const message = `should ${update ? up : ins} a document with sequence number`;
+  const message = `should ${update ? 'update' : 'insert'}` +
+  `a document with sequence number`;
   const valueArray = [
     // low values
     ['1', 1],
