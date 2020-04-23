@@ -41,36 +41,12 @@ function getRandomIntInclusive(min, max) {
 }
 
 // test various sequence numbers at edge case zones
-// exports.sequenceNumberTests = [
-//   // low values
-//   ['0', 0],
-//   ['1', 1],
-//   // near INT32_MAX
-//   ['2**31-1', 2 ** 31 - 1],
-//   ['2**31', 2 ** 31],
-//   ['2**31+1', 2 ** 31 + 1],
-//   // near UINT32_MAX
-//   ['2**32-1', 2 ** 32 - 1],
-//   ['2**32', 2 ** 32],
-//   ['2**32+1', 2 ** 32 + 1],
-//   // in range [UINT32_MAX + 1, Number.MAX_SAFE_INTEGER]
-//   ['in range [2**32, MAX_SAFE_INTEGER] (middle)',
-//     2 ** 32 + (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
-//   ['in range [2**32, MAX_SAFE_INTEGER] (random)',
-//     getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
-//   // near Number.MAX_SAFE_INTEGER
-//   ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
-//   ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
-// ].map(d => ({
-//   title: `should insert a document with sequence number ${d[0]}`,
-//   sequence: d[1]
-// }));
 
 exports.sequenceNumberTests = ({update = false}) => {
   const up = 'update';
   const ins = 'insert';
   const message = `should ${update ? up : ins} a document with sequence number`;
-  return [
+  const valueArray = [
     // low values
     ['1', 1],
     // near INT32_MAX
@@ -88,8 +64,13 @@ exports.sequenceNumberTests = ({update = false}) => {
       getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
     // near Number.MAX_SAFE_INTEGER
     ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
-    ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
-  ].map(d => ({
+    ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER]];
+
+  // If we testing insert, add a zero value entry
+  if(!update) {
+    valueArray.unshift(['0', 0]);
+  }
+  return valueArray.map(d => ({
     title: `${message} ${d[0]}`,
     sequence: d[1]
   }));
