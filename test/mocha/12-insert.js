@@ -96,7 +96,7 @@ describe('insert API', () => {
         '"doc.sequence" must be a non-negative integer.');
     });
 
-  it('should fail to insert a document with' +
+  it('should fail to insert a document with ' +
     'a sequence number greater than MAX_SAFE_INTEGER',
   async () => {
     let record, error = null;
