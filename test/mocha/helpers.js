@@ -66,6 +66,35 @@ exports.sequenceNumberTests = [
   sequence: d[1]
 }));
 
+exports.updateSequenceNumbers = ({update = false}) => {
+  const up = 'update';
+  const ins = 'insert';
+  return [
+    // low values
+    ['1', 1],
+    // near INT32_MAX
+    ['2**31-1', 2 ** 31 - 1],
+    ['2**31', 2 ** 31],
+    ['2**31+1', 2 ** 31 + 1],
+    // near UINT32_MAX
+    ['2**32-1', 2 ** 32 - 1],
+    ['2**32', 2 ** 32],
+    ['2**32+1', 2 ** 32 + 1],
+    // in range [UINT32_MAX + 1, Number.MAX_SAFE_INTEGER]
+    ['in range [2**32, MAX_SAFE_INTEGER] (middle)',
+      2 ** 32 + (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
+    ['in range [2**32, MAX_SAFE_INTEGER] (random)',
+      getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
+    // near Number.MAX_SAFE_INTEGER
+    ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
+    ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
+  ].map(d => ({
+    title: `should ${update ? up : ins} \
+     a document with sequence number ${d[0]}`,
+    sequence: d[1]
+  }));
+};
+
 exports.generateRandom = async () => {
   // 128-bit random number, multibase encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)
@@ -176,6 +205,7 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
     config.referenceId = referenceId;
   }
   const kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`;
+  console.log('kmsBaseUrl', kmsBaseUrl);
   const {httpsAgent} = brHttpsAgent;
   const keystore = await KmsClient.createKeystore({
     url: `${kmsBaseUrl}/keystores`,
