@@ -118,7 +118,7 @@ data.doc2 = {
   }
 };
 
-// NOTE: There are no keys in indexed or receipients by design
+// NOTE: There are no keys in indexed or recipients by design
 data.docWithNoIndexedOrRecipients = {
   "id": "z19pjdSMQMkBqqJ5zsaagncfU",
   "sequence": 0,
