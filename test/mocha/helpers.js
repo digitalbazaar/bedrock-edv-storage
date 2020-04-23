@@ -41,34 +41,35 @@ function getRandomIntInclusive(min, max) {
 }
 
 // test various sequence numbers at edge case zones
-exports.sequenceNumberTests = [
-  // low values
-  ['0', 0],
-  ['1', 1],
-  // near INT32_MAX
-  ['2**31-1', 2 ** 31 - 1],
-  ['2**31', 2 ** 31],
-  ['2**31+1', 2 ** 31 + 1],
-  // near UINT32_MAX
-  ['2**32-1', 2 ** 32 - 1],
-  ['2**32', 2 ** 32],
-  ['2**32+1', 2 ** 32 + 1],
-  // in range [UINT32_MAX + 1, Number.MAX_SAFE_INTEGER]
-  ['in range [2**32, MAX_SAFE_INTEGER] (middle)',
-    2 ** 32 + (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
-  ['in range [2**32, MAX_SAFE_INTEGER] (random)',
-    getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
-  // near Number.MAX_SAFE_INTEGER
-  ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
-  ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
-].map(d => ({
-  title: `should insert a document with sequence number ${d[0]}`,
-  sequence: d[1]
-}));
+// exports.sequenceNumberTests = [
+//   // low values
+//   ['0', 0],
+//   ['1', 1],
+//   // near INT32_MAX
+//   ['2**31-1', 2 ** 31 - 1],
+//   ['2**31', 2 ** 31],
+//   ['2**31+1', 2 ** 31 + 1],
+//   // near UINT32_MAX
+//   ['2**32-1', 2 ** 32 - 1],
+//   ['2**32', 2 ** 32],
+//   ['2**32+1', 2 ** 32 + 1],
+//   // in range [UINT32_MAX + 1, Number.MAX_SAFE_INTEGER]
+//   ['in range [2**32, MAX_SAFE_INTEGER] (middle)',
+//     2 ** 32 + (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
+//   ['in range [2**32, MAX_SAFE_INTEGER] (random)',
+//     getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)],
+//   // near Number.MAX_SAFE_INTEGER
+//   ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
+//   ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
+// ].map(d => ({
+//   title: `should insert a document with sequence number ${d[0]}`,
+//   sequence: d[1]
+// }));
 
-exports.updateSequenceNumbers = ({update = false}) => {
+exports.sequenceNumberTests = ({update = false}) => {
   const up = 'update';
   const ins = 'insert';
+  const message = `should ${update ? up : ins} a document with sequence number`;
   return [
     // low values
     ['1', 1],
@@ -89,8 +90,7 @@ exports.updateSequenceNumbers = ({update = false}) => {
     ['MAX_SAFE_INTEGER-1', Number.MAX_SAFE_INTEGER - 1],
     ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
   ].map(d => ({
-    title: `should ${update ? up : ins} \
-     a document with sequence number ${d[0]}`,
+    title: `${message} ${d[0]}`,
     sequence: d[1]
   }));
 };
@@ -205,7 +205,6 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
     config.referenceId = referenceId;
   }
   const kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`;
-  console.log('kmsBaseUrl', kmsBaseUrl);
   const {httpsAgent} = brHttpsAgent;
   const keystore = await KmsClient.createKeystore({
     url: `${kmsBaseUrl}/keystores`,
