@@ -105,5 +105,39 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result.content.should.eql(record.doc.content);
       });
     }
+
+    it('should not update a sequence number greater than MAX_SAFE_INTEGER',
+      async () => {
+        let error, result = null;
+        try {
+          const actor = actors['alpha@example.com'];
+          const doc = clone(mockData.docWithNoIndexedOrRecipients);
+          doc.id = await helpers.generateRandom();
+          doc.sequence = Number.MAX_SAFE_INTEGER;
+          doc.content = {
+            foo: 'bar'
+          };
+          const record = await brEdvStorage.insert({
+            actor,
+            edvId: mockEdvId,
+            doc
+          });
+          should.exist(record);
+          record.doc.content.oranges = 1;
+          result = await edvClient.update({
+            doc: record.doc,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          error = e;
+        }
+        console.log(result.sequence);
+        should.not.exist(result);
+        should.exist(error);
+        error.name.should.equal('Error');
+        error.message.should.equal(
+          `"doc.sequence" must be less than MAX_SAFE_INTEGER`
+        );
+      });
   });
 });
