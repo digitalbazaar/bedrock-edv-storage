@@ -118,6 +118,22 @@ data.doc2 = {
   }
 };
 
+// NOTE: There are no keys in indexed or receipients by design
+data.docWithNoIndexedOrRecipients = {
+  "id": "z19pjdSMQMkBqqJ5zsaagncfU",
+  "sequence": 0,
+  "indexed": [
+  ],
+  "jwe": {
+    "protected": "eyJlbmMiOiJDMjBQIn0",
+    "recipients": [
+    ],
+    "iv": "S-bNe9DayHcXWhBH",
+    "ciphertext": "bcZnPyreRmcLCngVbMHJTNeIIxkSJno",
+    "tag": "R2xDL9AJo7IhZ7y_sebgJw"
+  }
+};
+
 data.docWithAttributes = {
   "id": "z19pjdSMQMkBqqJ5zsbbgbbbb",
   "sequence": 0,
