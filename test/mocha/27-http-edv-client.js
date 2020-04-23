@@ -136,7 +136,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         should.exist(error);
         error.name.should.equal('Error');
         error.message.should.equal(
-          `"doc.sequence" must be less than MAX_SAFE_INTEGER`
+          '"doc.sequence" must be less than MAX_SAFE_INTEGER'
         );
       });
   });
