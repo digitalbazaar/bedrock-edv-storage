@@ -40,7 +40,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     passportStub.restore();
   });
 
-  describe.only('update API', () => {
+  describe('update API', () => {
     let capabilityAgent;
     let edvClient;
     let accounts;
@@ -72,7 +72,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         {actor, capabilityAgent, keystoreAgent, urls}));
     });
 
-    for(const test of helpers.updateSequenceNumbers({update: true})) {
+    for(const test of helpers.sequenceNumberTests({update: true})) {
       it(test.title, async () => {
         let result;
         let err;

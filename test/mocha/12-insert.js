@@ -48,7 +48,7 @@ describe('insert API', () => {
   });
 
   // test various sequence numbers
-  for(const test of helpers.sequenceNumberTests) {
+  for(const test of helpers.sequenceNumberTests({})) {
     it(test.title, async () => {
       const actor = actors['alpha@example.com'];
       const {doc1} = mockData;
