@@ -25,24 +25,28 @@
   "dependencies": {
     "assert-plus": "^1.0.0",
     "bs58": "^4.0.1",
-    "cors": "^2.8.4",
-    "crypto-ld": "^3.5.2",
-    "did-method-key": "^0.5.0",
+    "cors": "^2.8.5",
+    "crypto-ld": "^3.7.0",
+    "did-io": "^0.8.0",
+    "did-method-key": "^0.6.1",
+    "did-veres-one": "veres-one/did-veres-one#support-v1",
     "http-signature-zcap-verify": "^3.0.0",
-    "jsonld-signatures": "^5.0.0",
+    "jsonld-signatures": "^5.0.1",
     "ocapld": "^2.0.0"
   },
   "peerDependencies": {
-    "bedrock": "1.12.1 - 3.x",
-    "bedrock-account": "^2.1.0",
+    "bedrock": "^3.1.0",
+    "bedrock-account": "^2.2.0",
     "bedrock-did-context": "^1.0.0",
-    "bedrock-express": "2.0.8 - 3.x",
+    "bedrock-ledger-context": "^15.0.0",
+    "bedrock-veres-one-context": "^10.0.0",
+    "bedrock-express": "^3.1.0",
     "bedrock-jsonld-document-loader": "^1.0.1",
-    "bedrock-passport": "4.0.2 - 5.x",
-    "bedrock-permission": "^2.5.0",
-    "bedrock-mongodb": "3.x - 6.x",
-    "bedrock-server": "^2.3.2",
-    "bedrock-validation": "^4.1.0",
+    "bedrock-passport": "^5.0.2",
+    "bedrock-permission": "^2.5.4",
+    "bedrock-mongodb": "^6.0.2",
+    "bedrock-server": "^2.6.0",
+    "bedrock-validation": "^4.3.0",
     "bedrock-zcap-storage": "^2.0.0"
   },
   "directories": {
@@ -50,6 +54,6 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-config-digitalbazaar": "^2.1.0"
+    "eslint-config-digitalbazaar": "^2.3.0"
   }
 }
