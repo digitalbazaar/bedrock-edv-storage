@@ -27,7 +27,7 @@
     "bs58": "^4.0.1",
     "cors": "^2.8.5",
     "crypto-ld": "^3.7.0",
-    "did-io": "^0.8.0",
+    "did-io": "digitalbazaar/did-io#support-v1",
     "did-method-key": "^0.6.1",
     "did-veres-one": "veres-one/did-veres-one#support-v1",
     "http-signature-zcap-verify": "^3.0.0",
