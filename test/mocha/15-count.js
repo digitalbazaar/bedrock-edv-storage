@@ -5,14 +5,12 @@
 
 const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
-const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 let actors;
 let accounts;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
-const hashedMockEdvId = database.hash(mockEdvId);
 
 describe('count API', () => {
   before(async () => {
@@ -71,7 +69,7 @@ describe('count API', () => {
     count.should.be.a('number');
     count.should.equal(1);
   });
-  it('should get a document by attribute and value when multiple ' +
+  it('should get a document count by attribute and value when multiple ' +
     'values exist for the attribute via an array', async () => {
     const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
