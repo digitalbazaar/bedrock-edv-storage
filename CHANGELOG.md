@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 2.1.0 - 2020-05-15
+
+### Changed
+- Add support for `did:v1` resolution.
+
 ## 2.0.0 - 2020-04-02
 
 ### Changed
