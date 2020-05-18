@@ -227,6 +227,10 @@ const query = {
     index: {
       type: 'string'
     },
+    count: {
+      title: 'EDV Query Count',
+      type: 'boolean'
+    },
     equals: {
       type: 'array',
       minItems: 1,
