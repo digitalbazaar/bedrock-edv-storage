@@ -140,7 +140,7 @@ exports.removeCollections = async (
   ]) => {
   await promisify(database.openCollections)(collectionNames);
   for(const collectionName of collectionNames) {
-    await database.collections[collectionName].remove({});
+    await database.collections[collectionName].removeMany({});
   }
 };
 
