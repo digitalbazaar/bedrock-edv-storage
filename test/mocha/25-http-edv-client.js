@@ -392,6 +392,22 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertions.shouldBeEdvDocument({doc: delta});
       delta.content.should.eql(mockData.httpDocs.delta.content);
     });
+    it('should get a document count when count is set to true', async () => {
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          has: ['content.apples'],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result.should.be.an('object');
+      result.count.should.equal(4);
+    });
     it('should get a document by attribute and value', async () => {
       // both alpha and beta have `apples` attribute
       let result;
