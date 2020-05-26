@@ -421,10 +421,15 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       }
       assertNoError(err);
       result1.should.be.an('object');
+      result1.should.have.keys('count');
       result1.count.should.equal(4);
+
       result2.should.be.an('object');
+      result2.should.have.keys('count');
       result2.count.should.equal(1);
+
       result3.should.be.an('object');
+      result3.should.have.keys('count');
       result3.count.should.equal(0);
     });
     it('should get a document by attribute and value', async () => {
