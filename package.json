@@ -30,7 +30,6 @@
     "did-io": "^0.8.2",
     "did-method-key": "^0.6.1",
     "did-veres-one": "^12.1.1",
-    "edv-client": "github:digitalbazaar/edv-client#count-feature",
     "http-signature-zcap-verify": "^3.0.0",
     "jsonld-signatures": "^5.0.1",
     "ocapld": "^2.0.0"
