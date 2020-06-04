@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 2.2.0 - 2020-06-04
+
+### Added
+- Implement a `count` API for returning the number of documents matching a
+  query.
+
 ## 2.1.0 - 2020-05-15
 
 ### Changed
