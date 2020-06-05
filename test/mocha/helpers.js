@@ -63,6 +63,7 @@ exports.sequenceNumberTests = [
   ['MAX_SAFE_INTEGER', Number.MAX_SAFE_INTEGER],
 ].map(d => ({
   title: `should insert a document with sequence number ${d[0]}`,
+  updatetitle: `should update a document with sequence number ${d[0]}`,
   sequence: d[1]
 }));
 
