@@ -60,7 +60,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
     });
     //using the sequenceNumberTests from helpers
     for(const test of helpers.sequenceNumberTests) {
-      it(test.updatetitle, async () => {
+      it(test.updateTitle, async () => {
         const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
         const doc = {...doc1};
