@@ -58,7 +58,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
       ({edvClient} = await helpers.createEdv(
         {actor, capabilityAgent, keystoreAgent, urls}));
     });
-    //using the sequenceNumberTests from helpers
+    // using the sequenceNumberTests from helpers
     for(const test of helpers.sequenceNumberTests) {
       it(test.updateTitle, async () => {
         const actor = actors['alpha@example.com'];
