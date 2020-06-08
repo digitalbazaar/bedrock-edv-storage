@@ -1,5 +1,16 @@
 # bedrock-edv-storage ChangeLog
 
+## 3.0.0 -
+
+### Changed
+- **BREAKING**: Upgrade to `bedrock-mongodb` ^7.0.0.
+- Change methods to use mongo 3.5 driver api.
+
+### Added
+- Find methods now accept options.projections.
+- Find parameter fields is now optional.
+- If options.projections & fields are passed in find will throw.
+
 ## 2.2.0 - 2020-06-04
 
 ### Added
