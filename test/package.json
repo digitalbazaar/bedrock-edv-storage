@@ -39,7 +39,7 @@
     "bedrock-kms": "digitalbazaar/bedrock-kms#mongo-version-3",
     "bedrock-kms-http": "v2.1.0",
     "bedrock-ledger-context": "^15.0.0",
-    "bedrock-mongodb": "digitalbazaar/bedrock-mongodb#driver3",
+    "bedrock-mongodb": "^7.0.0",
     "bedrock-package-manager": "^1.0.1",
     "bedrock-passport": "^5.0.2",
     "bedrock-permission": "digitalbazaar/bedrock-permission#mongo-version-3",
