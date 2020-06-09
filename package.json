@@ -53,7 +53,7 @@
     "lib": "./lib"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-digitalbazaar": "^2.3.0"
+    "eslint": "^7.2.0",
+    "eslint-config-digitalbazaar": "^2.5.0"
   }
 }
