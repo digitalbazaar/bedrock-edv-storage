@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 3.0.0 -
+## 3.0.0 - 2020-06-09
 
 ### Changed
 - **BREAKING**: Upgrade to `bedrock-mongodb` ^7.0.0.
