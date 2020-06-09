@@ -56,7 +56,7 @@
     "jsonld-signatures": "^5.0.1",
     "nyc": "^15.0.1",
     "sinon": "^9.0.2",
-    "webkms-client": "^2.1.0"
+    "webkms-client": "digitalbazaar/webkms-client#ky-universal"
   },
   "nyc": {
     "excludeNodeModules": false,
