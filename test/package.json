@@ -1,31 +1,13 @@
 {
   "name": "bedrock-edv-storage-test",
   "version": "0.0.1-0",
-  "description": "Bedrock EDV storage test",
   "private": true,
-  "main": "./lib",
   "scripts": {
     "test": "node --preserve-symlinks test.js test",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm test",
     "coverage-ci": "cross-env NODE_ENV=test nyc --reporter=text-lcov npm test > coverage.lcov",
     "coverage-report": "nyc report"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/digitalbazaar/bedrock-edv-storage"
-  },
-  "keywords": [
-    "bedrock"
-  ],
-  "author": {
-    "name": "Digital Bazaar, Inc.",
-    "email": "support@digitalbazaar.com",
-    "url": "http://digitalbazaar.com"
-  },
-  "bugs": {
-    "url": "https://github.com/digitalbazaar/bedrock-edv-storage/issues"
-  },
-  "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
     "axios": "^0.19.2",
     "bedrock": "^3.1.0",
