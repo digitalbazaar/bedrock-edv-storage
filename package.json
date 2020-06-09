@@ -43,11 +43,11 @@
     "bedrock-express": "^3.1.0",
     "bedrock-jsonld-document-loader": "^1.0.1",
     "bedrock-passport": "^5.0.2",
-    "bedrock-permission": "^2.6.0",
+    "bedrock-permission": "^3.0.0",
     "bedrock-mongodb": "^7.0.0",
     "bedrock-server": "^2.6.0",
     "bedrock-validation": "^4.3.0",
-    "bedrock-zcap-storage": "^2.1.0"
+    "bedrock-zcap-storage": "^3.0.0"
   },
   "directories": {
     "lib": "./lib"
