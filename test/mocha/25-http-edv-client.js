@@ -317,6 +317,92 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
   }); // end `get`
 
+  describe('count', () => {
+    let capabilityAgent;
+    let edvClient;
+
+    before(async () => {
+      const secret = '6bc1fdf9-d454-4853-b776-3641314aa3b8';
+      const handle = 'testKey5';
+      capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
+      ({edvClient} = await helpers.createEdv(
+        {actor, capabilityAgent, keystoreAgent, urls}));
+    });
+    before(async () => {
+      // instruct client to index documents
+      edvClient.ensureIndex({attribute: 'content.apples'});
+      edvClient.ensureIndex({
+        attribute: ['content.group', 'content.subgroup', 'content.id'],
+        unique: true
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.alpha,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.beta,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.gamma,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+
+      await edvClient.insert({
+        doc: mockData.httpDocs.delta,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
+    });
+
+    it('should count documents using a query', async () => {
+      let result1;
+      let result2;
+      let result3;
+
+      let err;
+      try {
+        result1 = await edvClient.count({
+          has: ['content.apples'],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+
+        result2 = await edvClient.count({
+          equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+
+        result3 = await edvClient.count({
+          equals: [{'content.foo': 'does-not-exist'}],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result1.should.be.a('number');
+      result1.should.equal(4);
+
+      result2.should.be.a('number');
+      result2.should.equal(1);
+
+      result3.should.be.a('number');
+      result3.should.equal(0);
+    });
+  });
+
   describe('find', () => {
     let capabilityAgent;
     let edvClient;
@@ -432,6 +518,45 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result3.should.have.keys('count');
       result3.count.should.equal(0);
     });
+
+    it('should count documents using a query', async () => {
+      let result1;
+      let result2;
+      let result3;
+
+      let err;
+      try {
+        result1 = await edvClient.count({
+          has: ['content.apples'],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+
+        result2 = await edvClient.count({
+          equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+
+        result3 = await edvClient.count({
+          equals: [{'content.foo': 'does-not-exist'}],
+          count: true,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      result1.should.be.a('number');
+      result1.should.equal(4);
+
+      result2.should.be.a('number');
+      result2.should.equal(1);
+
+      result3.should.be.a('number');
+      result3.should.equal(0);
+    });
+
     it('should get a document by attribute and value', async () => {
       // both alpha and beta have `apples` attribute
       let result;
