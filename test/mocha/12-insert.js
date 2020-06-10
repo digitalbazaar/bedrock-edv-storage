@@ -95,6 +95,29 @@ describe('insert API', () => {
       error.message.should.equal(
         '"doc.sequence" must be a non-negative integer.');
     });
+  it('should fail to insert a document with an unsafe sequence number',
+    async () => {
+      let record, error = null;
+      try {
+        const actor = actors['alpha@example.com'];
+        const {doc1} = mockData;
+        const doc = {...doc1};
+        doc.id = await helpers.generateRandom();
+        doc.sequence = Number.MAX_SAFE_INTEGER;
+        record = await brEdvStorage.insert({
+          actor,
+          edvId: mockEdvId,
+          doc,
+        });
+      } catch(e) {
+        error = e;
+      }
+      should.not.exist(record);
+      should.exist(error);
+      error.name.should.equal('TypeError');
+      error.message.should.equal(
+        '"doc.sequence" has exceeded max safe integer.');
+    });
   it('should insert a document with an attribute', async () => {
     const actor = actors['alpha@example.com'];
     const {docWithAttributes: doc} = mockData;
