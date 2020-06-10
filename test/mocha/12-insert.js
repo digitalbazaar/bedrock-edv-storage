@@ -95,7 +95,7 @@ describe('insert API', () => {
       error.message.should.equal(
         '"doc.sequence" must be a non-negative integer.');
     });
-  it('should fail to insert a document with an max safe sequence number',
+  it('should fail to insert a document with max safe sequence number',
     async () => {
       let record, error = null;
       try {
