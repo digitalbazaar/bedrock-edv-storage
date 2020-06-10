@@ -57,7 +57,7 @@ exports.sequenceNumberTests = [
   ['in range [2**32, MAX_SAFE_INTEGER] (middle)',
     2 ** 32 + (Number.MAX_SAFE_INTEGER - 2 ** 32 - 1) / 2],
   ['in range [2**32, MAX_SAFE_INTEGER] (random)',
-    getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER)]
+    getRandomIntInclusive(2 ** 32, Number.MAX_SAFE_INTEGER - 1)]
 ].map(d => ({
   title: `should insert a document with sequence number ${d[0]}`,
   updateTitle: `should update a document with sequence number ${d[0]}`,
