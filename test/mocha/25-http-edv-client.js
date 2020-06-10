@@ -519,44 +519,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result3.count.should.equal(0);
     });
 
-    it('should count documents using a query', async () => {
-      let result1;
-      let result2;
-      let result3;
-
-      let err;
-      try {
-        result1 = await edvClient.count({
-          has: ['content.apples'],
-          count: true,
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-
-        result2 = await edvClient.count({
-          equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
-          count: true,
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-
-        result3 = await edvClient.count({
-          equals: [{'content.foo': 'does-not-exist'}],
-          count: true,
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-      } catch(e) {
-        err = e;
-      }
-      assertNoError(err);
-      result1.should.be.a('number');
-      result1.should.equal(4);
-
-      result2.should.be.a('number');
-      result2.should.equal(1);
-
-      result3.should.be.a('number');
-      result3.should.equal(0);
-    });
-
     it('should get a document by attribute and value', async () => {
       // both alpha and beta have `apples` attribute
       let result;
