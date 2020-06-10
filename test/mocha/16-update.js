@@ -47,6 +47,24 @@ describe('update API', () => {
     });
     record.doc.should.eql(doc);
   });
+  it('should fail to update a document with unsafe sequence', async () => {
+    let error;
+    const actor = actors['alpha@example.com'];
+    const doc = {...mockData.doc1, sequence: Number.MAX_SAFE_INTEGER};
+    try {
+      await brEdvStorage.update({actor, edvId: mockEdvId, doc});
+      await database.collections.edvDoc.findOne({
+        edvId: hashedMockEdvId,
+        id: database.hash(mockData.doc1.id)
+      });
+    } catch(e) {
+      error = e;
+    }
+    should.exist(error);
+    error.name.should.equal('TypeError');
+    error.message.should.equal(
+      '"doc.sequence" has exceeded max safe integer.');
+  });
   // FIXME: the current implementation does not check edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for another EDV', async () => {
