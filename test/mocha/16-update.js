@@ -47,7 +47,7 @@ describe('update API', () => {
     });
     record.doc.should.eql(doc);
   });
-  it('should fail to update a document with unsafe sequence', async () => {
+  it('should fail to update a document with max safe sequence', async () => {
     let error;
     const actor = actors['alpha@example.com'];
     const doc = {...mockData.doc1, sequence: Number.MAX_SAFE_INTEGER};
