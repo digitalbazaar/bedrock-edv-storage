@@ -63,7 +63,7 @@ describe('update API', () => {
     should.exist(error);
     error.name.should.equal('TypeError');
     error.message.should.equal(
-      '"doc.sequence" has exceeded max safe integer.');
+      '"doc.sequence" number is too large.');
   });
   // FIXME: the current implementation does not check edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12

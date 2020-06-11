@@ -116,7 +116,7 @@ describe('insert API', () => {
       should.exist(error);
       error.name.should.equal('TypeError');
       error.message.should.equal(
-        '"doc.sequence" has exceeded max safe integer.');
+        '"doc.sequence" number is too large.');
     });
   it('should insert a document with an attribute', async () => {
     const actor = actors['alpha@example.com'];
