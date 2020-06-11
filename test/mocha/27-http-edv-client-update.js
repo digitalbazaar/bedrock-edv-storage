@@ -90,5 +90,34 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         result.sequence.should.equal(doc.sequence + 1);
       });
     }
+    it('should fail to update a document to max safe sequence number',
+      async () => {
+        const actor = actors['alpha@example.com'];
+        const {doc1} = mockData;
+        const doc = {...doc1};
+        doc.id = await helpers.generateRandom();
+        doc.sequence = Number.MAX_SAFE_INTEGER - 1;
+        const record = await brEdvStorage.insert({
+          actor,
+          edvId: mockEdvId,
+          doc,
+        });
+
+        record.doc.content = {};
+        record.doc.jwe.recipients = [];
+
+        let err;
+        try {
+          await edvClient.update({
+            doc: record.doc,
+            invocationSigner: capabilityAgent.getSigner(),
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(err);
+        err.message.should.equal(
+          '"sequence" is too large.');
+      });
   });
 });
