@@ -45,11 +45,6 @@ data.config = {
     id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
     type: 'X25519KeyAgreementKey2019',
   },
-  // FIXME: schema does not allow kek, oversight?
-  // "kek": {
-  //   "id": `${data.baseUrl}/${keyStore}/keys/z19rREpJY9J14W53mvhGHaTJo`,
-  //   "type": "AesKeyWrappingKey2019"
-  // },
   "hmac": {
     "id": `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
     "type": "Sha256HmacKey2019"
