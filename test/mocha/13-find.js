@@ -49,10 +49,12 @@ describe('find API', () => {
       }
     });
     should.exist(records);
-    records.should.have.length(1);
-    const [record] = records;
-    record.edvId.should.equal(hashedMockEdvId);
-    record.doc.should.eql(doc);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(1);
+    documents[0].should.be.an('object');
+    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].doc.should.eql(doc);
   });
   it('should get a document by attribute and value', async () => {
     const actor = actors['alpha@example.com'];
@@ -71,10 +73,12 @@ describe('find API', () => {
       }
     });
     should.exist(records);
-    records.should.have.length(1);
-    const [record] = records;
-    record.edvId.should.equal(hashedMockEdvId);
-    record.doc.should.eql(mockData.docWithAttributes);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(1);
+    documents[0].should.be.an('object');
+    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should get a document by attribute and value when multiple ' +
     'values exist for the attribute via an array', async () => {
@@ -94,10 +98,12 @@ describe('find API', () => {
       }
     });
     should.exist(records);
-    records.should.have.length(1);
-    const [record] = records;
-    record.edvId.should.equal(hashedMockEdvId);
-    record.doc.should.eql(mockData.docWithAttributes);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(1);
+    documents[0].should.be.an('object');
+    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should find no results', async () => {
     const actor = actors['alpha@example.com'];
@@ -118,7 +124,9 @@ describe('find API', () => {
       }
     });
     should.exist(records);
-    records.should.have.length(0);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(0);
   });
   // FIXME: the current implementation does not check for a valid edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
