@@ -462,19 +462,20 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(4);
-      const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+      documents.should.be.an('array');
+      documents.should.have.length(4);
+      const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
       assertions.shouldBeEdvDocument({doc: alpha});
       alpha.content.should.eql(mockData.httpDocs.alpha.content);
-      const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+      const beta = documents.find(r => r.id === mockData.httpDocs.beta.id);
       assertions.shouldBeEdvDocument({doc: beta});
       beta.content.should.eql(mockData.httpDocs.beta.content);
-      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      const gamma = documents.find(r => r.id === mockData.httpDocs.gamma.id);
       assertions.shouldBeEdvDocument({doc: gamma});
       gamma.content.should.eql(mockData.httpDocs.gamma.content);
-      const delta = result.find(r => r.id === mockData.httpDocs.delta.id);
+      const delta = documents.find(r => r.id === mockData.httpDocs.delta.id);
       assertions.shouldBeEdvDocument({doc: delta});
       delta.content.should.eql(mockData.httpDocs.delta.content);
     });
@@ -531,12 +532,13 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(1);
-      assertions.shouldBeEdvDocument({doc: result[0]});
-      result[0].content.should.eql(mockData.httpDocs.beta.content);
-      result[0].id.should.equal(mockData.httpDocs.beta.id);
+      documents.should.be.an('array');
+      documents.should.have.length(1);
+      assertions.shouldBeEdvDocument({doc: documents[0]});
+      documents[0].content.should.eql(mockData.httpDocs.beta.content);
+      documents[0].id.should.equal(mockData.httpDocs.beta.id);
     });
     it('should get a document by attribute and value where multiple values ' +
       'exist for an attribute via an array', async () => {
@@ -553,12 +555,13 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(1);
-      assertions.shouldBeEdvDocument({doc: result[0]});
-      result[0].content.should.eql(mockData.httpDocs.alpha.content);
-      result[0].id.should.equal(mockData.httpDocs.alpha.id);
+      documents.should.be.an('array');
+      documents.should.have.length(1);
+      assertions.shouldBeEdvDocument({doc: documents[0]});
+      documents[0].content.should.eql(mockData.httpDocs.alpha.content);
+      documents[0].id.should.equal(mockData.httpDocs.alpha.id);
     });
     it('should find no results on non-indexed attribute', async () => {
       let result;
@@ -571,9 +574,10 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(0);
+      documents.should.be.an('array');
+      documents.should.have.length(0);
     });
     it('should get a document by attribute 1 in a compound index', async () => {
       // NOTE: the client was instructed to create a compound index
@@ -589,16 +593,17 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(3);
-      const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+      documents.should.be.an('array');
+      documents.should.have.length(3);
+      const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
       assertions.shouldBeEdvDocument({doc: alpha});
       alpha.content.should.eql(mockData.httpDocs.alpha.content);
-      const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+      const beta = documents.find(r => r.id === mockData.httpDocs.beta.id);
       assertions.shouldBeEdvDocument({doc: beta});
       beta.content.should.eql(mockData.httpDocs.beta.content);
-      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      const gamma = documents.find(r => r.id === mockData.httpDocs.gamma.id);
       assertions.shouldBeEdvDocument({doc: gamma});
       gamma.content.should.eql(mockData.httpDocs.gamma.content);
     });
@@ -615,16 +620,17 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         } catch(e) {
           err = e;
         }
+        const {documents} = result;
         assertNoError(err);
-        result.should.be.an('array');
-        result.should.have.length(3);
-        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        documents.should.be.an('array');
+        documents.should.have.length(3);
+        const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
         assertions.shouldBeEdvDocument({doc: alpha});
         alpha.content.should.eql(mockData.httpDocs.alpha.content);
-        const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+        const beta = documents.find(r => r.id === mockData.httpDocs.beta.id);
         assertions.shouldBeEdvDocument({doc: beta});
         beta.content.should.eql(mockData.httpDocs.beta.content);
-        const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+        const gamma = documents.find(r => r.id === mockData.httpDocs.gamma.id);
         assertions.shouldBeEdvDocument({doc: gamma});
         gamma.content.should.eql(mockData.httpDocs.gamma.content);
       });
@@ -642,16 +648,17 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
+      const {documents} = result;
       assertNoError(err);
-      result.should.be.an('array');
-      result.should.have.length(3);
-      const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+      documents.should.be.an('array');
+      documents.should.have.length(3);
+      const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
       assertions.shouldBeEdvDocument({doc: alpha});
       alpha.content.should.eql(mockData.httpDocs.alpha.content);
-      const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+      const beta = documents.find(r => r.id === mockData.httpDocs.beta.id);
       assertions.shouldBeEdvDocument({doc: beta});
       beta.content.should.eql(mockData.httpDocs.beta.content);
-      const gamma = result.find(r => r.id === mockData.httpDocs.gamma.id);
+      const gamma = documents.find(r => r.id === mockData.httpDocs.gamma.id);
       assertions.shouldBeEdvDocument({doc: gamma});
       gamma.content.should.eql(mockData.httpDocs.gamma.content);
     });
@@ -671,13 +678,14 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         } catch(e) {
           err = e;
         }
+        const {documents} = result;
         assertNoError(err);
-        result.should.be.an('array');
-        result.should.have.length(2);
-        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        documents.should.be.an('array');
+        documents.should.have.length(2);
+        const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
         assertions.shouldBeEdvDocument({doc: alpha});
         alpha.content.should.eql(mockData.httpDocs.alpha.content);
-        const beta = result.find(r => r.id === mockData.httpDocs.beta.id);
+        const beta = documents.find(r => r.id === mockData.httpDocs.beta.id);
         assertions.shouldBeEdvDocument({doc: beta});
         beta.content.should.eql(mockData.httpDocs.beta.content);
       });
@@ -698,10 +706,11 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         } catch(e) {
           err = e;
         }
+        const {documents} = result;
         assertNoError(err);
-        result.should.be.an('array');
-        result.should.have.length(1);
-        const alpha = result.find(r => r.id === mockData.httpDocs.alpha.id);
+        documents.should.be.an('array');
+        documents.should.have.length(1);
+        const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
         assertions.shouldBeEdvDocument({doc: alpha});
         alpha.content.should.eql(mockData.httpDocs.alpha.content);
       });
