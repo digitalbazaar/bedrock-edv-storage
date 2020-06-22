@@ -52,7 +52,7 @@
     "bedrock-zcap-storage": "^3.0.0",
     "cross-env": "^7.0.2",
     "crypto-ld": "^3.7.0",
-    "edv-client": "github:digitalbazaar/edv-client#return-obj",
+    "edv-client": "^4.0.1",
     "jsonld-signatures": "^5.0.1",
     "nyc": "^15.0.1",
     "sinon": "^9.0.2",
