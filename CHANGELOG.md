@@ -1,5 +1,13 @@
 # bedrock-edv-storage ChangeLog
 
+## 4.0.0 - 2020-06-23
+
+### Changed
+- **BREAKING**: The query endpoint now returns an object `{documents: [...]}`
+  instead of only an array of documents.
+- **BREAKING**: Changed validation around the upper bounds of
+  `document.sequence`.
+
 ## 3.0.0 - 2020-06-09
 
 ### Changed
