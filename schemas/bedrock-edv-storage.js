@@ -228,7 +228,7 @@ const edvDocumentChunk = {
   }
 };
 
-const query = {
+const postQuery = {
   title: 'EDV Document Query',
   type: 'object',
   required: ['index'],
@@ -264,7 +264,127 @@ const query = {
   }
 };
 
-module.exports.config = () => edvConfig;
-module.exports.chunk = () => edvDocumentChunk;
-module.exports.document = () => edvDocument;
-module.exports.query = () => query;
+const getEdvsQuery = {
+  title: 'edv query',
+  type: 'object',
+  required: ['controller', 'referenceId'],
+  additionalProperties: false,
+  properties: {
+    controller: {
+      type: 'string'
+    },
+    referenceId: {
+      type: 'string'
+    }
+  }
+};
+
+const getAuthorizationsQuery = {
+  title: 'authorization query',
+  type: 'object',
+  required: ['id'],
+  additionalProperties: false,
+  properties: {
+    id: {
+      type: 'string'
+    },
+  }
+};
+
+const zcap = {
+  title: 'zcap',
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    id: {
+      title: 'id',
+      type: 'string'
+    },
+    allowedAction: {
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    caveat: {
+      title: 'Caveat',
+      type: 'object'
+    },
+    '@context': {
+      title: '@context',
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    controller: {
+      title: 'controller',
+      type: 'string'
+    },
+    delegator: {
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    invoker: {
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    invocationTarget: {
+      title: 'Invocation Target',
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'object',
+        properties: {
+          id: {
+            title: 'Invocation Target Id',
+            type: 'string'
+          },
+          type: {
+            title: 'Invocation Target Type',
+            type: 'string'
+          }
+        }
+      }]
+    },
+    parentCapability: {
+      title: 'Parent Capability',
+      type: 'string'
+    },
+    proof: {
+      title: 'Proof',
+      type: 'object'
+    },
+    referenceId: {
+      title: 'Reference Id',
+      type: 'string'
+    }
+  }
+};
+
+module.exports = {
+  config: () => edvConfig,
+  chunk: () => edvDocumentChunk,
+  document: () => edvDocument,
+  postQuery: () => postQuery,
+  getEdvsQuery: () => getEdvsQuery,
+  zcap: () => zcap,
+  getAuthorizationsQuery: () => getAuthorizationsQuery,
+};
+
