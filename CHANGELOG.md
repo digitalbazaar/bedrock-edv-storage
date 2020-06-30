@@ -1,5 +1,12 @@
 # bedrock-edv-storage ChangeLog
 
+## 4.1.0 - 2020-06-30
+
+### Changed
+- Update peerDependencies to include bedrock-account@4.
+- Update test deps.
+- Update CI workflow.
+
 ## 4.0.0 - 2020-06-23
 
 ### Changed
