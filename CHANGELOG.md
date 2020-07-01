@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 4.1.1 - 2020-07-01
+
+### Fixed
+- Fix MongoDB collection calls that involve the projection API.
+
 ## 4.1.0 - 2020-06-30
 
 ### Changed
