@@ -224,6 +224,10 @@ exports.createEdv = async ({
     };
   }
 
+  if(keystoreAgent && keystoreAgent.keystore.referenceId) {
+    newEdvConfig['referenceId'] = keystoreAgent.keystore.referenceId;
+  }
+
   const {httpsAgent} = brHttpsAgent;
   const edvConfig = await EdvClient.createEdv({
     config: newEdvConfig,

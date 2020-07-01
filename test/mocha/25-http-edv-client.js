@@ -242,6 +242,82 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
   }); // end `update`
 
+  describe('update config', () => {
+    it('should update an EDV config', async () => {
+      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const handle = 'testKey3';
+      const {httpsAgent} = brHttpsAgent;
+
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      const invocationSigner = capabilityAgent.getSigner();
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
+      let edvClient;
+      let edvConfig;
+      let config;
+      let err;
+      try {
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {actor, capabilityAgent, keystoreAgent, urls}));
+        config = await EdvClient.findConfigs({
+          controller: edvConfig.controller, invocationSigner,
+          url: edvClient.id, httpsAgent
+        });
+        config.sequence += 1;
+        await EdvClient.updateConfig({
+          id: config.id, config, httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      // no response is returned from sucessful update
+      should.not.exist(err);
+    });
+    it('should not update an EDV config with wrong id', async () => {
+      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const handle = 'testKey3';
+      const {httpsAgent} = brHttpsAgent;
+
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      const invocationSigner = capabilityAgent.getSigner();
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
+      let edvClient;
+      let edvConfig;
+      let config;
+      let err;
+      try {
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {actor, capabilityAgent, keystoreAgent, urls}));
+        config = await EdvClient.findConfigs({
+          controller: edvConfig.controller, invocationSigner,
+          url: edvClient.id, httpsAgent
+        });
+        const url = config.id;
+        config.id = '123';
+        config.sequence += 1;
+        await EdvClient.updateConfig({
+          id: url, config, httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.exist(err);
+      err.response.data.message.should.equal(
+        'Configuration "id" does not match.');
+    });
+  }); // end `update config`
+
   describe('get', () => {
     let capabilityAgent;
     let edvClient;
@@ -314,6 +390,105 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(result);
       should.exist(err);
       err.name.should.equal('NotFoundError');
+    });
+    it('should get an EDV config', async () => {
+      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f677';
+      const handle = 'testKey2';
+      const {httpsAgent} = brHttpsAgent;
+
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      const invocationSigner = capabilityAgent.getSigner();
+
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
+      let edvClient;
+      let edvConfig;
+      let config;
+      let err;
+      try {
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {actor, capabilityAgent, keystoreAgent, urls}));
+        config = await EdvClient.findConfigs({
+          controller: edvConfig.controller, invocationSigner,
+          url: edvClient.id, httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(err);
+      config.should.be.an('object');
+      config.id.should.be.a('string');
+      config.id.should.equal(edvClient.id);
+    });
+    it('should get an EDV', async () => {
+      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f679';
+      const handle = 'testKey4';
+      const {httpsAgent} = brHttpsAgent;
+
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent,
+        referenceId: 'test'});
+      // corresponds to the passport authenticated user
+      const actor = actors['alpha@example.com'];
+
+      let edvConfig;
+      let config;
+      let err;
+      try {
+        ({edvConfig} = await helpers.createEdv(
+          {actor, capabilityAgent, keystoreAgent, urls}));
+        config = await EdvClient.findConfigs({
+          controller: edvConfig.controller, referenceId: 'test',
+          url: 'https://localhost:18443/edvs', httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(err);
+      should.exist(config);
+      config.should.be.an('array');
+      config.should.have.length(1);
+    });
+    it('should fail to get an EDV without controller', async () => {
+      const {httpsAgent} = brHttpsAgent;
+
+      let config;
+      let err;
+      try {
+        config = await EdvClient.findConfigs({
+          referenceId: 'test', url: 'https://localhost:18443/edvs', httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(config);
+      should.exist(err);
+      err.response.data.message.should.equal(
+        'Query not supported; a "controller" must be specified.');
+    });
+    it('should fail to get an EDV without referenceId', async () => {
+      const {httpsAgent} = brHttpsAgent;
+
+      let config;
+      let err;
+      try {
+        config = await EdvClient.findConfigs({
+          controller: 'urn:uuid:3ff914be-ba55-4332-b2fa-10534977137c',
+          url: 'https://localhost:18443/edvs', httpsAgent
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(config);
+      should.exist(err);
+      err.response.data.message.should.equal(
+        'Query not supported; a "referenceId" must be specified.');
     });
   }); // end `get`
 
