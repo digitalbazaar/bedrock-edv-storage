@@ -268,7 +268,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
           controller: edvConfig.controller, invocationSigner,
           url: edvClient.id, httpsAgent
         });
-        config.sequence += 1;
+        config.sequence++;
         await EdvClient.updateConfig({
           id: config.id, config, httpsAgent
         });
@@ -276,7 +276,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         err = e;
       }
       // no response is returned from sucessful update
-      should.not.exist(err);
+      assertNoError(err);
     });
     it('should not update an EDV config with wrong id', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
@@ -428,6 +428,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f679';
       const handle = 'testKey4';
       const {httpsAgent} = brHttpsAgent;
+      const {baseUri} = config.server;
+      const root = `${baseUri}/edvs`;
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -438,36 +440,38 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const actor = actors['alpha@example.com'];
 
       let edvConfig;
-      let config;
+      let configs;
       let err;
       try {
         ({edvConfig} = await helpers.createEdv(
           {actor, capabilityAgent, keystoreAgent, urls}));
-        config = await EdvClient.findConfigs({
-          controller: edvConfig.controller, referenceId: 'test',
-          url: 'https://localhost:18443/edvs', httpsAgent
+        configs = await EdvClient.findConfigs({
+          controller: edvConfig.controller, referenceId: edvConfig.referenceId,
+          url: root, httpsAgent
         });
       } catch(e) {
         err = e;
       }
       should.not.exist(err);
-      should.exist(config);
-      config.should.be.an('array');
-      config.should.have.length(1);
+      should.exist(configs);
+      configs.should.be.an('array');
+      configs.should.have.length(1);
+      const alpha = configs.find(r => r.controller === edvConfig.controller);
+      alpha.referenceId.should.eql(edvConfig.referenceId);
     });
     it('should fail to get an EDV without controller', async () => {
       const {httpsAgent} = brHttpsAgent;
 
-      let config;
+      let configs;
       let err;
       try {
-        config = await EdvClient.findConfigs({
+        configs = await EdvClient.findConfigs({
           referenceId: 'test', url: 'https://localhost:18443/edvs', httpsAgent
         });
       } catch(e) {
         err = e;
       }
-      should.not.exist(config);
+      should.not.exist(configs);
       should.exist(err);
       err.response.data.message.should.equal(
         'Query not supported; a "controller" must be specified.');
@@ -475,17 +479,17 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should fail to get an EDV without referenceId', async () => {
       const {httpsAgent} = brHttpsAgent;
 
-      let config;
+      let configs;
       let err;
       try {
-        config = await EdvClient.findConfigs({
+        configs = await EdvClient.findConfigs({
           controller: 'urn:uuid:3ff914be-ba55-4332-b2fa-10534977137c',
           url: 'https://localhost:18443/edvs', httpsAgent
         });
       } catch(e) {
         err = e;
       }
-      should.not.exist(config);
+      should.not.exist(configs);
       should.exist(err);
       err.response.data.message.should.equal(
         'Query not supported; a "referenceId" must be specified.');
