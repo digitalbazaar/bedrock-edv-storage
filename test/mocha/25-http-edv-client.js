@@ -456,8 +456,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.exist(configs);
       configs.should.be.an('array');
       configs.should.have.length(1);
-      const alpha = configs.find(r => r.controller === edvConfig.controller);
-      alpha.referenceId.should.eql(edvConfig.referenceId);
+      configs[0].controller.should.eql(edvConfig.controller);
+      configs[0].referenceId.should.eql(edvConfig.referenceId);
     });
     it('should fail to get an EDV without controller', async () => {
       const {httpsAgent} = brHttpsAgent;
