@@ -8,6 +8,8 @@ const brEdvStorage = require('bedrock-edv-storage');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
+const axios = require('axios');
+const brHttpsAgent = require('bedrock-https-agent');
 let actors;
 let accounts;
 
@@ -65,6 +67,31 @@ describe('update API', () => {
     error.message.should.equal(
       '"doc.sequence" number is too large.');
   });
+  it('should fail to update document with unmatching ids',
+    async () => {
+      const actor = actors['alpha@example.com'];
+      const {doc1} = mockData;
+      const doc = {...doc1};
+      doc.id = await helpers.generateRandom();
+      const {httpsAgent} = brHttpsAgent;
+      const record = await brEdvStorage.insert({
+        actor,
+        edvId: mockEdvId,
+        doc,
+      });
+      const newid = await helpers.generateRandom();
+      const url = `${mockEdvId}/documents/${newid}`;
+
+      let err;
+      try {
+        await axios.post(url, record.doc, {httpsAgent});
+      } catch(e) {
+        err = e;
+      }
+      should.exist(err);
+      err.response.data.message.should.equal(
+        'Could not update document; ID does not match.');
+    });
   // FIXME: the current implementation does not check edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for another EDV', async () => {
