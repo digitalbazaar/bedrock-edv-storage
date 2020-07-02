@@ -474,7 +474,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(configs);
       should.exist(err);
       err.data.message.should.equal(
-        'Query not supported; a "controller" must be specified.');
+        'A validation error occured in the \'edv query\' validator.');
     });
     it('should fail to get an EDV without referenceId', async () => {
       const {httpsAgent} = brHttpsAgent;
@@ -494,7 +494,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(configs);
       should.exist(err);
       err.data.message.should.equal(
-        'Query not supported; a "referenceId" must be specified.');
+        'A validation error occured in the \'edv query\' validator.');
     });
   }); // end `get`
 
