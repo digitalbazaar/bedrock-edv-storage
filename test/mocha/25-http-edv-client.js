@@ -305,7 +305,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         });
         const url = config.id;
         config.id = '123';
-        config.sequence += 1;
+        config.sequence++;
         await EdvClient.updateConfig({
           id: url, config, httpsAgent
         });
@@ -461,12 +461,14 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
     it('should fail to get an EDV without controller', async () => {
       const {httpsAgent} = brHttpsAgent;
+      const {baseUri} = config.server;
+      const root = `${baseUri}/edvs`;
 
       let configs;
       let err;
       try {
         configs = await EdvClient.findConfigs({
-          referenceId: 'test', url: 'https://localhost:18443/edvs', httpsAgent
+          referenceId: 'test', url: root, httpsAgent
         });
       } catch(e) {
         err = e;
@@ -478,13 +480,15 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
     it('should fail to get an EDV without referenceId', async () => {
       const {httpsAgent} = brHttpsAgent;
+      const {baseUri} = config.server;
+      const root = `${baseUri}/edvs`;
 
       let configs;
       let err;
       try {
         configs = await EdvClient.findConfigs({
           controller: 'urn:uuid:3ff914be-ba55-4332-b2fa-10534977137c',
-          url: 'https://localhost:18443/edvs', httpsAgent
+          url: root, httpsAgent
         });
       } catch(e) {
         err = e;
