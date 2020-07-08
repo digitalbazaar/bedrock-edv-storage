@@ -46,7 +46,8 @@ describe('remove API', () => {
       edvId: hashedMockEdvId,
       id: database.hash(mockData.doc1.id)
     });
-    should.not.exist(record);
+    should.exist(record);
+    record.doc.deleted.should.equal(true);
   });
   it('should return `false` for a missing document', async () => {
     const actor = actors['alpha@example.com'];

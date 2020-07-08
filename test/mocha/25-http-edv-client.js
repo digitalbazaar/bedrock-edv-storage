@@ -1008,7 +1008,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.should.be.a('boolean');
       result.should.be.true;
 
-      // an attempt to get the deleted document should fail
+      // should return document with content as an empty object and
+      // 'meta.deleted' as true
       let getResult;
       try {
         getResult = await edvClient.get({
@@ -1018,9 +1019,10 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       } catch(e) {
         err = e;
       }
-      should.not.exist(getResult);
-      should.exist(err);
-      err.name.should.equal('NotFoundError');
+      should.exist(getResult);
+      assertNoError(err);
+      getResult.content.should.be.an('object');
+      getResult.meta.deleted.should.equal(true);
     });
     it('NotFoundError for a missing document', async () => {
       let result;
