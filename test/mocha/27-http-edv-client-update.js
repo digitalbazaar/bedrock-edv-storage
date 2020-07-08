@@ -119,5 +119,40 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         err.message.should.equal(
           '"sequence" is too large.');
       });
+    it('should increase sequence when updating a deleted document',
+      async () => {
+
+        await edvClient.insert({
+          doc: mockData.httpDocs.alpha,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+        // delete doc
+        await edvClient.delete({id: mockData.httpDocs.alpha.id,
+          invocationSigner: capabilityAgent.getSigner()});
+        // get doc
+        const record = await edvClient.get({
+          id: mockData.httpDocs.alpha.id,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+        record.content = {};
+        record.jwe.recipients = [];
+
+        const result = await edvClient.update({
+          doc: record,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+        should.exist(result);
+        result.sequence.should.equal(1);
+
+        result.content = {};
+        result.jwe.recipients = [];
+
+        const result2 = await edvClient.update({
+          doc: result,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+        should.exist(result2);
+        result2.sequence.should.equal(2);
+      });
   });
 });
