@@ -121,7 +121,6 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
       });
     it('should increase sequence when updating a deleted document',
       async () => {
-
         await edvClient.insert({
           doc: mockData.httpDocs.alpha,
           invocationSigner: capabilityAgent.getSigner(),
@@ -142,7 +141,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
           invocationSigner: capabilityAgent.getSigner(),
         });
         should.exist(result);
-        result.sequence.should.equal(1);
+        result.sequence.should.equal(2);
 
         result.content = {};
         result.jwe.recipients = [];
@@ -152,7 +151,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
           invocationSigner: capabilityAgent.getSigner(),
         });
         should.exist(result2);
-        result2.sequence.should.equal(2);
+        result2.sequence.should.equal(3);
       });
   });
 });
