@@ -133,25 +133,8 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
           id: mockData.httpDocs.alpha.id,
           invocationSigner: capabilityAgent.getSigner(),
         });
-        record.content = {};
-        record.jwe.recipients = [];
-
-        const result = await edvClient.update({
-          doc: record,
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-        should.exist(result);
-        result.sequence.should.equal(2);
-
-        result.content = {};
-        result.jwe.recipients = [];
-
-        const result2 = await edvClient.update({
-          doc: result,
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-        should.exist(result2);
-        result2.sequence.should.equal(3);
+        should.exist(record);
+        record.sequence.should.equal(1);
       });
   });
 });
