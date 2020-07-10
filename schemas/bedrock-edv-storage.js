@@ -228,7 +228,7 @@ const edvDocumentChunk = {
   }
 };
 
-const postQuery = {
+const postDocumentQuery = {
   title: 'EDV Document Query',
   type: 'object',
   required: ['index'],
@@ -382,9 +382,8 @@ module.exports = {
   config: () => edvConfig,
   chunk: () => edvDocumentChunk,
   document: () => edvDocument,
-  postQuery: () => postQuery,
+  postDocumentQuery: () => postDocumentQuery,
   getEdvsQuery: () => getEdvsQuery,
   zcap: () => zcap,
   getAuthorizationsQuery: () => getAuthorizationsQuery,
 };
-
