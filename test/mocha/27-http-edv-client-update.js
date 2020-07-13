@@ -126,7 +126,8 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
           invocationSigner: capabilityAgent.getSigner(),
         });
         // delete doc
-        await edvClient.delete({id: mockData.httpDocs.alpha.id,
+        await edvClient.delete({
+          id: mockData.httpDocs.alpha.id,
           invocationSigner: capabilityAgent.getSigner()});
         // get doc
         const record = await edvClient.get({

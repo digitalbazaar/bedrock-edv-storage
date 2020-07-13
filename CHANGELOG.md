@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 4.1.2 - 2020-07-09
+## 5.0.0 - 2020-07-13
 
 ### Changed
 - **BREAKING**: Move delete method client-side.
