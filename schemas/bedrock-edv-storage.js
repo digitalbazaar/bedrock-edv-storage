@@ -295,6 +295,8 @@ const zcap = {
   title: 'zcap',
   type: 'object',
   additionalProperties: false,
+  required: ['id', 'invoker', 'parentCapability', 'allowedAction',
+    'invocationTarget'],
   properties: {
     id: {
       title: 'id',
