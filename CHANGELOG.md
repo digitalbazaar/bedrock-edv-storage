@@ -1,5 +1,13 @@
 # bedrock-edv-storage ChangeLog
 
+## 6.0.0 - TBD
+
+### Changed
+- **BREAKING**: Some property validation error responses have changed.
+
+### Added
+- Add validators to endpoints.
+
 ## 5.4.0 - 2021-02-08
 
 ### Changed
