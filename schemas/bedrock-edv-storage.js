@@ -292,126 +292,129 @@ const getAuthorizationsQuery = {
 };
 
 const zcap = {
-  allOf: [{
-    title: 'zcap',
-    type: 'object',
-    additionalProperties: false,
-    required: ['id', 'parentCapability', 'invocationTarget'],
-    properties: {
-      id: {
-        title: 'id',
-        type: 'string'
-      },
-      allowedAction: {
-        anyOf: [{
+  allOf: [
+    {
+      anyOf: [
+        {required: ['invoker']},
+        {required: ['controller']},
+        {required: ['delegator']}
+      ]
+    },
+    {
+      title: 'zcap',
+      type: 'object',
+      additionalProperties: false,
+      required: ['id', 'parentCapability', 'invocationTarget'],
+      properties: {
+        id: {
+          title: 'id',
           type: 'string'
-        }, {
-          type: 'array',
-          minItems: 1,
-          items: {type: 'string'}
-        }]
-      },
-      caveat: {
-        title: 'Caveat',
-        type: 'object'
-      },
-      '@context': {
-        title: '@context',
-        anyOf: [{
-          type: 'string'
-        }, {
-          type: 'array',
-          minItems: 1,
-          items: {type: 'string'}
-        }]
-      },
-      controller: {
-        title: 'controller',
-        type: 'string'
-      },
-      delegator: {
-        anyOf: [{
-          type: 'string'
-        }, {
-          type: 'array',
-          minItems: 1,
-          items: {type: 'string'}
-        }]
-      },
-      invoker: {
-        anyOf: [{
-          type: 'string'
-        }, {
-          type: 'array',
-          minItems: 1,
-          items: {type: 'string'}
-        }]
-      },
-      invocationTarget: {
-        title: 'Invocation Target',
-        anyOf: [{
-          type: 'string'
-        }, {
-          type: 'object',
-          properties: {
-            id: {
-              title: 'Invocation Target Id',
-              type: 'string'
-            },
-            type: {
-              title: 'Invocation Target Type',
-              type: 'string'
-            }
-          }
-        }]
-      },
-      parentCapability: {
-        title: 'Parent Capability',
-        type: 'string'
-      },
-      proof: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          verificationMethod: {
-            title: 'verificationMethod',
+        },
+        allowedAction: {
+          anyOf: [{
             type: 'string'
-          },
-          type: {
-            title: 'type',
-            type: 'string'
-          },
-          created: {
-            title: 'created',
-            type: 'string'
-          },
-          proofPurpose: {
-            title: 'proofPurpose',
-            type: 'string'
-          },
-          capabilityChain: {
-            title: 'capabilityChain',
+          }, {
             type: 'array',
             minItems: 1,
             items: {type: 'string'}
-          },
-          jws: {
-            title: 'jws',
+          }]
+        },
+        caveat: {
+          title: 'Caveat',
+          type: 'object'
+        },
+        '@context': {
+          title: '@context',
+          anyOf: [{
             type: 'string'
-          },
-        }},
-      referenceId: {
-        title: 'Reference Id',
-        type: 'string'
+          }, {
+            type: 'array',
+            minItems: 1,
+            items: {type: 'string'}
+          }]
+        },
+        controller: {
+          title: 'controller',
+          type: 'string'
+        },
+        delegator: {
+          anyOf: [{
+            type: 'string'
+          }, {
+            type: 'array',
+            minItems: 1,
+            items: {type: 'string'}
+          }]
+        },
+        invoker: {
+          anyOf: [{
+            type: 'string'
+          }, {
+            type: 'array',
+            minItems: 1,
+            items: {type: 'string'}
+          }]
+        },
+        invocationTarget: {
+          title: 'Invocation Target',
+          anyOf: [{
+            type: 'string'
+          }, {
+            type: 'object',
+            properties: {
+              id: {
+                title: 'Invocation Target Id',
+                type: 'string'
+              },
+              type: {
+                title: 'Invocation Target Type',
+                type: 'string'
+              }
+            }
+          }]
+        },
+        parentCapability: {
+          title: 'Parent Capability',
+          type: 'string'
+        },
+        proof: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            verificationMethod: {
+              title: 'verificationMethod',
+              type: 'string'
+            },
+            type: {
+              title: 'type',
+              type: 'string'
+            },
+            created: {
+              title: 'created',
+              type: 'string'
+            },
+            proofPurpose: {
+              title: 'proofPurpose',
+              type: 'string'
+            },
+            capabilityChain: {
+              title: 'capabilityChain',
+              type: 'array',
+              minItems: 1,
+              items: {type: 'string'}
+            },
+            jws: {
+              title: 'jws',
+              type: 'string'
+            },
+          }
+        },
+        referenceId: {
+          title: 'Reference Id',
+          type: 'string'
+        }
       }
-    }},
-  {
-    anyOf: [
-      {required: ['invoker']},
-      {required: ['controller']},
-      {required: ['delegator']}
-    ]
-  }]
+    }]
 };
 
 module.exports = {
