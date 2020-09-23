@@ -987,18 +987,20 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       ({edvClient} = await helpers.createEdv(
         {actor, capabilityAgent, keystoreAgent, urls}));
     });
-    before(async () => {
+    it('should delete a document', async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
         invocationSigner: capabilityAgent.getSigner(),
       });
-    });
-    it('should delete a document', async () => {
+      const doc = await edvClient.get({
+        id: mockData.httpDocs.alpha.id,
+        invocationSigner: capabilityAgent.getSigner(),
+      });
       let result;
       let err;
       try {
         result = await edvClient.delete({
-          id: mockData.httpDocs.alpha.id,
+          doc,
           invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
@@ -1023,22 +1025,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertNoError(err);
       getResult.content.should.be.an('object');
       getResult.meta.deleted.should.equal(true);
-    });
-    it('NotFoundError for a missing document', async () => {
-      let result;
-      let err;
-      try {
-        result = await edvClient.delete({
-          // does not exist
-          id: 'z1ABxUcbcnSyMtnenFmeARhxx',
-          invocationSigner: capabilityAgent.getSigner(),
-        });
-      } catch(e) {
-        err = e;
-      }
-      assertNoError(err);
-      result.should.be.a('boolean');
-      result.should.be.false;
     });
   }); // end `delete`
 }); // end bedrock-edv-storage
