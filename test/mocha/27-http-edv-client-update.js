@@ -83,7 +83,6 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
             invocationSigner: capabilityAgent.getSigner(),
           });
         } catch(e) {
-          console.dir(e);
           err = e;
         }
         assertNoError(err);
@@ -125,9 +124,13 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
           doc: mockData.httpDocs.alpha,
           invocationSigner: capabilityAgent.getSigner(),
         });
+        const doc = await edvClient.get({
+          id: mockData.httpDocs.alpha.id,
+          invocationSigner: capabilityAgent.getSigner(),
+        });
         // delete doc
         await edvClient.delete({
-          id: mockData.httpDocs.alpha.id,
+          doc,
           invocationSigner: capabilityAgent.getSigner()});
         // get doc
         const record = await edvClient.get({
