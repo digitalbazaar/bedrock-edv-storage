@@ -89,8 +89,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(edv);
       should.exist(err);
       should.exist(err.response);
-      err.response.status.should.equal(403);
-      err.response.data.type.should.equal('PermissionDenied');
+      err.status.should.equal(403);
+      err.data.type.should.equal('PermissionDenied');
     });
   }); // end `insertConfig`
 
@@ -257,17 +257,16 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       // corresponds to the passport authenticated user
       const actor = actors['alpha@example.com'];
 
-      let edvClient;
-      let edvConfig;
-      let config;
+      const {edvClient, edvConfig} = await helpers.createEdv(
+        {actor, capabilityAgent, keystoreAgent, urls});
+
+      const config = await EdvClient.findConfigs({
+        controller: edvConfig.controller, invocationSigner,
+        url: edvClient.id, httpsAgent
+      });
+
       let err;
       try {
-        ({edvClient, edvConfig} = await helpers.createEdv(
-          {actor, capabilityAgent, keystoreAgent, urls}));
-        config = await EdvClient.findConfigs({
-          controller: edvConfig.controller, invocationSigner,
-          url: edvClient.id, httpsAgent
-        });
         config.sequence++;
         await EdvClient.updateConfig({
           id: config.id, config, httpsAgent
@@ -313,8 +312,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         err = e;
       }
       should.exist(err);
-      err.response.data.message.should.equal(
-        'Configuration "id" does not match.');
+      err.data.message.should.equal('Configuration "id" does not match.');
     });
   }); // end `update config`
 
@@ -372,8 +370,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(result);
       should.exist(err);
       should.exist(err.response);
-      err.response.status.should.equal(400);
-      err.response.data.type.should.equal('SyntaxError');
+      err.status.should.equal(400);
+      err.data.type.should.equal('SyntaxError');
     });
     it('NotFoundError on unknown id', async () => {
       let result;
@@ -475,7 +473,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       }
       should.not.exist(configs);
       should.exist(err);
-      err.response.data.message.should.equal(
+      err.data.message.should.equal(
         'Query not supported; a "controller" must be specified.');
     });
     it('should fail to get an EDV without referenceId', async () => {
@@ -495,7 +493,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       }
       should.not.exist(configs);
       should.exist(err);
-      err.response.data.message.should.equal(
+      err.data.message.should.equal(
         'Query not supported; a "referenceId" must be specified.');
     });
   }); // end `get`

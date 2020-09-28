@@ -157,7 +157,7 @@ describe('revocation API', function() {
     }
     should.not.exist(resultBobGetAfterRevocation);
     should.exist(err);
-    err.response.data.type.should.equal('NotAllowedError');
+    err.data.type.should.equal('NotAllowedError');
   });
 
   // TODO: this more comprehensive test is to be completed later
