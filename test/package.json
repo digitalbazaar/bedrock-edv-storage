@@ -38,7 +38,7 @@
     "bedrock-kms": "^3.0.1",
     "bedrock-kms-http": "^2.3.0",
     "bedrock-ledger-context": "^15.0.0",
-    "bedrock-mongodb": "^7.1.0",
+    "bedrock-mongodb": "^8.0.1",
     "bedrock-package-manager": "^1.0.1",
     "bedrock-passport": "^6.0.0",
     "bedrock-permission": "^3.0.0",

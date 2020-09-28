@@ -16,7 +16,6 @@ config.mocha.tests.push(path.join(__dirname, 'mocha'));
 config.mongodb.name = 'bedrock_edv_storage_test';
 config.mongodb.host = 'localhost';
 config.mongodb.port = 27017;
-config.mongodb.local.collection = 'bedrock_edv_storage_test';
 // drop all collections on initialization
 config.mongodb.dropCollections = {};
 config.mongodb.dropCollections.onInit = true;
