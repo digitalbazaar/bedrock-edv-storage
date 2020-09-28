@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 5.1.0 - 2020-09-28
+
+### Changed
+- Use did-method-key@0.7.0.
+- Update peer and test deps.
+
 ## 5.0.0 - 2020-09-23
 
 ### Changed
