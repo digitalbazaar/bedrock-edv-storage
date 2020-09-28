@@ -28,7 +28,7 @@
     "cors": "^2.8.5",
     "crypto-ld": "^3.8.0",
     "did-io": "^0.8.2",
-    "did-method-key": "^0.6.1",
+    "did-method-key": "^0.7.0",
     "did-veres-one": "^12.1.1",
     "http-signature-zcap-verify": "^3.0.0",
     "jsonld-signatures": "^5.1.0",
