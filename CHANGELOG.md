@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 5.3.1 - 2021-02-08
+
+### Fixed
+- Fix API call to removeChunk.
+
 ## 5.3.0 - 2021-01-12
 
 ### Changed
