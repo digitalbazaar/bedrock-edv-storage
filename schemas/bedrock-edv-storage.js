@@ -188,7 +188,21 @@ const edvDocument = {
       type: 'array',
       items: [indexedEntry]
     },
-    jwe
+    jwe,
+    stream: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        sequence: {
+          type: 'integer',
+          minimum: 0
+        },
+        chunks: {
+          type: 'integer',
+          minimum: 1
+        }
+      }
+    }
   }
 };
 
