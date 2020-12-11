@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 5.2.0 - 2020-12-10
+
+### Changed
+- Adjust document schema to accept stream information from edv-client `>=7.0.0`.
+
 ## 5.1.0 - 2020-09-28
 
 ### Changed
