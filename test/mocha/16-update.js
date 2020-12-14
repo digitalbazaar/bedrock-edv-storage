@@ -10,6 +10,8 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const axios = require('axios');
 const brHttpsAgent = require('bedrock-https-agent');
+const {createHeaderValue} = require('@digitalbazaar/http-digest-header');
+
 let actors;
 let accounts;
 
@@ -81,10 +83,17 @@ describe('update API', () => {
       });
       const newid = await helpers.generateRandom();
       const url = `${mockEdvId}/documents/${newid}`;
-
       let err;
       try {
-        await axios.post(url, record.doc, {httpsAgent});
+        const digest = await createHeaderValue({
+          data: record.doc, useMultihash: true
+        });
+        await axios.post(url, record.doc, {
+          httpsAgent,
+          headers: {
+            digest
+          }
+        });
       } catch(e) {
         err = e;
       }
