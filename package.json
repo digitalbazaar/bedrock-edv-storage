@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
+    "@digitalbazaar/http-digest-header": "^1.0.0",
     "assert-plus": "^1.0.0",
     "bs58": "^4.0.1",
     "cors": "^2.8.5",
