@@ -94,10 +94,8 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       invocationSigner,
       id: doc.id,
       keyAgreementKey: edvClient.keyAgreementKey,
-      capability: {
-        id: `${edvClient.id}`,
-        invocationTarget: `${edvClient.id}/documents/${doc.id}`
-      }
+      keyResolver: edvClient.keyResolver,
+      client: edvClient,
     });
     const result = await edvDoc.read();
     result.should.be.an('object');
@@ -134,10 +132,8 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       invocationSigner,
       id: doc.id,
       keyAgreementKey: edvClient.keyAgreementKey,
-      capability: {
-        id: `${edvClient.id}`,
-        invocationTarget: `${edvClient.id}/documents/${doc.id}`
-      }
+      keyResolver: edvClient.keyResolver,
+      client: edvClient,
     });
     const data = getRandomUint8();
     const stream = new ReadableStream({
@@ -189,10 +185,8 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       invocationSigner,
       id: doc.id,
       keyAgreementKey: edvClient.keyAgreementKey,
-      capability: {
-        id: `${edvClient.id}`,
-        invocationTarget: `${edvClient.id}/documents/${doc.id}`
-      }
+      keyResolver: edvClient.keyResolver,
+      client: edvClient
     });
     const result = await edvDoc.read();
 
