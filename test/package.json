@@ -56,6 +56,7 @@
     "jsonld-signatures": "^5.1.0",
     "nyc": "^15.1.0",
     "sinon": "^9.0.2",
+    "web-streams-polyfill": "^3.0.1",
     "webkms-client": "^2.3.0"
   },
   "nyc": {
