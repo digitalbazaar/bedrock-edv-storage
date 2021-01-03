@@ -23,7 +23,7 @@ function getRandomUint8({size = 50} = {}) {
     () => Math.floor(Math.random() * 255));
 }
 
-describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
+describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   let passportStub;
   let capabilityAgent;
   let edvClient;
@@ -122,12 +122,20 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       }
       done = _done;
     }
+    data.should.eql(streamData);
   });
   it('should be able to write a stream to an EdvDocument', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = await EdvClient.generateId();
     const doc = {id: docId, content: {indexedKey: 'value2'}};
-    await edvClient.insert({doc, invocationSigner});
+    const dataOriginal = getRandomUint8();
+    const stream1 = new ReadableStream({
+      pull(controller) {
+        controller.enqueue(dataOriginal);
+        controller.close();
+      }
+    });
+    await edvClient.insert({doc, invocationSigner, stream: stream1});
     const edvDoc = new EdvDocument({
       invocationSigner,
       id: doc.id,
@@ -135,14 +143,15 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       keyResolver: edvClient.keyResolver,
       client: edvClient,
     });
-    const data = getRandomUint8();
-    const stream = new ReadableStream({
+    const dataUpdate = getRandomUint8();
+    const stream2 = new ReadableStream({
       pull(controller) {
-        controller.enqueue(data);
+        controller.enqueue(dataUpdate);
         controller.close();
       }
     });
-    const result = await edvClient.update({doc, stream, invocationSigner});
+    const result = await edvClient.update(
+      {doc, stream: stream2, invocationSigner});
     result.should.be.an('object');
     result.content.should.deep.equal({indexedKey: 'value2'});
     should.exist(result.stream);
