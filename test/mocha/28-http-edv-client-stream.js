@@ -142,8 +142,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
         controller.close();
       }
     });
-    const result = await edvDoc.write({
-      doc, stream, invocationSigner});
+    const result = await edvClient.update({doc, stream, invocationSigner});
     result.should.be.an('object');
     result.content.should.deep.equal({indexedKey: 'value2'});
     should.exist(result.stream);
