@@ -10,6 +10,7 @@ const mockData = require('./mock.data');
 const {config} = bedrock;
 const {CapabilityAgent} = require('webkms-client');
 const {EdvClient, EdvDocument} = require('edv-client');
+const brEdvStorage = require('bedrock-edv-storage');
 
 let actors;
 let urls;
@@ -27,6 +28,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   let capabilityAgent;
   let edvClient;
   let invocationSigner;
+
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
@@ -170,6 +172,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       done = _done;
     }
   });
+
   it('should throw error if document chunk does not exist', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = await EdvClient.generateId();
@@ -198,9 +201,9 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     should.exist(result.stream);
     result.stream.should.be.an('object');
 
-    // intentionally clear the database for chunks
-    mock.edvStorage.chunks.clear();
-
+    // intentionally clear the database of first chunk
+    await brEdvStorage.removeChunk(
+      {edvId: edvClient.id, docId: doc.id, chunkIndex: 0});
     const expectedStream = await edvDoc.getStream({doc: result});
     const reader = expectedStream.getReader();
     let streamData = new Uint8Array(0);
