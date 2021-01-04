@@ -39,15 +39,15 @@
     "bedrock": "^3.1.1",
     "bedrock-account": "^5.0.0",
     "bedrock-did-context": "^1.0.0",
-    "bedrock-ledger-context": "^15.0.0",
-    "bedrock-veres-one-context": "^10.0.1",
     "bedrock-express": "^3.2.0",
     "bedrock-jsonld-document-loader": "^1.0.1",
+    "bedrock-ledger-context": "^15.0.0",
+    "bedrock-mongodb": "^8.0.1",
     "bedrock-passport": "^6.0.0",
     "bedrock-permission": "^3.0.0",
-    "bedrock-mongodb": "^8.0.1",
     "bedrock-server": "^2.6.0",
     "bedrock-validation": "^4.4.0",
+    "bedrock-veres-one-context": "^10.0.1",
     "bedrock-zcap-storage": "^3.0.0"
   },
   "directories": {

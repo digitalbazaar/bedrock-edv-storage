@@ -3,14 +3,16 @@
  */
 'use strict';
 
-const {ReadableStream} = require('web-streams-polyfill/ponyfill');
+const streams = require('web-streams-polyfill/ponyfill');
 const bedrock = require('bedrock');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {config} = bedrock;
 const {CapabilityAgent} = require('webkms-client');
-const {EdvClient, EdvDocument} = require('edv-client');
+const {EdvDocument} = require('edv-client');
 const brEdvStorage = require('bedrock-edv-storage');
+
+const ReadableStream = streams.ReadableStream;
 
 let actors;
 let urls;
@@ -58,8 +60,8 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   });
 
   it('should insert a document with a stream', async () => {
-    const testId = await EdvClient.generateId();
-    const doc = {id: testId, content: {someKey: 'someValue'}};
+    const docId = 'z19krtYWG3TdMyicpnbeXWwT4';
+    const doc = {id: docId, content: {someKey: 'someValue'}};
     const data = getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
@@ -80,8 +82,8 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
 
   it('should be able to decrypt a stream from an EdvDocument', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
-    const testId = await EdvClient.generateId();
-    const doc = {id: testId, content: {indexedKey: 'value1'}};
+    const docId = 'z1A6MUALPcgdjfNAWk63qqdVZ';
+    const doc = {id: docId, content: {indexedKey: 'value1'}};
     const data = getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
@@ -126,7 +128,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   });
   it('should be able to write a stream to an EdvDocument', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
-    const docId = await EdvClient.generateId();
+    const docId = 'z1A2my1mru8g7kXxgzMcwbgWL';
     const doc = {id: docId, content: {indexedKey: 'value2'}};
     const dataOriginal = getRandomUint8();
     const stream1 = new ReadableStream({
@@ -179,7 +181,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
 
   it('should throw error if document chunk does not exist', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
-    const docId = await EdvClient.generateId();
+    const docId = 'z1A5griaxMEoVewt747yxiUec';
     const doc = {id: docId, content: {indexedKey: 'value3'}};
     const data = getRandomUint8();
     const stream = new ReadableStream({
@@ -206,28 +208,11 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     // intentionally clear the database of first chunk
     await brEdvStorage.removeChunk(
       {edvId: edvClient.id, docId: doc.id, chunkIndex: 0});
-    const expectedStream = await edvDoc.getStream({doc: result});
-    const reader = expectedStream.getReader();
-    let streamData = new Uint8Array(0);
-    let done = false;
     let err;
     try {
-      while(!done) {
-        // value is either undefined or a Uint8Array
-        const {value, done: _done} = await reader.read();
-        // if there is a chunk then we need to update the streamData
-        if(value) {
-          // create a new array with the new length
-          const next = new Uint8Array(streamData.length + value.length);
-          // set the first values to the existing chunk
-          next.set(streamData);
-          // set the chunk's values to the rest of the array
-          next.set(value, streamData.length);
-          // update the streamData
-          streamData = next;
-        }
-        done = _done;
-      }
+      const expectedStream = await edvDoc.getStream({doc: result});
+      const reader = expectedStream.getReader();
+      await reader.read();
     } catch(e) {
       err = e;
     }
