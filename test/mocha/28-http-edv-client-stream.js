@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const streams = require('web-streams-polyfill/ponyfill');
+const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const bedrock = require('bedrock');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
@@ -11,8 +11,6 @@ const {config} = bedrock;
 const {CapabilityAgent} = require('webkms-client');
 const {EdvDocument} = require('edv-client');
 const brEdvStorage = require('bedrock-edv-storage');
-
-const ReadableStream = streams.ReadableStream;
 
 let actors;
 let urls;
@@ -124,20 +122,15 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       }
       done = _done;
     }
+    // ensure decrypted data matches original data
     data.should.eql(streamData);
   });
   it('should be able to write a stream to an EdvDocument', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = 'z1A2my1mru8g7kXxgzMcwbgWL';
     const doc = {id: docId, content: {indexedKey: 'value2'}};
-    const dataOriginal = getRandomUint8();
-    const stream1 = new ReadableStream({
-      pull(controller) {
-        controller.enqueue(dataOriginal);
-        controller.close();
-      }
-    });
-    await edvClient.insert({doc, invocationSigner, stream: stream1});
+    const insertResult = await edvClient.insert(
+      {doc, invocationSigner});
     const edvDoc = new EdvDocument({
       invocationSigner,
       id: doc.id,
@@ -146,14 +139,16 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       client: edvClient,
     });
     const dataUpdate = getRandomUint8();
-    const stream2 = new ReadableStream({
+    const stream = new ReadableStream({
       pull(controller) {
         controller.enqueue(dataUpdate);
         controller.close();
       }
     });
+    // NOTE: we have to use insertResult here
+    // just using doc will result in duplicate key error
     const result = await edvClient.update(
-      {doc, stream: stream2, invocationSigner});
+      {doc: insertResult, stream, invocationSigner});
     result.should.be.an('object');
     result.content.should.deep.equal({indexedKey: 'value2'});
     should.exist(result.stream);
