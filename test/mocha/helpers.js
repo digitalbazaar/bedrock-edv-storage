@@ -31,6 +31,14 @@ exports.KMS_MODULE = 'ssm-v1';
 // algorithm required for the jwe headers
 exports.JWE_ALG = 'ECDH-ES+A256KW';
 
+// creates a unit8 array of variable size
+// that can be used as stream data
+exports.getRandomUint8 = ({size = 50} = {}) => {
+  return new Uint8Array(size).map(
+    // 255 is the max value of a Unit8
+    () => Math.floor(Math.random() * 255));
+};
+
 /* eslint-disable-next-line max-len */
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomIntInclusive(min, max) {
