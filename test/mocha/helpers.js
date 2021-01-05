@@ -269,6 +269,7 @@ async function _keyResolver({id}) {
   });
   return response.data;
 }
+exports.keyResolver = _keyResolver;
 
 /**
  * Delegates a zCap.

@@ -15,7 +15,7 @@ const brEdvStorage = require('bedrock-edv-storage');
 let actors;
 let urls;
 
-describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
+describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   let passportStub;
   let capabilityAgent;
   let edvClient;
