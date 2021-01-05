@@ -207,7 +207,10 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     try {
       const expectedStream = await edvDoc.getStream({doc: result});
       const reader = expectedStream.getReader();
-      await reader.read();
+      // FIXME this is where it should be throwing
+      const readResult = await reader.read();
+      // FIXME delete this once working
+      console.log({readResult});
     } catch(e) {
       err = e;
     }
