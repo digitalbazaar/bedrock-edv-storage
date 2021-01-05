@@ -15,14 +15,6 @@ const brEdvStorage = require('bedrock-edv-storage');
 let actors;
 let urls;
 
-// creates a unit8 array of variable size
-// that can be used as stream data
-function getRandomUint8({size = 50} = {}) {
-  return new Uint8Array(size).map(
-    // 255 is the max value of a Unit8
-    () => Math.floor(Math.random() * 255));
-}
-
 describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   let passportStub;
   let capabilityAgent;
@@ -60,7 +52,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   it('should insert a document with a stream', async () => {
     const docId = 'z19krtYWG3TdMyicpnbeXWwT4';
     const doc = {id: docId, content: {someKey: 'someValue'}};
-    const data = getRandomUint8();
+    const data = helpers.getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
         controller.enqueue(data);
@@ -82,7 +74,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = 'z1A6MUALPcgdjfNAWk63qqdVZ';
     const doc = {id: docId, content: {indexedKey: 'value1'}};
-    const data = getRandomUint8();
+    const data = helpers.getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
         controller.enqueue(data);
@@ -138,7 +130,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       keyResolver: edvClient.keyResolver,
       client: edvClient,
     });
-    const dataUpdate = getRandomUint8();
+    const dataUpdate = helpers.getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
         controller.enqueue(dataUpdate);
@@ -178,7 +170,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = 'z1A5griaxMEoVewt747yxiUec';
     const doc = {id: docId, content: {indexedKey: 'value3'}};
-    const data = getRandomUint8();
+    const data = helpers.getRandomUint8();
     const stream = new ReadableStream({
       pull(controller) {
         controller.enqueue(data);
