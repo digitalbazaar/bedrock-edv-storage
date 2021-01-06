@@ -9,6 +9,7 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {Cipher} = require('minimal-cipher');
+const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const axios = require('axios');
 const brHttpsAgent = require('bedrock-https-agent');
 
@@ -46,8 +47,44 @@ describe('chunk API', () => {
     docInsertResult.edvId.should.equal(hashedMockEdvId);
     docInsertResult.id.should.equal(hashedDocId);
     docInsertResult.doc.should.eql(doc);
+    const {doc: {jwe}} = docInsertResult;
+
+    const data = helpers.getRandomUint8();
+    const stream = new ReadableStream({
+      pull(controller) {
+        controller.enqueue(data);
+        controller.close();
+      }
+    });
     const encryptStream = await cipher.createEncryptStream(
-      {recipients, keyResolver, chunkSize});
+      {recipients: jwe.recipients, keyResolver, chunkSize});
+
+    // pipe user supplied `stream` through the encrypt stream
+    //const readable = forStorage.pipeThrough(encryptStream);
+    const readable = stream.pipeThrough(encryptStream);
+    const reader = readable.getReader();
+
+    // continually read from encrypt stream and upload result
+    let value;
+    let done;
+    let chunks = 0;
+    while(!done) {
+      // read next encrypted chunk
+      ({value, done} = await reader.read());
+      if(!value) {
+        break;
+      }
+
+      // create chunk
+      chunks++;
+      const chunk = {
+        sequence: doc.sequence,
+        ...value,
+      };
+
+      // await this._storeChunk({doc, chunk, capability, invocationSigner});
+    }
+    chunks.should.eql(1);
 
   });
 });
