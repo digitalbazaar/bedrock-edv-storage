@@ -69,7 +69,7 @@ data.doc1 = {
     "recipients": [
       {
         "header": {
-          "alg": "A256KW",
+          "alg": "ECDH-ES+A256KW",
           "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
@@ -100,7 +100,7 @@ data.doc2 = {
     "recipients": [
       {
         "header": {
-          "alg": "A256KW",
+          "alg": "ECDH-ES+A256KW",
           "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
@@ -140,7 +140,7 @@ data.docWithAttributes = {
     "recipients": [
       {
         "header": {
-          "alg": "A256KW",
+          "alg": "ECDH-ES+A256KW",
           "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
@@ -181,7 +181,7 @@ data.docWithUniqueAttributes = {
     "recipients": [
       {
         "header": {
-          "alg": "A256KW",
+          "alg": "ECDH-ES+A256KW",
           "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
@@ -224,7 +224,7 @@ data.docWithUniqueAttributes2 = {
     "recipients": [
       {
         "header": {
-          "alg": "A256KW",
+          "alg": "ECDH-ES+A256KW",
           "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
