@@ -20,6 +20,9 @@ const {keyResolver} = helpers;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
+// stream tests require a real KaK
+const kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZLpP6d4kN2tRo1URZPdrm#z6LS' +
+  'g1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
 
 describe('chunk API', () => {
   before(async () => {
@@ -42,8 +45,7 @@ describe('chunk API', () => {
   it('should insert a new chunk', async () => {
     const {doc1} = mockData;
     const doc = {...doc1};
-    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
-      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
+    doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.insert({
       edvId: mockEdvId,
@@ -102,11 +104,78 @@ describe('chunk API', () => {
     result.should.be.a('boolean');
     result.should.eql(true);
   });
+  it('should insert multiple chunks', async () => {
+    const {doc1} = mockData;
+    const doc = {...doc1};
+    doc.jwe.recipients[0].header.kid = kid;
+    const hashedDocId = database.hash(doc.id);
+    const docInsertResult = await brEdvStorage.insert({
+      edvId: mockEdvId,
+      doc,
+    });
+    should.exist(docInsertResult);
+    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.id.should.equal(hashedDocId);
+    docInsertResult.doc.should.eql(doc);
+    const {doc: {jwe}} = docInsertResult;
+
+    const data = helpers.getRandomUint8();
+    const stream = new ReadableStream({
+      pull(controller) {
+        for(let i = 0; i < data.length; i += 5) {
+          const chunk = data.slice(i, i + 5);
+          console.log({i, data, chunk});
+          controller.enqueue(chunk);
+        }
+        controller.close();
+      }
+    });
+    const encryptStream = await cipher.createEncryptStream(
+      {recipients: jwe.recipients, keyResolver, chunkSize: 5});
+    // pipe user supplied `stream` through the encrypt stream
+    //const readable = forStorage.pipeThrough(encryptStream);
+    const readable = stream.pipeThrough(encryptStream);
+    const reader = readable.getReader();
+
+    // continually read from encrypt stream and upload result
+    let value;
+    let done;
+    let chunks = 0;
+    let error;
+    let result;
+    while(!done) {
+      // read next encrypted chunk
+      ({value, done} = await reader.read());
+      if(!value) {
+        break;
+      }
+
+      // create chunk
+      chunks++;
+      const chunk = {
+        sequence: doc.sequence,
+        ...value,
+      };
+      try {
+        result = await brEdvStorage.updateChunk(
+          {edvId: mockEdvId, docId: doc.id, chunk});
+      } catch(e) {
+        error = e;
+        done = true;
+      }
+    }
+    chunks.should.eql(10);
+    should.not.exist(error);
+    should.exist(result);
+    result.should.be.a('boolean');
+    result.should.eql(true);
+    // FIXME decrypt and check chunks here
+  });
+
   it('should get a chunk', async () => {
     const {doc1} = mockData;
     const doc = {...doc1};
-    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
-      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
+    doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.insert({
       edvId: mockEdvId,
@@ -180,8 +249,7 @@ describe('chunk API', () => {
   it('should remove a chunk', async () => {
     const {doc1} = mockData;
     const doc = {...doc1};
-    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
-      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
+    doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.insert({
       edvId: mockEdvId,
