@@ -10,8 +10,6 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
-const axios = require('axios');
-const brHttpsAgent = require('bedrock-https-agent');
 
 let actors;
 let accounts;
@@ -72,7 +70,6 @@ describe('chunk API', () => {
     let chunks = 0;
     while(!done) {
       // read next encrypted chunk
-      console.log('reading');
       ({value, done} = await reader.read());
       if(!value) {
         break;
@@ -87,7 +84,70 @@ describe('chunk API', () => {
       await brEdvStorage.updateChunk({edvId: mockEdvId, docId: doc.id, chunk});
     }
     chunks.should.eql(1);
-
   });
+  it('should get a new chunk', async () => {
+    const {doc1} = mockData;
+    const doc = {...doc1};
+    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
+      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
+    const hashedDocId = database.hash(doc.id);
+    const docInsertResult = await brEdvStorage.insert({
+      edvId: mockEdvId,
+      doc,
+    });
+    should.exist(docInsertResult);
+    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.id.should.equal(hashedDocId);
+    docInsertResult.doc.should.eql(doc);
+    const {doc: {jwe}} = docInsertResult;
+
+    const data = helpers.getRandomUint8();
+    const stream = new ReadableStream({
+      pull(controller) {
+        controller.enqueue(data);
+        controller.close();
+      }
+    });
+    const encryptStream = await cipher.createEncryptStream(
+      {recipients: jwe.recipients, keyResolver, chunkSize});
+    // pipe user supplied `stream` through the encrypt stream
+    //const readable = forStorage.pipeThrough(encryptStream);
+    const readable = stream.pipeThrough(encryptStream);
+    const reader = readable.getReader();
+
+    // continually read from encrypt stream and upload result
+    let value;
+    let done;
+    let chunks = 0;
+    while(!done) {
+      // read next encrypted chunk
+      ({value, done} = await reader.read());
+      if(!value) {
+        break;
+      }
+
+      // create chunk
+      chunks++;
+      const chunk = {
+        sequence: doc.sequence,
+        ...value,
+      };
+      await brEdvStorage.updateChunk({edvId: mockEdvId, docId: doc.id, chunk});
+    }
+    chunks.should.eql(1);
+    const {chunk} = await brEdvStorage.getChunk(
+      {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
+    should.exist(chunk);
+    chunk.should.be.an('object');
+    chunk.should.have.all.keys(['sequence', 'index', 'offset', 'jwe']);
+    chunk.sequence.should.be.a('number');
+    chunk.sequence.should.eql(0);
+    chunk.index.should.be.a('number');
+    chunk.index.should.eql(0);
+    chunk.offset.should.be.a('number');
+    chunk.offset.should.eql(50);
+    chunk.jwe.should.be.an('object');
+  });
+
 });
 
