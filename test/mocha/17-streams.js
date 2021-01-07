@@ -37,7 +37,10 @@ describe('chunk API', () => {
     await brEdvStorage.insertConfig({actor, config: edvConfig});
   });
   it('should insert a new chunk', async () => {
-    const {doc1: doc} = mockData;
+    const {doc1} = mockData;
+    const doc = {...doc1};
+    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
+      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
     const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.insert({
       edvId: mockEdvId,
@@ -58,7 +61,6 @@ describe('chunk API', () => {
     });
     const encryptStream = await cipher.createEncryptStream(
       {recipients: jwe.recipients, keyResolver, chunkSize});
-
     // pipe user supplied `stream` through the encrypt stream
     //const readable = forStorage.pipeThrough(encryptStream);
     const readable = stream.pipeThrough(encryptStream);
@@ -70,6 +72,7 @@ describe('chunk API', () => {
     let chunks = 0;
     while(!done) {
       // read next encrypted chunk
+      console.log('reading');
       ({value, done} = await reader.read());
       if(!value) {
         break;
@@ -81,8 +84,7 @@ describe('chunk API', () => {
         sequence: doc.sequence,
         ...value,
       };
-
-      // await this._storeChunk({doc, chunk, capability, invocationSigner});
+      await brEdvStorage.updateChunk({edvId: mockEdvId, docId: doc.id, chunk});
     }
     chunks.should.eql(1);
 
