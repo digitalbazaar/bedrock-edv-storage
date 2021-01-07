@@ -68,6 +68,8 @@ describe('chunk API', () => {
     let value;
     let done;
     let chunks = 0;
+    let error;
+    let result;
     while(!done) {
       // read next encrypted chunk
       ({value, done} = await reader.read());
@@ -81,9 +83,18 @@ describe('chunk API', () => {
         sequence: doc.sequence,
         ...value,
       };
-      await brEdvStorage.updateChunk({edvId: mockEdvId, docId: doc.id, chunk});
+      try {
+        result = await brEdvStorage.updateChunk(
+          {edvId: mockEdvId, docId: doc.id, chunk});
+      } catch(e) {
+        error = e;
+      }
     }
     chunks.should.eql(1);
+    should.not.exist(error);
+    should.exist(result);
+    result.should.be.a('boolean');
+    result.should.eql(true);
   });
   it('should get a new chunk', async () => {
     const {doc1} = mockData;
@@ -119,6 +130,8 @@ describe('chunk API', () => {
     let value;
     let done;
     let chunks = 0;
+    let result;
+    let error;
     while(!done) {
       // read next encrypted chunk
       ({value, done} = await reader.read());
@@ -132,9 +145,18 @@ describe('chunk API', () => {
         sequence: doc.sequence,
         ...value,
       };
-      await brEdvStorage.updateChunk({edvId: mockEdvId, docId: doc.id, chunk});
+      try {
+        result = await brEdvStorage.updateChunk(
+          {edvId: mockEdvId, docId: doc.id, chunk});
+      } catch(e) {
+        error = e;
+      }
     }
     chunks.should.eql(1);
+    should.not.exist(error);
+    should.exist(result);
+    result.should.be.a('boolean');
+    result.should.eql(true);
     const {chunk} = await brEdvStorage.getChunk(
       {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
     should.exist(chunk);
