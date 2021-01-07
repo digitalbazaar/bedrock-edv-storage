@@ -21,7 +21,7 @@ const {keyResolver} = helpers;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe.only('chunk API', () => {
+describe('chunk API', () => {
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
@@ -102,7 +102,7 @@ describe.only('chunk API', () => {
     result.should.be.a('boolean');
     result.should.eql(true);
   });
-  it('should get a new chunk', async () => {
+  it('should get a chunk', async () => {
     const {doc1} = mockData;
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
@@ -262,6 +262,5 @@ describe.only('chunk API', () => {
     error.name.should.eql('NotFoundError');
     should.not.exist(result);
   });
-
 });
 
