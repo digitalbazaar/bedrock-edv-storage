@@ -93,6 +93,7 @@ describe.only('chunk API', () => {
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
+        done = true;
       }
     }
     chunks.should.eql(1);
@@ -155,6 +156,7 @@ describe.only('chunk API', () => {
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
+        done = true;
       }
     }
     chunks.should.eql(1);
@@ -175,5 +177,91 @@ describe.only('chunk API', () => {
     chunk.offset.should.eql(50);
     chunk.jwe.should.be.an('object');
   });
+  it('should remove a chunk', async () => {
+    const {doc1} = mockData;
+    const doc = {...doc1};
+    doc.jwe.recipients[0].header.kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZ' +
+      'LpP6d4kN2tRo1URZPdrm#z6LSg1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
+    const hashedDocId = database.hash(doc.id);
+    const docInsertResult = await brEdvStorage.insert({
+      edvId: mockEdvId,
+      doc,
+    });
+    should.exist(docInsertResult);
+    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.id.should.equal(hashedDocId);
+    docInsertResult.doc.should.eql(doc);
+    const {doc: {jwe}} = docInsertResult;
+
+    const data = helpers.getRandomUint8();
+    const stream = new ReadableStream({
+      pull(controller) {
+        controller.enqueue(data);
+        controller.close();
+      }
+    });
+    const encryptStream = await cipher.createEncryptStream(
+      {recipients: jwe.recipients, keyResolver, chunkSize});
+    // pipe user supplied `stream` through the encrypt stream
+    //const readable = forStorage.pipeThrough(encryptStream);
+    const readable = stream.pipeThrough(encryptStream);
+    const reader = readable.getReader();
+
+    // continually read from encrypt stream and upload result
+    let value;
+    let done;
+    let chunks = 0;
+    let result;
+    let error;
+    while(!done) {
+      // read next encrypted chunk
+      ({value, done} = await reader.read());
+      if(!value) {
+        break;
+      }
+
+      // create chunk
+      chunks++;
+      const chunk = {
+        sequence: doc.sequence,
+        ...value,
+      };
+      try {
+        result = await brEdvStorage.updateChunk(
+          {edvId: mockEdvId, docId: doc.id, chunk});
+      } catch(e) {
+        error = e;
+        done = true;
+      }
+    }
+    chunks.should.eql(1);
+    should.not.exist(error);
+    should.exist(result);
+    result.should.be.a('boolean');
+    result.should.eql(true);
+    result = undefined;
+    try {
+      result = await brEdvStorage.removeChunk(
+        {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
+    } catch(e) {
+      error = e;
+    }
+    should.not.exist(error);
+    should.exist(result);
+    result.should.be.a('boolean');
+    result.should.eql(true);
+    result = undefined;
+    try {
+      result = await brEdvStorage.getChunk(
+        {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
+    } catch(e) {
+      error = e;
+    }
+    should.exist(error);
+    error.should.have.property('name');
+    error.name.should.eql('NotFoundError');
+    should.not.exist(result);
+  });
+
 });
 
