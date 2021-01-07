@@ -21,7 +21,7 @@ const {keyResolver} = helpers;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe('chunk API', () => {
+describe.only('chunk API', () => {
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
@@ -34,6 +34,11 @@ describe('chunk API', () => {
     edvConfig.id = mockEdvId;
     await brEdvStorage.insertConfig({actor, config: edvConfig});
   });
+
+  beforeEach(async () => {
+    await helpers.prepareDatabase(mockData);
+  });
+
   it('should insert a new chunk', async () => {
     const {doc1} = mockData;
     const doc = {...doc1};
@@ -170,6 +175,5 @@ describe('chunk API', () => {
     chunk.offset.should.eql(50);
     chunk.jwe.should.be.an('object');
   });
-
 });
 
