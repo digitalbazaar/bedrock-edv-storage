@@ -12,6 +12,7 @@ const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 
 const {Ed25519KeyPair} = require('crypto-ld');
+const {X25519KeyPair} = require('x25519-key-pair');
 const {keyToDidDoc} = require('did-method-key').driver();
 
 let actors;
@@ -19,6 +20,8 @@ let accounts;
 let didDoc;
 let edKey;
 let kid;
+let keyAgreementKey;
+
 const chunkSize = 1048576;
 const cipher = new Cipher();
 const {keyResolver} = helpers;
@@ -34,6 +37,7 @@ describe.only('chunk API', () => {
     edKey = await Ed25519KeyPair.generate();
     didDoc = await keyToDidDoc(edKey);
     kid = didDoc.keyAgreement[0].id;
+    keyAgreementKey = await X25519KeyPair.fromEdKeyPair(edKey);
   });
   before(async () => {
     const actor = actors['alpha@example.com'];
