@@ -11,24 +11,29 @@ const mockData = require('./mock.data');
 const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 
+const {Ed25519KeyPair} = require('crypto-ld');
+const {keyToDidDoc} = require('did-method-key').driver();
+
 let actors;
 let accounts;
-
+let didDoc;
+let edKey;
+let kid;
 const chunkSize = 1048576;
 const cipher = new Cipher();
 const {keyResolver} = helpers;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
-// stream tests require a real KaK
-const kid = 'did:key:z6MkoLSj28uRLaYUWFevCtCqgYdZLpP6d4kN2tRo1URZPdrm#z6LS' +
-  'g1RLCrRGZ7sPKn9Aa41JEzBGe3S42qGURnKPcL4695uf';
 
-describe('chunk API', () => {
+describe.only('chunk API', () => {
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
     accounts = mockData.accounts;
+    edKey = await Ed25519KeyPair.generate();
+    didDoc = await keyToDidDoc(edKey);
+    kid = didDoc.keyAgreement[0].id;
   });
   before(async () => {
     const actor = actors['alpha@example.com'];
