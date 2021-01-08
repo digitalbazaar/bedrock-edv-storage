@@ -124,7 +124,6 @@ describe('chunk API', () => {
       pull(controller) {
         for(let i = 0; i < data.length; i += 5) {
           const chunk = data.slice(i, i + 5);
-          console.log({i, data, chunk});
           controller.enqueue(chunk);
         }
         controller.close();
