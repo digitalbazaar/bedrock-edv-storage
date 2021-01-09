@@ -23,6 +23,11 @@ const {CapabilityDelegation} = require('ocapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
 const sinon = require('sinon');
 const {Ed25519KeyPair} = require('crypto-ld');
+const {Cipher} = require('minimal-cipher');
+const {ReadableStream} = require('web-streams-polyfill/ponyfill');
+
+const cipher = new Cipher();
+const _chunkSize = 1048576;
 
 const getRandomBytes = promisify(crypto.randomBytes);
 
@@ -333,4 +338,58 @@ exports.setKeyId = async key => {
   const fingerprint = Ed25519KeyPair.fingerprintFromPublicKey(keyDescription);
   // invocationTarget.verificationMethod = `did:key:${fingerprint}`;
   key.id = `did:key:${fingerprint}#${fingerprint}`;
+};
+
+exports.createEncryptStream = async ({
+  data,
+  recipients,
+  chunkSize = _chunkSize
+}) => {
+  const stream = new ReadableStream({
+    pull(controller) {
+      controller.enqueue(data);
+      controller.close();
+    }
+  });
+  const encryptStream = await cipher.createEncryptStream(
+    {recipients, keyResolver: _keyResolver, chunkSize});
+  // pipe user supplied `stream` through the encrypt stream
+  //const readable = forStorage.pipeThrough(encryptStream);
+  const readable = stream.pipeThrough(encryptStream);
+  return readable.getReader();
+};
+
+exports.decryptStream = async ({chunks, keyAgreementKey}) => {
+  const stream = new ReadableStream({
+    pull(controller) {
+      chunks.forEach(c => controller.enqueue(c));
+      controller.close();
+    }
+  });
+  const decryptStream = await cipher.createDecryptStream(
+    {keyAgreementKey});
+  const readable = stream.pipeThrough(decryptStream);
+  const reader = readable.getReader();
+  let data = new Uint8Array(0);
+  let value;
+  let done = false;
+  while(!done) {
+    try {
+      ({value, done} = await reader.read());
+      if(!done) {
+        // create a new array with the new length
+        const next = new Uint8Array(data.length + value.length);
+        // set the first values to the existing chunk
+        next.set(data);
+        // set the chunk's values to the rest of the array
+        next.set(value, data.length);
+        // update the streamData
+        data = next;
+      }
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
+  }
+  return Uint8Array.from(data);
 };
