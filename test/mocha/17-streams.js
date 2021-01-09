@@ -29,7 +29,42 @@ const {keyResolver} = helpers;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe.only('chunk API', () => {
+async function decryptStream({chunks}) {
+  const stream = new ReadableStream({
+    pull(controller) {
+      chunks.forEach(c => controller.enqueue(c));
+      controller.close();
+    }
+  });
+  const decryptStream = await cipher.createDecryptStream(
+    {keyAgreementKey});
+  const readable = stream.pipeThrough(decryptStream);
+  const reader = readable.getReader();
+  let data = new Uint8Array(0);
+  let value;
+  let done = false;
+  while(!done) {
+    try {
+      ({value, done} = await reader.read());
+      if(!done) {
+        // create a new array with the new length
+        const next = new Uint8Array(data.length + value.length);
+        // set the first values to the existing chunk
+        next.set(data);
+        // set the chunk's values to the rest of the array
+        next.set(value, data.length);
+        // update the streamData
+        data = next;
+      }
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
+  }
+  return Uint8Array.from(data);
+}
+
+describe('chunk API', () => {
   before(async () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
@@ -253,6 +288,10 @@ describe.only('chunk API', () => {
     chunk.offset.should.be.a('number');
     chunk.offset.should.eql(50);
     chunk.jwe.should.be.an('object');
+    const decryptResult = await decryptStream({chunks: [chunk]});
+    should.exist(decryptResult);
+    decryptResult.should.be.an('Uint8Array');
+    decryptResult.should.eql(data);
   });
   it('should remove a chunk', async () => {
     const {doc1} = mockData;
