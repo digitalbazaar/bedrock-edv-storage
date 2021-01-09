@@ -8,8 +8,6 @@ const brEdvStorage = require('bedrock-edv-storage');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-const {Cipher} = require('minimal-cipher');
-const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 
 const {Ed25519KeyPair} = require('crypto-ld');
 const {X25519KeyPair} = require('x25519-key-pair');
@@ -23,46 +21,9 @@ let kid;
 let keyAgreementKey;
 
 const chunkSize = 1048576;
-const cipher = new Cipher();
-const {keyResolver} = helpers;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
-
-async function decryptStream({chunks}) {
-  const stream = new ReadableStream({
-    pull(controller) {
-      chunks.forEach(c => controller.enqueue(c));
-      controller.close();
-    }
-  });
-  const decryptStream = await cipher.createDecryptStream(
-    {keyAgreementKey});
-  const readable = stream.pipeThrough(decryptStream);
-  const reader = readable.getReader();
-  let data = new Uint8Array(0);
-  let value;
-  let done = false;
-  while(!done) {
-    try {
-      ({value, done} = await reader.read());
-      if(!done) {
-        // create a new array with the new length
-        const next = new Uint8Array(data.length + value.length);
-        // set the first values to the existing chunk
-        next.set(data);
-        // set the chunk's values to the rest of the array
-        next.set(value, data.length);
-        // update the streamData
-        data = next;
-      }
-    } catch(e) {
-      console.error(e);
-      throw e;
-    }
-  }
-  return Uint8Array.from(data);
-}
 
 describe('chunk API', () => {
   before(async () => {
@@ -102,19 +63,8 @@ describe('chunk API', () => {
     const {doc: {jwe}} = docInsertResult;
 
     const data = helpers.getRandomUint8();
-    const stream = new ReadableStream({
-      pull(controller) {
-        controller.enqueue(data);
-        controller.close();
-      }
-    });
-    const encryptStream = await cipher.createEncryptStream(
-      {recipients: jwe.recipients, keyResolver, chunkSize});
-    // pipe user supplied `stream` through the encrypt stream
-    //const readable = forStorage.pipeThrough(encryptStream);
-    const readable = stream.pipeThrough(encryptStream);
-    const reader = readable.getReader();
-
+    const reader = await helpers.createEncryptStream(
+      {recipients: jwe.recipients, chunkSize, data});
     // continually read from encrypt stream and upload result
     let value;
     let done;
@@ -164,21 +114,8 @@ describe('chunk API', () => {
     const {doc: {jwe}} = docInsertResult;
 
     const data = helpers.getRandomUint8();
-    const stream = new ReadableStream({
-      pull(controller) {
-        for(let i = 0; i < data.length; i += 5) {
-          const chunk = data.slice(i, i + 5);
-          controller.enqueue(chunk);
-        }
-        controller.close();
-      }
-    });
-    const encryptStream = await cipher.createEncryptStream(
-      {recipients: jwe.recipients, keyResolver, chunkSize: 5});
-    // pipe user supplied `stream` through the encrypt stream
-    //const readable = forStorage.pipeThrough(encryptStream);
-    const readable = stream.pipeThrough(encryptStream);
-    const reader = readable.getReader();
+    const reader = await helpers.createEncryptStream(
+      {recipients: jwe.recipients, chunkSize: 5, data});
 
     // continually read from encrypt stream and upload result
     let value;
@@ -231,18 +168,8 @@ describe('chunk API', () => {
     const {doc: {jwe}} = docInsertResult;
 
     const data = helpers.getRandomUint8();
-    const stream = new ReadableStream({
-      pull(controller) {
-        controller.enqueue(data);
-        controller.close();
-      }
-    });
-    const encryptStream = await cipher.createEncryptStream(
-      {recipients: jwe.recipients, keyResolver, chunkSize});
-    // pipe user supplied `stream` through the encrypt stream
-    //const readable = forStorage.pipeThrough(encryptStream);
-    const readable = stream.pipeThrough(encryptStream);
-    const reader = readable.getReader();
+    const reader = await helpers.createEncryptStream(
+      {recipients: jwe.recipients, chunkSize, data});
 
     // continually read from encrypt stream and upload result
     let value;
@@ -288,7 +215,8 @@ describe('chunk API', () => {
     chunk.offset.should.be.a('number');
     chunk.offset.should.eql(50);
     chunk.jwe.should.be.an('object');
-    const decryptResult = await decryptStream({chunks: [chunk]});
+    const decryptResult = await helpers.decryptStream(
+      {chunks: [chunk], keyAgreementKey});
     should.exist(decryptResult);
     decryptResult.should.be.an('Uint8Array');
     decryptResult.should.eql(data);
@@ -309,18 +237,8 @@ describe('chunk API', () => {
     const {doc: {jwe}} = docInsertResult;
 
     const data = helpers.getRandomUint8();
-    const stream = new ReadableStream({
-      pull(controller) {
-        controller.enqueue(data);
-        controller.close();
-      }
-    });
-    const encryptStream = await cipher.createEncryptStream(
-      {recipients: jwe.recipients, keyResolver, chunkSize});
-    // pipe user supplied `stream` through the encrypt stream
-    //const readable = forStorage.pipeThrough(encryptStream);
-    const readable = stream.pipeThrough(encryptStream);
-    const reader = readable.getReader();
+    const reader = await helpers.createEncryptStream(
+      {recipients: jwe.recipients, chunkSize, data});
 
     // continually read from encrypt stream and upload result
     let value;
