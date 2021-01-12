@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 5.3.0 - 2021-01-TBD
+## 5.3.0 - 2021-01-12
 
 ### Changed
 - Update bedrock-account@5.0.
