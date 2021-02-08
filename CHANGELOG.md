@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 5.4.0 - 2021-02-08
+
+### Changed
+- Use `verifyHeaderValue` middleware to check digest header.
+
 ## 5.3.1 - 2021-02-08
 
 ### Fixed
