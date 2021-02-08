@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 6.0.0 - TBD
+## 6.0.0 - 2021-02-08
 
 ### Changed
 - **BREAKING**: Some property validation error responses have changed.
