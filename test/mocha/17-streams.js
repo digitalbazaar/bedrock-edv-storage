@@ -92,11 +92,11 @@ describe('chunk API', () => {
         done = true;
       }
     }
-    chunks.should.eql(1);
+    chunks.should.equal(1);
     should.not.exist(error);
     should.exist(result);
     result.should.be.a('boolean');
-    result.should.eql(true);
+    result.should.equal(true);
   });
   it('should insert multiple chunks', async () => {
     const {doc1} = mockData;
@@ -144,11 +144,11 @@ describe('chunk API', () => {
         done = true;
       }
     }
-    chunks.should.eql(10);
+    chunks.should.equal(10);
     should.not.exist(error);
     should.exist(result);
     result.should.be.a('boolean');
-    result.should.eql(true);
+    result.should.equal(true);
     // FIXME decrypt and check chunks here
   });
 
@@ -198,22 +198,22 @@ describe('chunk API', () => {
         done = true;
       }
     }
-    chunks.should.eql(1);
+    chunks.should.equal(1);
     should.not.exist(error);
     should.exist(result);
     result.should.be.a('boolean');
-    result.should.eql(true);
+    result.should.equal(true);
     const {chunk} = await brEdvStorage.getChunk(
       {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
     should.exist(chunk);
     chunk.should.be.an('object');
     chunk.should.have.all.keys(['sequence', 'index', 'offset', 'jwe']);
     chunk.sequence.should.be.a('number');
-    chunk.sequence.should.eql(0);
+    chunk.sequence.should.equal(0);
     chunk.index.should.be.a('number');
-    chunk.index.should.eql(0);
+    chunk.index.should.equal(0);
     chunk.offset.should.be.a('number');
-    chunk.offset.should.eql(50);
+    chunk.offset.should.equal(50);
     chunk.jwe.should.be.an('object');
     const decryptResult = await helpers.decryptStream(
       {chunks: [chunk], keyAgreementKey});
@@ -267,11 +267,11 @@ describe('chunk API', () => {
         done = true;
       }
     }
-    chunks.should.eql(1);
+    chunks.should.equal(1);
     should.not.exist(error);
     should.exist(result);
     result.should.be.a('boolean');
-    result.should.eql(true);
+    result.should.equal(true);
     result = undefined;
     try {
       result = await brEdvStorage.removeChunk(
@@ -282,7 +282,7 @@ describe('chunk API', () => {
     should.not.exist(error);
     should.exist(result);
     result.should.be.a('boolean');
-    result.should.eql(true);
+    result.should.equal(true);
     result = undefined;
     try {
       result = await brEdvStorage.getChunk(
@@ -292,7 +292,7 @@ describe('chunk API', () => {
     }
     should.exist(error);
     error.should.have.property('name');
-    error.name.should.eql('NotFoundError');
+    error.name.should.equal('NotFoundError');
     should.not.exist(result);
   });
 });
