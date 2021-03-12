@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 8.0.0 - TBD
+## 8.0.0 - 2021-03-12
 
 ### Changed
 - **BREAKING**: Use `http-signature-zcap-verify@4`. Includes breaking changes
