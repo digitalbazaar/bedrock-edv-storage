@@ -9,7 +9,7 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const {httpClient} = require('@digitalbazaar/http-client');
 const mockData = require('./mock.data');
-const brHttpsAgent = require('bedrock-https-agent');
+const {agent} = require('bedrock-https-agent');
 const {createHeaderValue} = require('@digitalbazaar/http-digest-header');
 
 let actors;
@@ -75,7 +75,6 @@ describe('update API', () => {
       const {doc1} = mockData;
       const doc = {...doc1};
       doc.id = await helpers.generateRandom();
-      const {httpsAgent} = brHttpsAgent;
       const record = await brEdvStorage.insert({
         actor,
         edvId: mockEdvId,
@@ -90,7 +89,7 @@ describe('update API', () => {
         });
         await httpClient.post(url, {
           json: record.doc,
-          agent: httpsAgent,
+          agent,
           headers: {
             digest
           }

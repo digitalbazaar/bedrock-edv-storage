@@ -5,7 +5,7 @@
 
 require('bedrock-edv-storage');
 const bedrock = require('bedrock');
-const brHttpsAgent = require('bedrock-https-agent');
+const {httpsAgent} = require('bedrock-https-agent');
 const {util: {clone}} = bedrock;
 const {config} = bedrock;
 const helpers = require('./helpers');
@@ -77,7 +77,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         const mockConfig =
           {...mockData.config, controller: 'urn:other:account'};
-        const {httpsAgent} = brHttpsAgent;
         edv = await EdvClient.createEdv({
           url: urls.edvs,
           config: mockConfig,
@@ -246,7 +245,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should update an EDV config', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
       const handle = 'testKey3';
-      const {httpsAgent} = brHttpsAgent;
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -280,7 +278,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should not update an EDV config with wrong id', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
       const handle = 'testKey3';
-      const {httpsAgent} = brHttpsAgent;
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -392,7 +389,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should get an EDV config', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f677';
       const handle = 'testKey2';
-      const {httpsAgent} = brHttpsAgent;
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -425,7 +421,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should get an EDV', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f679';
       const handle = 'testKey4';
-      const {httpsAgent} = brHttpsAgent;
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 
@@ -458,7 +453,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       configs[0].referenceId.should.eql(edvConfig.referenceId);
     });
     it('should fail to get an EDV without controller', async () => {
-      const {httpsAgent} = brHttpsAgent;
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 
@@ -477,7 +471,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         'A validation error occured in the \'edv query\' validator.');
     });
     it('should fail to get an EDV without referenceId', async () => {
-      const {httpsAgent} = brHttpsAgent;
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 

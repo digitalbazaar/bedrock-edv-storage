@@ -6,7 +6,7 @@
 const bedrock = require('bedrock');
 const base58 = require('bs58');
 const brAccount = require('bedrock-account');
-const brHttpsAgent = require('bedrock-https-agent');
+const {httpsAgent} = require('bedrock-https-agent');
 const brPassport = require('bedrock-passport');
 const crypto = require('crypto');
 const database = require('bedrock-mongodb');
@@ -185,7 +185,6 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
     config.referenceId = referenceId;
   }
   const kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`;
-  const {httpsAgent} = brHttpsAgent;
   const keystore = await KmsClient.createKeystore({
     url: `${kmsBaseUrl}/keystores`,
     config,
@@ -237,7 +236,6 @@ exports.createEdv = async ({
     newEdvConfig['referenceId'] = keystoreAgent.keystore.referenceId;
   }
 
-  const {httpsAgent} = brHttpsAgent;
   const edvConfig = await EdvClient.createEdv({
     config: newEdvConfig,
     httpsAgent,
@@ -262,7 +260,6 @@ async function _keyResolver({id}) {
   if(id.startsWith('did:key:')) {
     return didKeyDriver.get({url: id});
   }
-  const {httpsAgent} = brHttpsAgent;
   const response = await httpClient.get(id, {agent: httpsAgent});
   return response.data;
 }

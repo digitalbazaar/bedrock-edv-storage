@@ -5,7 +5,7 @@
 
 const {config, util: {uuid}} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
-const brHttpsAgent = require('bedrock-https-agent');
+const {httpsAgent} = require('bedrock-https-agent');
 // const {AsymmetricKey, CapabilityAgent} = require('webkms-client');
 const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
 // const {CapabilityDelegation} = require('ocapld');
@@ -123,7 +123,6 @@ describe('revocation API', function() {
     resultAliceGet.content.should.eql(docContent);
 
     // create and EdvClient for bob
-    const {httpsAgent} = brHttpsAgent;
     const bobEdvClient = new EdvClient({
       keyAgreementKey: testers.bob.keyAgreementKey,
       httpsAgent
