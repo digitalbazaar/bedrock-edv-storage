@@ -1,11 +1,8 @@
 /*!
  * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
  */
-/* jshint node: true */
-
 'use strict';
 
-const axios = require('axios');
 const bedrock = require('bedrock');
 const base58 = require('bs58');
 const brAccount = require('bedrock-account');
@@ -25,6 +22,7 @@ const sinon = require('sinon');
 const {Ed25519KeyPair} = require('crypto-ld');
 const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
+const {httpClient} = require('@digitalbazaar/http-client');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -259,17 +257,13 @@ exports.createEdv = async ({
   return {edvClient, edvConfig};
 };
 
-const DEFAULT_HEADERS = {Accept: 'application/ld+json, application/json'};
 // FIXME: make more restrictive, support `did:key` and `did:v1`
 async function _keyResolver({id}) {
   if(id.startsWith('did:key:')) {
     return didKeyDriver.get({url: id});
   }
   const {httpsAgent} = brHttpsAgent;
-  const response = await axios.get(id, {
-    headers: DEFAULT_HEADERS,
-    httpsAgent,
-  });
+  const response = await httpClient.get(id, {agent: httpsAgent});
   return response.data;
 }
 exports.keyResolver = _keyResolver;

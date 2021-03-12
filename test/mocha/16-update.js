@@ -7,8 +7,8 @@ const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
+const {httpClient} = require('@digitalbazaar/http-client');
 const mockData = require('./mock.data');
-const axios = require('axios');
 const brHttpsAgent = require('bedrock-https-agent');
 const {createHeaderValue} = require('@digitalbazaar/http-digest-header');
 
@@ -88,8 +88,9 @@ describe('update API', () => {
         const digest = await createHeaderValue({
           data: record.doc, useMultihash: true
         });
-        await axios.post(url, record.doc, {
-          httpsAgent,
+        await httpClient.post(url, {
+          json: record.doc,
+          agent: httpsAgent,
           headers: {
             digest
           }
@@ -98,7 +99,7 @@ describe('update API', () => {
         err = e;
       }
       should.exist(err);
-      err.response.data.message.should.equal(
+      err.data.message.should.equal(
         'Could not update document; ID does not match.');
     });
   // FIXME: the current implementation does not check edv id
