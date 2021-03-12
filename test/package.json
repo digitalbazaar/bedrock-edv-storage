@@ -53,7 +53,7 @@
     "bedrock-zcap-storage": "^3.0.0",
     "cross-env": "^7.0.2",
     "crypto-ld": "^3.8.0",
-    "edv-client": "digitalbazaar/edv-client#use-latest-zcap",
+    "edv-client": "^8.0.0",
     "jsonld-signatures": "^5.1.0",
     "nyc": "^15.1.0",
     "sinon": "^9.0.2",
