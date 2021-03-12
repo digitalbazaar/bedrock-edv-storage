@@ -1,5 +1,13 @@
 # bedrock-edv-storage ChangeLog
 
+## 8.0.0 - TBD
+
+### Changed
+- **BREAKING**: Use `http-signature-zcap-verify@4`. Includes breaking changes
+  related to headers that contain timestamps.
+- **BREAKING**: Use `did-veres-one@13`. Includes breaking changes
+  related to headers that contain timestamps.
+
 ## 7.0.0 - 2021-03-11
 
 ### Fixed
