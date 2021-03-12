@@ -30,8 +30,8 @@
     "crypto-ld": "^3.8.0",
     "did-io": "^0.8.2",
     "did-method-key": "^0.7.0",
-    "did-veres-one": "github:veres-one/did-veres-one#next-release-http-signature-header",
-    "http-signature-zcap-verify": "github:digitalbazaar/http-signature-zcap-verify#add-now-to-parse-request",
+    "did-veres-one": "^13.0.0",
+    "http-signature-zcap-verify": "^4.0.0",
     "jsonld-signatures": "^5.1.0",
     "ocapld": "^2.0.0"
   },

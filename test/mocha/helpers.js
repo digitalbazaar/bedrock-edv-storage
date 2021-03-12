@@ -182,8 +182,6 @@ exports.createKeystore = async ({capabilityAgent, referenceId}) => {
   const config = {
     sequence: 0,
     controller: capabilityAgent.id,
-    invoker: capabilityAgent.id,
-    delegator: capabilityAgent.id
   };
   if(referenceId) {
     config.referenceId = referenceId;
