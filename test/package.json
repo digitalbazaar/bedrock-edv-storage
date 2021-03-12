@@ -40,7 +40,7 @@
     "bedrock-kms": "^5.0.0",
     "bedrock-kms-http": "digitalbazaar/bedrock-kms-http",
     "bedrock-ledger-context": "^15.0.0",
-    "bedrock-mongodb": "github:digitalbazaar/bedrock-mongodb",
+    "bedrock-mongodb": "^8.2.0",
     "bedrock-package-manager": "^1.0.1",
     "bedrock-passport": "^6.0.0",
     "bedrock-permission": "^3.0.0",
