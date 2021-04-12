@@ -23,32 +23,31 @@
   },
   "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
+    "@digitalbazaar/ed25519-signature-2020": "^2.1.0",
     "@digitalbazaar/http-digest-header": "^1.0.0",
     "assert-plus": "^1.0.0",
+    "bedrock-did-io": "^1.0.0",
     "bs58": "^4.0.1",
     "cors": "^2.8.5",
-    "crypto-ld": "^3.8.0",
-    "did-io": "^0.8.2",
-    "did-method-key": "^0.7.0",
-    "did-veres-one": "^13.0.0",
-    "http-signature-zcap-verify": "^4.0.0",
-    "jsonld-signatures": "^5.1.0",
-    "ocapld": "^2.0.0"
+    "http-signature-zcap-verify": "^6.0.0",
+    "jsonld-signatures": "^9.0.1",
+    "@digitalbazaar/zcapld": "^3.1.0",
+    "security-context": "^4.0.0"
   },
   "peerDependencies": {
-    "bedrock": "^3.1.1",
+    "bedrock": "^4.1.1",
     "bedrock-account": "^5.0.0",
-    "bedrock-did-context": "^1.0.0",
-    "bedrock-express": "^3.2.0",
+    "bedrock-did-context": "^2.0.0",
+    "bedrock-express": "^3.2.1",
     "bedrock-jsonld-document-loader": "^1.0.1",
-    "bedrock-ledger-context": "^15.0.0",
-    "bedrock-mongodb": "^8.0.1",
+    "bedrock-ledger-context": "^18.0.0",
+    "bedrock-mongodb": "^8.1.0",
     "bedrock-passport": "^6.0.0",
-    "bedrock-permission": "^3.0.0",
-    "bedrock-server": "^2.6.0",
-    "bedrock-validation": "^4.4.0",
+    "bedrock-permission": "^3.2.0",
+    "bedrock-server": "^2.7.0",
+    "bedrock-validation": "^5.0.0",
     "bedrock-veres-one-context": "^10.0.1",
-    "bedrock-zcap-storage": "^3.0.0"
+    "bedrock-zcap-storage": "^3.2.0"
   },
   "directories": {
     "lib": "./lib"
@@ -57,7 +56,7 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "eslint": "^7.3.1",
-    "eslint-config-digitalbazaar": "^2.5.0"
+    "eslint": "^7.24.0",
+    "eslint-config-digitalbazaar": "^2.6.1"
   }
 }

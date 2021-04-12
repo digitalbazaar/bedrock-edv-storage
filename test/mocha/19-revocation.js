@@ -31,7 +31,7 @@ const urls = {
 
 const JWE_ALG = 'ECDH-ES+A256KW';
 
-describe('revocation API', function() {
+describe.skip('revocation API', function() {
   // TODO: Rename this.
   // TODO: Move this to helpers.
   let testers = null;
