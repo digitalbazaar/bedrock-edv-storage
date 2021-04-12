@@ -16,7 +16,7 @@ const {CapabilityAgent} = require('webkms-client');
 let actors;
 let urls;
 
-describe('bedrock-edv-storage HTTP API - edv-client', () => {
+describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
   let passportStub;
 
   before(async () => {

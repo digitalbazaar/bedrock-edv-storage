@@ -15,7 +15,7 @@ let urls;
 const brEdvStorage = require('bedrock-edv-storage');
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 
-describe('bedrock-edv-storage HTTP API - edv-client update', () => {
+describe.skip('bedrock-edv-storage HTTP API - edv-client update', () => {
   let passportStub;
 
   before(async () => {
