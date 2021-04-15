@@ -9,14 +9,10 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
-const {Ed25519KeyPair} = require('crypto-ld');
-const {X25519KeyPair} = require('x25519-key-pair');
-const {keyToDidDoc} = require('did-method-key').driver();
+const didKeyDriver = require('did-method-key').driver();
 
 let actors;
 let accounts;
-let didDoc;
-let edKey;
 let kid;
 let keyAgreementKey;
 
@@ -30,10 +26,9 @@ describe('chunk API', () => {
     await helpers.prepareDatabase(mockData);
     actors = await helpers.getActors(mockData);
     accounts = mockData.accounts;
-    edKey = await Ed25519KeyPair.generate();
-    didDoc = await keyToDidDoc(edKey);
-    kid = didDoc.keyAgreement[0].id;
-    keyAgreementKey = await X25519KeyPair.fromEdKeyPair(edKey);
+    const {methodFor} = await didKeyDriver.generate();
+    keyAgreementKey = methodFor({purpose: 'keyAgreement'});
+    kid = keyAgreementKey.id;
   });
   before(async () => {
     const actor = actors['alpha@example.com'];

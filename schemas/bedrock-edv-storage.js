@@ -403,8 +403,8 @@ const zcap = {
               minItems: 1,
               items: {type: 'string'}
             },
-            jws: {
-              title: 'jws',
+            proofValue: {
+              title: 'proofValue',
               type: 'string'
             },
           }
