@@ -14,15 +14,16 @@ const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
 const {EdvClient} = require('edv-client');
 const didKeyDriver = require('did-method-key').driver();
-const {suites, sign, SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
+const {suites, sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
-const {CapabilityDelegation} = require('ocapld');
+const {CapabilityDelegation} = require('@digitalbazaar/zcapld');
 const {Ed25519Signature2018, RsaSignature2018} = suites;
 const sinon = require('sinon');
 const {Ed25519KeyPair} = require('crypto-ld');
 const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
+const {CONTEXT_URL: ZCAP_CONTEXT_URL} = require('zcap-context');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -233,7 +234,7 @@ exports.createEdv = async ({
   }
 
   if(keystoreAgent && keystoreAgent.keystore.referenceId) {
-    newEdvConfig['referenceId'] = keystoreAgent.keystore.referenceId;
+    newEdvConfig.referenceId = keystoreAgent.keystore.referenceId;
   }
 
   const edvConfig = await EdvClient.createEdv({
@@ -280,7 +281,7 @@ exports.keyResolver = _keyResolver;
  */
 exports.delegate = async ({zcap, signer, capabilityChain}) => {
   if(!zcap['@context']) {
-    zcap['@context'] = SECURITY_CONTEXT_V2_URL;
+    zcap['@context'] = ZCAP_CONTEXT_URL;
   }
   if(!zcap.id) {
     zcap.id = `urn:zcap:${uuid()}`;

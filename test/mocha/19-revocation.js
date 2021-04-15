@@ -7,8 +7,8 @@ const {config, util: {uuid}} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
 const {httpsAgent} = require('bedrock-https-agent');
 // const {AsymmetricKey, CapabilityAgent} = require('webkms-client');
-const {SECURITY_CONTEXT_V2_URL} = require('jsonld-signatures');
-// const {CapabilityDelegation} = require('ocapld');
+const {CONTEXT_URL: ZCAP_CONTEXT_URL} = require('zcap-context');
+// const {CapabilityDelegation} = require('zcapld');
 // const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
@@ -71,7 +71,7 @@ describe.skip('revocation API', function() {
     // alice is the controller of the EDV
     const capabilityDelegation = {
       id: `urn:zcap:${uuid()}`,
-      '@context': SECURITY_CONTEXT_V2_URL,
+      '@context': ZCAP_CONTEXT_URL,
       allowedAction: 'read',
       invoker: testers.bob.verificationKey.id,
       parentCapability: `${aliceEdvConfig.id}/zcaps/documents/${docId}`,
@@ -197,7 +197,7 @@ describe.skip('revocation API', function() {
     // this will be stored in authorizations
     const writeZcap = {
       id: `urn:zcap:${uuid()}`,
-      '@context': SECURITY_CONTEXT_V2_URL,
+      '@context': ZCAP_CONTEXT_URL,
       allowedAction,
       invoker: testers.bob.verificationKey.id,
       delegator: testers.bob.verificationKey.id,
