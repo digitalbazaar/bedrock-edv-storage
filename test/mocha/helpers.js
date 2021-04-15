@@ -17,7 +17,7 @@ const didKeyDriver = require('did-method-key').driver();
 const {suites, sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('@digitalbazaar/zcapld');
-const {Ed25519Signature2018, RsaSignature2018} = suites;
+const {Ed25519Signature2018} = suites;
 const sinon = require('sinon');
 const {Ed25519KeyPair} = require('crypto-ld');
 const {Cipher} = require('minimal-cipher');
@@ -289,9 +289,6 @@ exports.delegate = async ({zcap, signer, capabilityChain}) => {
   let Suite = null;
   if(/^Ed25519/i.test(signer.type)) {
     Suite = Ed25519Signature2018;
-  }
-  if(/^RSA/i.test(signer.test)) {
-    Suite = RsaSignature2018;
   }
   if(!Suite) {
     throw new Error(`Unsupported key type ${signer.type}`);
