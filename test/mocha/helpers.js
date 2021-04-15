@@ -14,12 +14,13 @@ const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
 const {EdvClient} = require('edv-client');
 const didKeyDriver = require('did-method-key').driver();
-const {suites, sign} = require('jsonld-signatures');
+const {sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('@digitalbazaar/zcapld');
-const {Ed25519Signature2018} = suites;
+const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
 const sinon = require('sinon');
-const {Ed25519KeyPair} = require('crypto-ld');
+const {Ed25519VerificationKey2020} =
+  require('@digitalbazaar/ed25519-verification-key-2020');
 const {Cipher} = require('minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
@@ -114,7 +115,7 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
     testerData.keyAgreementKey = await keystoreAgent.generateKey(
       {type: 'keyAgreement', kmsModule: exports.KMS_MODULE});
     testerData.verificationKey = await keystoreAgent.generateKey(
-      {type: 'Ed25519VerificationKey2018', kmsModule: exports.KMS_MODULE});
+      {type: 'Ed25519VerificationKey2020', kmsModule: exports.KMS_MODULE});
     testerData.hmac = await keystoreAgent.generateKey(
       {type: 'hmac', kmsModule: exports.KMS_MODULE});
   }
@@ -288,7 +289,7 @@ exports.delegate = async ({zcap, signer, capabilityChain}) => {
   }
   let Suite = null;
   if(/^Ed25519/i.test(signer.type)) {
-    Suite = Ed25519Signature2018;
+    Suite = Ed25519Signature2020;
   }
   if(!Suite) {
     throw new Error(`Unsupported key type ${signer.type}`);
@@ -297,11 +298,9 @@ exports.delegate = async ({zcap, signer, capabilityChain}) => {
   return sign(zcap, {
     // TODO: map `signer.type` to signature suite
     suite: new Suite({
-      signer,
-      verificationMethod: signer.id
+      signer
     }),
-    purpose: new CapabilityDelegation({capabilityChain}),
-    compactProof: false
+    purpose: new CapabilityDelegation({capabilityChain})
   });
 };
 
@@ -322,7 +321,8 @@ exports.setKeyId = async key => {
   const keyDescription = await key.getKeyDescription();
   // create public ID (did:key) for bob's key
   // TODO: do not use did:key but support a did:v1 based key.
-  const fingerprint = Ed25519KeyPair.fingerprintFromPublicKey(keyDescription);
+  const fingerprint = (await Ed25519VerificationKey2020.from(keyDescription))
+    .fingerprint();
   // invocationTarget.verificationMethod = `did:key:${fingerprint}`;
   key.id = `did:key:${fingerprint}#${fingerprint}`;
 };

@@ -43,7 +43,7 @@ data.config = {
   "sequence": 0,
   keyAgreementKey: {
     id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
-    type: 'X25519KeyAgreementKey2019',
+    type: 'X25519KeyAgreementKey2020',
   },
   "hmac": {
     "id": `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
