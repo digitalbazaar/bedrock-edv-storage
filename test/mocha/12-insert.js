@@ -74,7 +74,8 @@ describe('insert API', () => {
   }
   it('should fail to insert a document with a negative sequence number',
     async () => {
-      let record, error = null;
+      let record;
+      let error = null;
       try {
         const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
@@ -97,7 +98,8 @@ describe('insert API', () => {
     });
   it('should fail to insert a document with max safe sequence number',
     async () => {
-      let record, error = null;
+      let record;
+      let error = null;
       try {
         const actor = actors['alpha@example.com'];
         const {doc1} = mockData;

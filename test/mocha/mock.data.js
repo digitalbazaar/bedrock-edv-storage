@@ -4,6 +4,14 @@
 'use strict';
 
 const {config} = require('bedrock');
+const {
+  documentLoaderFactory,
+  contexts,
+} = require('@transmute/jsonld-document-loader');
+const didContext = require('did-context');
+const {CONTEXT_URL: ZCAP_CONTEXT_URL, CONTEXT: ZCAP_CONTEXT} =
+  require('zcap-context');
+const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
 const helpers = require('./helpers');
 
 const data = {};
@@ -284,3 +292,20 @@ httpDocs.delta = {
     pears: 3000,
   }
 };
+
+data.documentLoader = documentLoaderFactory.pluginFactory
+  .build({
+    contexts: {
+      ...contexts.W3C_Verifiable_Credentials,
+      'https://w3id.org/security/suites/ed25519-2020/v1':
+        Ed25519Signature2020.CONTEXT,
+    }
+  })
+  .addContext({
+    [didContext.constants.DID_CONTEXT_URL]: didContext
+      .contexts.get('https://www.w3.org/ns/did/v1')
+  })
+  .addContext({
+    [ZCAP_CONTEXT_URL]: ZCAP_CONTEXT
+  })
+  .buildDocumentLoader();
