@@ -31,7 +31,7 @@ const urls = {
 
 const JWE_ALG = 'ECDH-ES+A256KW';
 
-describe.skip('revocation API', function() {
+describe('revocation API', function() {
   // TODO: Rename this.
   // TODO: Move this to helpers.
   let testers = null;
@@ -85,7 +85,8 @@ describe.skip('revocation API', function() {
       signer: testers.alice.capabilityAgent.getSigner(),
       capabilityChain: [
         capabilityDelegation.parentCapability,
-      ]
+      ],
+      documentLoader: mockData.documentLoader
     });
 
     const docContent = {
@@ -161,7 +162,7 @@ describe.skip('revocation API', function() {
 
   // TODO: this more comprehensive test is to be completed later
   /* eslint-disable */
-  it.skip('should delegate & revoke write access II', async () => {
+  it('should delegate & revoke write access II', async () => {
     // bob delegates his write capability from alice to carol.
     // all 3 of them are able to write to the same EDV.
     // Bob revoke's carol's capability

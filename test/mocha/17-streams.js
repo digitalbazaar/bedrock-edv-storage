@@ -9,7 +9,7 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
-const didKeyDriver = require('did-method-key').driver();
+const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 
 let actors;
 let accounts;
@@ -291,4 +291,3 @@ describe('chunk API', () => {
     should.not.exist(result);
   });
 });
-

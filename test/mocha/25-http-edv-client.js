@@ -16,7 +16,7 @@ const {CapabilityAgent} = require('webkms-client');
 let actors;
 let urls;
 
-describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
+describe('bedrock-edv-storage HTTP API - edv-client', () => {
   let passportStub;
 
   before(async () => {
@@ -47,7 +47,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const handle = 'testKey1';
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -101,7 +101,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = '40762a17-1696-428f-a2b2-ddf9fe9b4987';
       const handle = 'testKey2';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -189,7 +189,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = '9c727b65-8553-4275-9ac3-0ac89396efc0';
       const handle = 'testKey3';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -247,7 +247,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const handle = 'testKey3';
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
       const invocationSigner = capabilityAgent.getSigner();
@@ -280,7 +280,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const handle = 'testKey3';
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
       const invocationSigner = capabilityAgent.getSigner();
@@ -321,7 +321,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = '6f799a67-45ec-4bc7-960c-c2b79a3c0216';
       const handle = 'testKey4';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -391,7 +391,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const handle = 'testKey2';
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
       const invocationSigner = capabilityAgent.getSigner();
@@ -425,7 +425,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const root = `${baseUri}/edvs`;
 
       const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent,
         referenceId: 'test'});
@@ -499,7 +499,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = '6bc1fdf9-d454-4853-b776-3641314aa3b8';
       const handle = 'testKey5';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -585,7 +585,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = '6bc1fdf9-d454-4853-b776-3641314aa3b8';
       const handle = 'testKey5';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
@@ -948,7 +948,8 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
         const capabilityToEnable = await helpers.delegate({
           zcap: writeZcap,
           signer: invocationSigner,
-          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`]
+          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`],
+          documentLoader: mockData.documentLoader
         });
         assertions.shouldBeCapability({capability: capabilityToEnable});
         await aliceEdvClient.enableCapability(
@@ -968,7 +969,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client', () => {
       const secret = 'bbe5e472-f8ff-4ea8-8004-f04a63d641e6';
       const handle = 'testKey6';
       capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
+        {secret, handle, keyType: 'Ed25519VerificationKey2020'});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 

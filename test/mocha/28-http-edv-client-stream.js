@@ -15,7 +15,7 @@ const brEdvStorage = require('bedrock-edv-storage');
 let actors;
 let urls;
 
-describe.skip('bedrock-edv-storage HTTP API - edv-client chunks', function() {
+describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
   let passportStub;
   let capabilityAgent;
   let edvClient;
@@ -34,7 +34,7 @@ describe.skip('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     const secret = '9c727b65-8553-4275-9ac3-0ac89396efc0';
     const handle = 'testKey3';
     capabilityAgent = await CapabilityAgent.fromSecret(
-      {secret, handle});
+      {secret, handle, keyType: 'Ed25519VerificationKey2020'});
     invocationSigner = capabilityAgent.getSigner();
     const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 

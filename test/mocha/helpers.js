@@ -13,7 +13,7 @@ const database = require('bedrock-mongodb');
 const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
 const {EdvClient} = require('edv-client');
-const didKeyDriver = require('did-method-key').driver();
+const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 const {sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
 const {CapabilityDelegation} = require('@digitalbazaar/zcapld');
@@ -21,7 +21,7 @@ const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
 const sinon = require('sinon');
 const {Ed25519VerificationKey2020} =
   require('@digitalbazaar/ed25519-verification-key-2020');
-const {Cipher} = require('minimal-cipher');
+const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
 const {CONTEXT_URL: ZCAP_CONTEXT_URL} = require('zcap-context');
@@ -105,7 +105,8 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
     };
     testerData.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testerData.secret,
-      handle: testerData.handle
+      handle: testerData.handle,
+      keyType: 'Ed25519VerificationKey2020'
     });
     const keystoreAgent = testerData.keystoreAgent =
       await exports.createKeystore({
@@ -280,7 +281,7 @@ exports.keyResolver = _keyResolver;
  *
  * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
  */
-exports.delegate = async ({zcap, signer, capabilityChain}) => {
+exports.delegate = async ({zcap, signer, capabilityChain, documentLoader}) => {
   if(!zcap['@context']) {
     zcap['@context'] = ZCAP_CONTEXT_URL;
   }
@@ -300,7 +301,8 @@ exports.delegate = async ({zcap, signer, capabilityChain}) => {
     suite: new Suite({
       signer
     }),
-    purpose: new CapabilityDelegation({capabilityChain})
+    purpose: new CapabilityDelegation({capabilityChain}),
+    documentLoader
   });
 };
 
