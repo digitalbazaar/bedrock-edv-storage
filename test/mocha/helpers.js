@@ -16,7 +16,8 @@ const {EdvClient} = require('edv-client');
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 const {sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
-const {CapabilityDelegation} = require('@digitalbazaar/zcapld');
+const {CapabilityDelegation, constants: {ZCAP_CONTEXT_URL}} =
+  require('@digitalbazaar/zcapld');
 const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
 const sinon = require('sinon');
 const {Ed25519VerificationKey2020} =
@@ -24,7 +25,6 @@ const {Ed25519VerificationKey2020} =
 const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
-const {CONTEXT_URL: ZCAP_CONTEXT_URL} = require('zcap-context');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;

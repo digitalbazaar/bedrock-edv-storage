@@ -30,8 +30,7 @@
     "bs58": "^4.0.1",
     "cors": "^2.8.5",
     "http-signature-zcap-verify": "^7.0.0",
-    "jsonld-signatures": "^9.0.2",
-    "zcap-context": "^1.1.0"
+    "jsonld-signatures": "^9.0.2"
   },
   "peerDependencies": {
     "bedrock": "^4.1.1",

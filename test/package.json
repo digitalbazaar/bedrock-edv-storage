@@ -63,8 +63,7 @@
     "sinon": "^9.0.2",
     "web-streams-polyfill": "^3.0.3",
     "webkms-client": "digitalbazaar/webkms-client#use-webkms-context",
-    "webkms-context": "^1.0.0",
-    "zcap-context": "^1.1.0"
+    "webkms-context": "^1.0.0"
   },
   "nyc": {
     "excludeNodeModules": false,
