@@ -4,15 +4,9 @@
 'use strict';
 
 const {config} = require('bedrock');
-const {
-  documentLoaderFactory,
-  contexts,
-} = require('@transmute/jsonld-document-loader');
-const didContext = require('did-context');
-const {CONTEXT_URL: ZCAP_CONTEXT_URL, CONTEXT: ZCAP_CONTEXT} =
-  require('zcap-context');
-const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
 const helpers = require('./helpers');
+const {didIo} = require('bedrock-did-io');
+const {documentLoader} = require('bedrock-jsonld-document-loader');
 
 const data = {};
 module.exports = data;
@@ -293,19 +287,21 @@ httpDocs.delta = {
   }
 };
 
-data.documentLoader = documentLoaderFactory.pluginFactory
-  .build({
-    contexts: {
-      ...contexts.W3C_Verifiable_Credentials,
-      'https://w3id.org/security/suites/ed25519-2020/v1':
-        Ed25519Signature2020.CONTEXT,
+data.documentLoader = async function _documentLoader(url) {
+  let document;
+  if(url.startsWith('did:')) {
+    document = await didIo.get({did: url, forceConstruct: true});
+    // FIXME: Remove the startsWith() logic once did-io.get() return signature
+    // is updated.
+    if(url.startsWith('did:v1:')) {
+      document = document.doc;
     }
-  })
-  .addContext({
-    [didContext.constants.DID_CONTEXT_URL]: didContext
-      .contexts.get('https://www.w3.org/ns/did/v1')
-  })
-  .addContext({
-    [ZCAP_CONTEXT_URL]: ZCAP_CONTEXT
-  })
-  .buildDocumentLoader();
+    return {
+      contextUrl: null,
+      documentUrl: url,
+      document
+    };
+  }
+
+  return documentLoader(url);
+};
