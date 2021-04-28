@@ -1,5 +1,15 @@
 # bedrock-edv-storage ChangeLog
 
+## 9.0.0 - 2021-04-TBD
+
+### Changed
+- Update dependencies.
+  - **BREAKING**: Use `ed25519-signature-2020` signature suite.
+  - **BREAKING**: Remove `ocapld` and use [@digitalbazaar/zcapld@4.0](https://github.com/digitalbazaar/zcapld/blob/main/CHANGELOG.md). fetchInSecurityContext API uses the new zcap-context.
+  - **BREAKING**: Use [http-signature-zcap-verify@7.0](https://github.com/digitalbazaar/http-signature-zcap-verify/blob/main/CHANGELOG.md). Uses new zcap-context.
+  - **BREAKING**: Use [jsonld-signatures@9.0.2](https://github.com/digitalbazaar/jsonld-signatures/blob/master/CHANGELOG.md)
+- Update test deps and peerDeps.
+
 ## 8.0.0 - 2021-03-12
 
 ### Changed
