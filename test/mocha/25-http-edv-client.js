@@ -12,7 +12,7 @@ const helpers = require('./helpers');
 const assertions = require('./assertions');
 const mockData = require('./mock.data');
 const {EdvClient} = require('edv-client');
-const {CapabilityAgent} = require('webkms-client');
+const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 let actors;
 let urls;
 

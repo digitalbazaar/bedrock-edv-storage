@@ -8,7 +8,7 @@ const bedrock = require('bedrock');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {config} = bedrock;
-const {CapabilityAgent} = require('webkms-client');
+const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 const {EdvDocument} = require('edv-client');
 const brEdvStorage = require('bedrock-edv-storage');
 

@@ -15,7 +15,8 @@ const {util: {uuid}} = bedrock;
 const {EdvClient} = require('edv-client');
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 const {sign} = require('jsonld-signatures');
-const {KeystoreAgent, KmsClient, CapabilityAgent} = require('webkms-client');
+const {KeystoreAgent, KmsClient, CapabilityAgent} =
+  require('@digitalbazaar/webkms-client');
 const {CapabilityDelegation, constants: {ZCAP_CONTEXT_URL}} =
   require('@digitalbazaar/zcapld');
 const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
