@@ -8,7 +8,7 @@ const bedrock = require('bedrock');
 const {config} = bedrock;
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-const {CapabilityAgent} = require('webkms-client');
+const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 let actors;
 let urls;
 
