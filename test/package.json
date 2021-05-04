@@ -34,7 +34,7 @@
     "@digitalbazaar/http-client": "^1.0.0",
     "@digitalbazaar/http-digest-header": "^1.0.0",
     "@digitalbazaar/minimal-cipher": "^3.0.0",
-    "@digitalbazaar/webkms-client": "digitalbazaar/webkms-client#use-webkms-context",
+    "@digitalbazaar/webkms-client": "^6.0.0",
     "@digitalbazaar/zcapld": "^4.0.0",
     "bedrock": "^4.1.1",
     "bedrock-account": "^5.0.0",
