@@ -59,7 +59,7 @@
     "bedrock-veres-one-context": "digitalbazaar/bedrock-veres-one-context#update-deps",
     "bedrock-zcap-storage": "^3.2.0",
     "cross-env": "^7.0.2",
-    "edv-client": "digitalbazaar/edv-client#support-ed25519-signature-2020",
+    "edv-client": "^9.0.0",
     "jsonld-signatures": "^9.0.2",
     "nyc": "^15.1.0",
     "sinon": "^9.0.2",
