@@ -44,7 +44,7 @@
     "bedrock-permission": "^3.2.0",
     "bedrock-server": "^2.7.0",
     "bedrock-validation": "^5.0.0",
-    "bedrock-veres-one-context": "digitalbazaar/bedrock-veres-one-context#update-deps",
+    "bedrock-veres-one-context": "^11.0.0",
     "bedrock-zcap-storage": "^3.2.0"
   },
   "directories": {
