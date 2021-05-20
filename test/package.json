@@ -39,7 +39,7 @@
     "bedrock": "^4.1.1",
     "bedrock-account": "^5.0.0",
     "bedrock-did-context": "^2.0.0",
-    "bedrock-did-io": "digitalbazaar/bedrock-did-io#update-veres-one",
+    "bedrock-did-io": "^2.0.0",
     "bedrock-edv-storage": "file:..",
     "bedrock-express": "^4.0.0",
     "bedrock-https-agent": "^2.0.0",
@@ -58,13 +58,13 @@
     "bedrock-validation": "^5.0.0",
     "bedrock-veres-one-context": "^11.0.0",
     "bedrock-zcap-storage": "^3.2.0",
+    "bs58": "^4.0.1",
     "cross-env": "^7.0.2",
     "edv-client": "^9.0.0",
     "jsonld-signatures": "^9.0.2",
     "nyc": "^15.1.0",
     "sinon": "^9.0.2",
-    "web-streams-polyfill": "^3.0.3",
-    "webkms-context": "^1.0.0"
+    "web-streams-polyfill": "^3.0.3"
   },
   "nyc": {
     "excludeNodeModules": false,

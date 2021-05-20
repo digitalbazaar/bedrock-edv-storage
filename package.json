@@ -36,7 +36,7 @@
     "bedrock": "^4.1.1",
     "bedrock-account": "^5.0.0",
     "bedrock-did-context": "^2.0.0",
-    "bedrock-did-io": "digitalbazaar/bedrock-did-io#update-veres-one",
+    "bedrock-did-io": "^2.0.0",
     "bedrock-express": "^4.0.0",
     "bedrock-jsonld-document-loader": "^1.0.1",
     "bedrock-mongodb": "^8.2.0",
