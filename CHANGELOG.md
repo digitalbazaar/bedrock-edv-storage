@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 9.0.0 - 2021-04-TBD
+## 9.0.0 - 2021-05-21
 
 ### Changed
 - Update dependencies.
