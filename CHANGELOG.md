@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 9.0.1 - 2021-06-xx
+
+### Fixed
+- Unset `uniqueAttributes` if cleared in a document update.
+
 ## 9.0.0 - 2021-05-21
 
 ### Changed
