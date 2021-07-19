@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 9.0.2 - 2021-07-xx
+
+### Fixed
+- Throw error (a typo previously just returned it) when `updateConfig` fails.
+
 ## 9.0.1 - 2021-06-08
 
 ### Fixed
