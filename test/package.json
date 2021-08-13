@@ -39,7 +39,7 @@
     "bedrock": "^4.1.1",
     "bedrock-account": "^5.0.0",
     "bedrock-did-context": "^2.0.0",
-    "bedrock-did-io": "^2.0.0",
+    "bedrock-did-io": "digitalbazaar/bedrock-did-io#offline-veres",
     "bedrock-edv-storage": "file:..",
     "bedrock-express": "^4.0.0",
     "bedrock-https-agent": "^2.0.0",
