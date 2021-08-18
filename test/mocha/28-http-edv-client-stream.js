@@ -33,9 +33,9 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     };
     const secret = '9c727b65-8553-4275-9ac3-0ac89396efc0';
     const handle = 'testKey3';
-    capabilityAgent = await CapabilityAgent.fromSecret(
-      {secret, handle, keyType: 'Ed25519VerificationKey2020'});
+    capabilityAgent = await CapabilityAgent.fromSecret({secret, handle});
     invocationSigner = capabilityAgent.getSigner();
+
     const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
     // corresponds to the passport authenticated user
