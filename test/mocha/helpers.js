@@ -6,7 +6,6 @@
 const bedrock = require('bedrock');
 const base58 = require('bs58');
 const brAccount = require('bedrock-account');
-const {httpsAgent} = require('bedrock-https-agent');
 const brPassport = require('bedrock-passport');
 const crypto = require('crypto');
 const database = require('bedrock-mongodb');
@@ -26,6 +25,7 @@ const {Ed25519VerificationKey2020} =
 const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
+const {httpsAgent} = require('bedrock-https-agent');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -106,20 +106,18 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
     };
     testerData.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testerData.secret,
-      handle: testerData.handle,
-      keyType: 'Ed25519VerificationKey2020'
+      handle: testerData.handle
     });
     const keystoreAgent = testerData.keystoreAgent =
       await exports.createKeystore({
-        capabilityAgent: testerData.capabilityAgent,
-        referenceId: testerData.secret
+        capabilityAgent: testerData.capabilityAgent
       });
     testerData.keyAgreementKey = await keystoreAgent.generateKey(
-      {type: 'keyAgreement', kmsModule: exports.KMS_MODULE});
+      {type: 'keyAgreement'});
     testerData.verificationKey = await keystoreAgent.generateKey(
-      {type: 'Ed25519VerificationKey2020', kmsModule: exports.KMS_MODULE});
+      {type: 'asymmetric'});
     testerData.hmac = await keystoreAgent.generateKey(
-      {type: 'hmac', kmsModule: exports.KMS_MODULE});
+      {type: 'hmac'});
   }
   return testData;
 };
@@ -177,36 +175,72 @@ async function insertTestData(mockData) {
   }
 }
 
+exports.createMeter = async ({capabilityAgent} = {}) => {
+  // create a meter
+  const meterService = `${bedrock.config.server.baseUri}/meters`;
+  let meter = {
+    controller: capabilityAgent.id,
+    product: {
+      // mock ID for webkms service product
+      id: 'urn:uuid:80a82316-e8c2-11eb-9570-10bf48838a41'
+    }
+  };
+
+  const response = await httpClient.post(meterService, {
+    agent: httpsAgent, json: meter
+  });
+  ({data: {meter}} = response);
+
+  // return usage capability
+  const {usageCapability: meterCapability} = meter;
+  return {meterCapability};
+};
+
 // the `keystores` endpoint uses session based authentication which is
 // mocked
-exports.createKeystore = async ({capabilityAgent, referenceId}) => {
+exports.createKeystore = async ({
+  capabilityAgent, ipAllowList, referenceId, meterCapability,
+  kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`,
+  kmsModule = 'ssm-v1',
+}) => {
+  if(!meterCapability) {
+    // create a meter for the keystore
+    ({meterCapability} = await exports.createMeter({capabilityAgent}));
+  }
+
   // create keystore
   const config = {
     sequence: 0,
     controller: capabilityAgent.id,
+    meterCapability,
+    kmsModule
   };
   if(referenceId) {
     config.referenceId = referenceId;
   }
-  const kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`;
-  const keystore = await KmsClient.createKeystore({
+  if(ipAllowList) {
+    config.ipAllowList = ipAllowList;
+  }
+
+  const {id: keystoreId} = await KmsClient.createKeystore({
     url: `${kmsBaseUrl}/keystores`,
     config,
-    httpsAgent,
+    invocationSigner: capabilityAgent.getSigner(),
+    httpsAgent
   });
   const kmsClient = new KmsClient({httpsAgent});
-  return new KeystoreAgent({capabilityAgent, keystore, kmsClient});
+  return new KeystoreAgent({capabilityAgent, keystoreId, kmsClient});
 };
 
 exports.createEdv = async ({
-  actor, capabilityAgent, keystoreAgent, kmsModule = exports.KMS_MODULE, urls,
-  keyAgreementKey, hmac, invocationSigner
+  actor, capabilityAgent, keystoreAgent, urls,
+  keyAgreementKey, hmac, invocationSigner, referenceId
 }) => {
   if(!(keyAgreementKey && hmac) && keystoreAgent) {
     // create KAK and HMAC keys for edv config
     ([keyAgreementKey, hmac] = await Promise.all([
-      keystoreAgent.generateKey({type: 'keyAgreement', kmsModule}),
-      keystoreAgent.generateKey({type: 'hmac', kmsModule})
+      keystoreAgent.generateKey({type: 'keyAgreement'}),
+      keystoreAgent.generateKey({type: 'hmac'})
     ]));
   }
 
@@ -236,8 +270,8 @@ exports.createEdv = async ({
     };
   }
 
-  if(keystoreAgent && keystoreAgent.keystore.referenceId) {
-    newEdvConfig.referenceId = keystoreAgent.keystore.referenceId;
+  if(referenceId) {
+    newEdvConfig.referenceId = referenceId;
   }
 
   const edvConfig = await EdvClient.createEdv({
