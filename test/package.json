@@ -67,7 +67,7 @@
     "jsonld-signatures": "^9.0.2",
     "nyc": "^15.1.0",
     "sinon": "^9.0.2",
-    "web-streams-polyfill": "^3.0.3"
+    "web-streams-polyfill": "~3.0.3"
   },
   "nyc": {
     "excludeNodeModules": false,
