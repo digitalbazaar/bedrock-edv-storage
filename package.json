@@ -29,7 +29,7 @@
     "assert-plus": "^1.0.0",
     "bs58": "^4.0.1",
     "cors": "^2.8.5",
-    "http-signature-zcap-verify": "^7.1.0",
+    "http-signature-zcap-verify": "^8.1.1",
     "jsonld-signatures": "^9.0.2"
   },
   "peerDependencies": {
