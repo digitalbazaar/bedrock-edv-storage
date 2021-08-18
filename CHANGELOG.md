@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 9.0.3 - 2021-08-xx
+
+### Fixed
+- Update dependencies to resolve multicodec key bugs with 2020 suites.
+
 ## 9.0.2 - 2021-07-19
 
 ### Fixed
