@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 9.0.4 - 2021-08-xx
+## 9.0.4 - 2021-08-19
 
 ### Fixed
 - Use bedrock-did-io@4.
