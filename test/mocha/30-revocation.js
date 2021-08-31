@@ -34,12 +34,11 @@ describe('revocation API', function() {
   // TODO: Rename this.
   // TODO: Move this to helpers.
   let testers = null;
-  let passportStub;
   let aliceEdvClient;
   let aliceEdvConfig;
 
   before(async () => {
-    await helpers.prepareDatabase(mockData);
+    await helpers.prepareDatabase();
   });
 
   before(async () => {
@@ -48,19 +47,13 @@ describe('revocation API', function() {
       testers: ['alice', 'bob', 'carol'],
       mockData
     });
-    passportStub = helpers.stubPassport({actor: testers.alice.actor});
     ({edvClient: aliceEdvClient, edvConfig: aliceEdvConfig} =
       await helpers.createEdv({
         capabilityAgent: testers.alice.capabilityAgent,
         hmac: testers.alice.hmac,
         keyAgreementKey: testers.alice.keyAgreementKey,
-        invocationSigner: testers.alice.capabilityAgent.getSigner(),
         urls,
       }));
-  });
-
-  after(() => {
-    passportStub.restore();
   });
 
   it('should delegate & revoke access', async () => {
@@ -210,7 +203,6 @@ describe('revocation API', function() {
       }
     };
     let record = await brEdvStorage.insert({
-      actor: testers.alice.actor,
       edvId: mockEdvId,
       doc,
     });
@@ -218,7 +210,7 @@ describe('revocation API', function() {
     //      await helpers.authorize({
     //        req, expectedTarget, expectedRootCapability, expectedAction
     //      });
-    // await brEdvStorage.update({actor, edvId: mockEdvId, doc: mockData.doc2});
+    // await brEdvStorage.update({edvId: mockEdvId, doc: mockData.doc2});
     // await helpers.verifyDelegation({edvId, controller, capability});
     // await brZCapStorage.revocations.insert({controller, capability});
     // test the default behavior that Alice can write to her own EDV,

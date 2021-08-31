@@ -4,7 +4,6 @@
 'use strict';
 
 const {config} = require('bedrock');
-const helpers = require('./helpers');
 const {didIo} = require('bedrock-did-io');
 const {documentLoader} = require('bedrock-jsonld-document-loader');
 
@@ -21,48 +20,25 @@ data.productIdMap = new Map([
   ['urn:uuid:dbd15f08-ff67-11eb-893b-10bf48838a41', 'edv']
 ]);
 
-const accounts = data.accounts = {};
-
-// regular permissions
-const email = 'alpha@example.com';
-accounts[email] = {};
-accounts[email].account = helpers.createAccount(email);
-accounts[email].meta = {};
-accounts[email].meta.sysResourceRole = [{
-  sysRole: 'bedrock-test.regular',
-  generateResource: 'id'
-}];
-
-// this will create the 3 users for the delegation / revoke
-// tests.
-for(const name of ['alice', 'bob', 'carol']) {
-  const _email = `${name}@example.com`;
-  accounts[_email] = {};
-  accounts[_email].account = helpers.createAccount(_email);
-  accounts[_email].meta = {};
-  accounts[_email].meta.sysResourceRole = [{
-    sysRole: 'bedrock-test.regular',
-    generateResource: 'id'
-  }];
-}
-
 data.baseUrl = config.server.baseUri;
 const keyStore = '/kms/keystores/z19tghrZEvcUY5YAG8tPi33P3';
 
-/* eslint-disable quotes, quote-props */
 data.config = {
-  "id": `${data.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
-  "sequence": 0,
+  id: `${data.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
+  controller: 'did:key:z6Mksbz5LDhX9WAYZxZ8sHinN7xeSSB3PWYRxTdJGrMyshN2',
+  sequence: 0,
   keyAgreementKey: {
     id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
     type: 'X25519KeyAgreementKey2020',
   },
-  "hmac": {
-    "id": `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
-    "type": "Sha256HmacKey2019"
-  }
+  hmac: {
+    id: `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
+    type: 'Sha256HmacKey2019'
+  },
+  meterId: 'https://localhost:18443/meters/zLd2ijgM1PoJvvULK9Wwx37'
 };
 
+/* eslint-disable quotes, quote-props */
 data.doc1 = {
   "id": "z1ABxUcbcnSyMtnenFmeARhUn",
   "sequence": 0,

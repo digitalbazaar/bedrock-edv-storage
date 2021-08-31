@@ -13,26 +13,18 @@ const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
 describe('insert API', () => {
-  let actors;
-  let accounts;
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
-    accounts = mockData.accounts;
+    await helpers.prepareDatabase();
   });
   before(async () => {
-    const actor = actors['alpha@example.com'];
-    const account = accounts['alpha@example.com'].account;
-    const edvConfig = {...mockData.config, controller: account.id};
+    const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({actor, config: edvConfig});
+    await brEdvStorage.insertConfig({config: edvConfig});
   });
   it('should insert a document', async () => {
-    const actor = actors['alpha@example.com'];
     const {doc1: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.insert({
-      actor,
       edvId: mockEdvId,
       doc,
     });
@@ -50,14 +42,12 @@ describe('insert API', () => {
   // test various sequence numbers
   for(const test of helpers.sequenceNumberTests) {
     it(test.title, async () => {
-      const actor = actors['alpha@example.com'];
       const {doc1} = mockData;
       const doc = {...doc1};
       doc.id = await helpers.generateRandom();
       doc.sequence = test.sequence;
       const hashedDocId = database.hash(doc.id);
       let record = await brEdvStorage.insert({
-        actor,
         edvId: mockEdvId,
         doc,
       });
@@ -77,13 +67,11 @@ describe('insert API', () => {
       let record;
       let error = null;
       try {
-        const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = -1;
         record = await brEdvStorage.insert({
-          actor,
           edvId: mockEdvId,
           doc,
         });
@@ -101,13 +89,11 @@ describe('insert API', () => {
       let record;
       let error = null;
       try {
-        const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = Number.MAX_SAFE_INTEGER;
         record = await brEdvStorage.insert({
-          actor,
           edvId: mockEdvId,
           doc,
         });
@@ -121,11 +107,9 @@ describe('insert API', () => {
         '"doc.sequence" number is too large.');
     });
   it('should insert a document with an attribute', async () => {
-    const actor = actors['alpha@example.com'];
     const {docWithAttributes: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.insert({
-      actor,
       edvId: mockEdvId,
       doc,
     });
@@ -140,11 +124,9 @@ describe('insert API', () => {
     record.doc.should.eql(doc);
   });
   it('should insert a document with a unique attribute', async () => {
-    const actor = actors['alpha@example.com'];
     const {docWithUniqueAttributes: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.insert({
-      actor,
       edvId: mockEdvId,
       doc
     });
@@ -159,13 +141,11 @@ describe('insert API', () => {
     record.doc.should.eql(doc);
   });
   it('should detect a duplicate with a unique attribute', async () => {
-    const actor = actors['alpha@example.com'];
     const doc = {...mockData.docWithUniqueAttributes};
     doc.id = 'z19pjdSMQMkBqqJ5zsbbgeeee';
     let err;
     try {
       await brEdvStorage.insert({
-        actor,
         edvId: mockEdvId,
         doc
       });
@@ -176,13 +156,11 @@ describe('insert API', () => {
     err.name.should.equal('DuplicateError');
   });
   it('should detect an upsert duplicate', async () => {
-    const actor = actors['alpha@example.com'];
     const doc = {...mockData.docWithUniqueAttributes};
     doc.id = 'z19pjdSMQMkBqqJ5zsbbgffff';
     let err;
     try {
       await brEdvStorage.update({
-        actor,
         edvId: mockEdvId,
         doc
       });
@@ -193,11 +171,9 @@ describe('insert API', () => {
     err.name.should.equal('DuplicateError');
   });
   it('should insert a document with non-conflicting attribute', async () => {
-    const actor = actors['alpha@example.com'];
     const {docWithUniqueAttributes2: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.insert({
-      actor,
       edvId: mockEdvId,
       doc,
     });
@@ -212,13 +188,11 @@ describe('insert API', () => {
     record.doc.should.eql(doc);
   });
   it('should return error on duplicate document', async () => {
-    const actor = actors['alpha@example.com'];
     const {doc1: doc} = mockData;
     // attempt to insert the same document again
     let err;
     try {
       await brEdvStorage.insert({
-        actor,
         edvId: mockEdvId,
         doc
       });
@@ -231,12 +205,10 @@ describe('insert API', () => {
   // FIXME: enable this test, current implementation does not test edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for an unknown EDV ID', async () => {
-    const actor = actors['alpha@example.com'];
     let err;
     let record;
     try {
       record = await brEdvStorage.insert({
-        actor,
         edvId: 'urn:uuid:something-else',
         doc: mockData.doc1
       });

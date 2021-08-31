@@ -11,8 +11,6 @@ const mockData = require('./mock.data');
 
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 
-let actors;
-let accounts;
 let kid;
 let keyAgreementKey;
 
@@ -23,23 +21,19 @@ const hashedMockEdvId = database.hash(mockEdvId);
 
 describe('chunk API', () => {
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
-    accounts = mockData.accounts;
+    await helpers.prepareDatabase();
     const {methodFor} = await didKeyDriver.generate();
     keyAgreementKey = methodFor({purpose: 'keyAgreement'});
     kid = keyAgreementKey.id;
   });
   before(async () => {
-    const actor = actors['alpha@example.com'];
-    const account = accounts['alpha@example.com'].account;
-    const edvConfig = {...mockData.config, controller: account.id};
+    const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({actor, config: edvConfig});
+    await brEdvStorage.insertConfig({config: edvConfig});
   });
 
   beforeEach(async () => {
-    await helpers.prepareDatabase(mockData);
+    await helpers.prepareDatabase();
   });
 
   it('should insert a new chunk', async () => {

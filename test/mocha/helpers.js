@@ -5,7 +5,6 @@
 
 const bedrock = require('bedrock');
 const base58 = require('bs58');
-const brAccount = require('bedrock-account');
 const brPassport = require('bedrock-passport');
 const crypto = require('crypto');
 const database = require('bedrock-mongodb');
@@ -91,18 +90,12 @@ exports.generateRandom = async () => {
   return 'z' + base58.encode(buf);
 };
 
-exports.makeDelegationTesters = async ({testers = [], mockData}) => {
-  const actors = await exports.getActors(mockData);
-  const accounts = mockData.accounts;
+exports.makeDelegationTesters = async ({testers = []}) => {
   const testData = {};
   for(const tester of testers) {
-    const email = `${tester}@example.com`;
     const testerData = testData[tester] = {
-      email,
       secret: uuid(),
       handle: `${tester}Key`,
-      actor: actors[email],
-      account: accounts[email]
     };
     testerData.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testerData.secret,
@@ -122,35 +115,17 @@ exports.makeDelegationTesters = async ({testers = [], mockData}) => {
   return testData;
 };
 
-exports.createAccount = email => {
-  const newAccount = {
-    id: 'urn:uuid:' + uuid(),
-    email
-  };
-  return newAccount;
-};
-
-exports.getActors = async mockData => {
-  const actors = {};
-  for(const [key, record] of Object.entries(mockData.accounts)) {
-    actors[key] = await brAccount.getCapabilities({id: record.account.id});
-  }
-  return actors;
-};
-
-exports.prepareDatabase = async mockData => {
+exports.prepareDatabase = async () => {
   await exports.removeCollections();
-  await insertTestData(mockData);
 };
 
 exports.removeCollections = async (
   collectionNames = [
-    'account',
     'edvConfig',
     'edvDoc',
     'edvDocChunk'
   ]) => {
-  await promisify(database.openCollections)(collectionNames);
+  await database.openCollections(collectionNames);
   for(const collectionName of collectionNames) {
     await database.collections[collectionName].removeMany({});
   }
@@ -158,22 +133,6 @@ exports.removeCollections = async (
 
 exports.removeCollection =
   async collectionName => exports.removeCollections([collectionName]);
-
-async function insertTestData(mockData) {
-  const records = Object.values(mockData.accounts);
-  for(const record of records) {
-    try {
-      await brAccount.insert(
-        {actor: null, account: record.account, meta: record.meta || {}});
-    } catch(e) {
-      if(e.name === 'DuplicateError') {
-        // duplicate error means test data is already loaded
-        continue;
-      }
-      throw e;
-    }
-  }
-}
 
 exports.createMeter = async ({capabilityAgent} = {}) => {
   // create a meter
@@ -191,28 +150,27 @@ exports.createMeter = async ({capabilityAgent} = {}) => {
   });
   ({data: {meter}} = response);
 
-  // return usage capability
-  const {usageCapability: meterCapability} = meter;
-  return {meterCapability};
+  const {id} = meter;
+  return {id: `${meterService}/${id}`};
 };
 
 // the `keystores` endpoint uses session based authentication which is
 // mocked
 exports.createKeystore = async ({
-  capabilityAgent, ipAllowList, referenceId, meterCapability,
+  capabilityAgent, ipAllowList, referenceId, meterId,
   kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`,
   kmsModule = 'ssm-v1',
 }) => {
-  if(!meterCapability) {
+  if(!meterId) {
     // create a meter for the keystore
-    ({meterCapability} = await exports.createMeter({capabilityAgent}));
+    ({id: meterId} = await exports.createMeter({capabilityAgent}));
   }
 
   // create keystore
   const config = {
     sequence: 0,
     controller: capabilityAgent.id,
-    meterCapability,
+    meterId,
     kmsModule
   };
   if(referenceId) {
@@ -233,9 +191,14 @@ exports.createKeystore = async ({
 };
 
 exports.createEdv = async ({
-  actor, capabilityAgent, keystoreAgent, urls,
-  keyAgreementKey, hmac, invocationSigner, referenceId
+  capabilityAgent, keystoreAgent, urls,
+  keyAgreementKey, hmac, referenceId, meterId
 }) => {
+  if(!meterId) {
+    // create a meter for the keystore
+    ({id: meterId} = await exports.createMeter({capabilityAgent}));
+  }
+
   if(!(keyAgreementKey && hmac) && keystoreAgent) {
     // create KAK and HMAC keys for edv config
     ([keyAgreementKey, hmac] = await Promise.all([
@@ -245,30 +208,13 @@ exports.createEdv = async ({
   }
 
   // create edv
-  let newEdvConfig;
-  if(!invocationSigner) {
-    newEdvConfig = {
-      sequence: 0,
-      controller: actor.id,
-      // TODO: add `invoker` and `delegator` using capabilityAgent.id *or*, if
-      // this is a profile's edv, the profile ID
-      invoker: capabilityAgent.id,
-      delegator: capabilityAgent.id,
-      keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
-      hmac: {id: hmac.id, type: hmac.type}
-    };
-  } else {
-    newEdvConfig = {
-      sequence: 0,
-      controller: capabilityAgent.id,
-      // TODO: add `invoker` and `delegator` using controllerKey.id *or*, if
-      // this is a profile's edv, the profile ID
-      invoker: capabilityAgent.id,
-      delegator: capabilityAgent.id,
-      keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
-      hmac: {id: hmac.id, type: hmac.type}
-    };
-  }
+  const newEdvConfig = {
+    sequence: 0,
+    controller: capabilityAgent.id,
+    keyAgreementKey: {id: keyAgreementKey.id, type: keyAgreementKey.type},
+    hmac: {id: hmac.id, type: hmac.type},
+    meterId
+  };
 
   if(referenceId) {
     newEdvConfig.referenceId = referenceId;
@@ -277,7 +223,7 @@ exports.createEdv = async ({
   const edvConfig = await EdvClient.createEdv({
     config: newEdvConfig,
     httpsAgent,
-    invocationSigner,
+    invocationSigner: capabilityAgent.getSigner(),
     url: urls.edvs,
   });
 
@@ -287,7 +233,7 @@ exports.createEdv = async ({
     keyAgreementKey,
     hmac,
     httpsAgent,
-    invocationSigner,
+    invocationSigner: capabilityAgent.getSigner(),
   });
 
   return {edvClient, edvConfig};

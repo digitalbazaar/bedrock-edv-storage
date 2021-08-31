@@ -11,10 +11,9 @@ exports.shouldBeEdvConfig = ({config}) => {
   config.should.have.property('id');
   config.should.have.property('sequence');
   config.should.have.property('controller');
-  config.should.have.property('invoker');
-  config.should.have.property('delegator');
   config.should.have.property('keyAgreementKey');
   config.should.have.property('hmac');
+  config.should.have.property('meterId');
 };
 
 exports.shouldBeEdvDocument = ({doc}) => {

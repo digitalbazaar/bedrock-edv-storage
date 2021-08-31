@@ -8,38 +8,29 @@ const brEdvStorage = require('bedrock-edv-storage');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-let actors;
-let accounts;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
 describe('find API', () => {
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
-    accounts = mockData.accounts;
+    await helpers.prepareDatabase();
   });
   before(async () => {
-    const actor = actors['alpha@example.com'];
-    const account = accounts['alpha@example.com'].account;
-    const edvConfig = {...mockData.config, controller: account.id};
+    const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({actor, config: edvConfig});
+    await brEdvStorage.insertConfig({config: edvConfig});
     const {docWithAttributes: doc} = mockData;
     await brEdvStorage.insert({
-      actor,
       edvId: mockEdvId,
       doc,
     });
   });
   it('should get a document by attribute', async () => {
-    const actor = actors['alpha@example.com'];
     const {docWithAttributes: doc} = mockData;
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
     const records = await brEdvStorage.find({
-      actor,
       edvId: mockEdvId,
       query: {
         'doc.indexed.hmac.id': entry.hmac.id,
@@ -57,11 +48,9 @@ describe('find API', () => {
     documents[0].doc.should.eql(doc);
   });
   it('should get a document by attribute and value', async () => {
-    const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
     const records = await brEdvStorage.find({
-      actor,
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -82,11 +71,9 @@ describe('find API', () => {
   });
   it('should get a document by attribute and value when multiple ' +
     'values exist for the attribute via an array', async () => {
-    const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
     const [, attribute] = entry.attributes;
     const records = await brEdvStorage.find({
-      actor,
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -106,10 +93,8 @@ describe('find API', () => {
     documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should find no results', async () => {
-    const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
     const records = await brEdvStorage.find({
-      actor,
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -131,13 +116,11 @@ describe('find API', () => {
   // FIXME: the current implementation does not check for a valid edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for another EDV', async () => {
-    const actor = actors['alpha@example.com'];
     const entry = mockData.docWithAttributes.indexed[0];
     let err;
     let records;
     try {
       records = await brEdvStorage.find({
-        actor,
         edvId: 'urn:uuid:something-else',
         query: {
           'doc.indexed.hmac.id': entry.hmac.id,
