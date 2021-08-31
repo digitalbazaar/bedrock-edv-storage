@@ -1,5 +1,27 @@
 # bedrock-edv-storage ChangeLog
 
+## 10.0.0 - 2021-08-xx
+
+### Added
+- **BREAKING** - Add storage and operation metering support. A meter ID
+  must be provided to create a new keystore. This meter ID will be used to
+  report keystore storage and operation usage to the associated meter.
+
+### Changed
+- **BREAKING**: Simplify zcap revocation model. Now any party that has been
+  delegated a zcap can send it to a revocation address:
+  `<edvId>/revocations/<zcap ID>` without needing to have an additional zcap
+  delegated to that party. The party must invoke the root zcap for that
+  endpoint, which will be dynamically generated and use the delegator of the
+  zcap as the controller, i.e., the delegator must invoke this root zcap to
+  revoke the zcap they delegated.
+- Use ezcap-express to provide zcap revocation authorization implementation.
+  Remove dependencies that are no longer needed because of this upgrade.
+
+### Removed
+- **BREAKING**: Removed deprecated `fields` option from `storage.find` API.
+  Use `options.projection` instead.
+
 ## 9.0.4 - 2021-08-19
 
 ### Fixed
