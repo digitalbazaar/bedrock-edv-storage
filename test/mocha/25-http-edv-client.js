@@ -15,7 +15,7 @@ const {EdvClient} = require('edv-client');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 let urls;
 
-describe('bedrock-edv-storage HTTP API - edv-client', () => {
+describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
   before(async () => {
     await helpers.prepareDatabase();
     // common URLs
@@ -29,7 +29,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     };
   });
 
-  describe.only('insertConfig API', () => {
+  describe('insertConfig API', () => {
     it('should create an EDV', async () => {
       const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f676';
       const handle = 'testKey1';
@@ -104,7 +104,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       ({edvClient} = await helpers.createEdv(
         {capabilityAgent, keystoreAgent, urls}));
     });
-    it('should insert a document', async () => {
+    it.only('should insert a document', async () => {
       let result;
       let err;
       try {
