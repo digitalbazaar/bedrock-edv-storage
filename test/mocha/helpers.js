@@ -5,7 +5,6 @@
 
 const bedrock = require('bedrock');
 const base58 = require('bs58');
-const brPassport = require('bedrock-passport');
 const crypto = require('crypto');
 const database = require('bedrock-mongodb');
 const {promisify} = require('util');
@@ -18,7 +17,6 @@ const {KeystoreAgent, KmsClient, CapabilityAgent} =
 const {CapabilityDelegation, constants: {ZCAP_CONTEXT_URL}} =
   require('@digitalbazaar/zcapld');
 const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
-const sinon = require('sinon');
 const {Ed25519VerificationKey2020} =
   require('@digitalbazaar/ed25519-verification-key-2020');
 const {Cipher} = require('@digitalbazaar/minimal-cipher');
@@ -285,18 +283,6 @@ exports.delegate = async ({zcap, signer, capabilityChain, documentLoader}) => {
     purpose: new CapabilityDelegation({capabilityChain}),
     documentLoader
   });
-};
-
-exports.stubPassport = ({actor}) => {
-  const passportStub = sinon.stub(brPassport, 'optionallyAuthenticated');
-  passportStub.callsFake((req, res, next) => {
-    req.user = {
-      account: {},
-      actor,
-    };
-    next();
-  });
-  return passportStub;
 };
 
 exports.setKeyId = async key => {

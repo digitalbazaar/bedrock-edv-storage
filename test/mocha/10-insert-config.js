@@ -8,7 +8,7 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
-describe.only('insertConfig API', () => {
+describe('insertConfig API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
