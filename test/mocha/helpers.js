@@ -23,6 +23,7 @@ const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
 const {httpsAgent} = require('bedrock-https-agent');
+const mockData = require('./mock.data');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -132,14 +133,13 @@ exports.removeCollections = async (
 exports.removeCollection =
   async collectionName => exports.removeCollections([collectionName]);
 
-exports.createMeter = async ({capabilityAgent} = {}) => {
+exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
   // create a meter
   const meterService = `${bedrock.config.server.baseUri}/meters`;
   let meter = {
     controller: capabilityAgent.id,
     product: {
-      // mock ID for webkms service product
-      id: 'urn:uuid:80a82316-e8c2-11eb-9570-10bf48838a41'
+      id: mockData.productIdMap.get(serviceType)
     }
   };
 
@@ -161,7 +161,9 @@ exports.createKeystore = async ({
 }) => {
   if(!meterId) {
     // create a meter for the keystore
-    ({id: meterId} = await exports.createMeter({capabilityAgent}));
+    ({id: meterId} = await exports.createMeter({
+      capabilityAgent, serviceType: 'webkms'
+    }));
   }
 
   // create keystore
@@ -194,7 +196,9 @@ exports.createEdv = async ({
 }) => {
   if(!meterId) {
     // create a meter for the keystore
-    ({id: meterId} = await exports.createMeter({capabilityAgent}));
+    ({id: meterId} = await exports.createMeter({
+      capabilityAgent, serviceType: 'edv'
+    }));
   }
 
   if(!(keyAgreementKey && hmac) && keystoreAgent) {

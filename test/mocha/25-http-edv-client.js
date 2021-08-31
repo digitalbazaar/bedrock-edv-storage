@@ -30,7 +30,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
   });
 
   describe('insertConfig API', () => {
-    it('should create an EDV', async () => {
+    it.only('should create an EDV', async () => {
       const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
       const handle = 'testKey1';
       const capabilityAgent = await CapabilityAgent.fromSecret(
