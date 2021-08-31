@@ -6,25 +6,20 @@
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const bedrock = require('bedrock');
 const helpers = require('./helpers');
-const mockData = require('./mock.data');
 const {config} = bedrock;
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 const {EdvDocument} = require('edv-client');
 const brEdvStorage = require('bedrock-edv-storage');
 
-let actors;
 let urls;
 
 describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
-  let passportStub;
   let capabilityAgent;
   let edvClient;
   let invocationSigner;
 
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
-    passportStub = helpers.stubPassport({actor: actors['alpha@example.com']});
+    await helpers.prepareDatabase();
     // common URLs
     const {baseUri} = config.server;
     const root = `${baseUri}/edvs`;
@@ -38,15 +33,8 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
 
     const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
-    // corresponds to the passport authenticated user
-    const actor = actors['alpha@example.com'];
-
     ({edvClient} = await helpers.createEdv(
-      {actor, capabilityAgent, keystoreAgent, urls}));
-  });
-
-  after(() => {
-    passportStub.restore();
+      {capabilityAgent, keystoreAgent, urls}));
   });
 
   it('should insert a document with a stream', async () => {

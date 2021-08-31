@@ -6,8 +6,7 @@
 const edvConfig = {
   title: 'EDV Configuration',
   type: 'object',
-  // TODO: do not require primary `keyAgreementKey` and `hmac` in the future
-  required: ['controller', 'sequence', 'keyAgreementKey', 'hmac'],
+  required: ['controller', 'sequence', 'keyAgreementKey', 'hmac', 'meterId'],
   additionalProperties: false,
   properties: {
     id: {
@@ -15,24 +14,6 @@ const edvConfig = {
     },
     controller: {
       type: 'string'
-    },
-    invoker: {
-      anyOf: [{
-        type: 'string'
-      }, {
-        type: 'array',
-        minItems: 1,
-        items: [{type: 'string'}]
-      }]
-    },
-    delegator: {
-      anyOf: [{
-        type: 'string'
-      }, {
-        type: 'array',
-        minItems: 1,
-        items: [{type: 'string'}]
-      }]
     },
     keyAgreementKey: {
       type: 'object',
@@ -65,6 +46,9 @@ const edvConfig = {
       minimum: 0
     },
     referenceId: {
+      type: 'string'
+    },
+    meterId: {
       type: 'string'
     }
   }

@@ -12,28 +12,20 @@ const mockData = require('./mock.data');
 const {agent} = require('bedrock-https-agent');
 const {createHeaderValue} = require('@digitalbazaar/http-digest-header');
 
-let actors;
-let accounts;
-
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
 describe('update API', () => {
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
-    accounts = mockData.accounts;
+    await helpers.prepareDatabase();
   });
   before(async () => {
-    const actor = actors['alpha@example.com'];
-    const account = accounts['alpha@example.com'].account;
-    const edvConfig = {...mockData.config, controller: account.id};
+    const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({actor, config: edvConfig});
+    await brEdvStorage.insertConfig({config: edvConfig});
   });
   it('should upsert a document', async () => {
-    const actor = actors['alpha@example.com'];
-    await brEdvStorage.update({actor, edvId: mockEdvId, doc: mockData.doc2});
+    await brEdvStorage.update({edvId: mockEdvId, doc: mockData.doc2});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
       id: database.hash(mockData.doc2.id)
@@ -42,9 +34,8 @@ describe('update API', () => {
     record.doc.should.eql(mockData.doc2);
   });
   it('should update a document', async () => {
-    const actor = actors['alpha@example.com'];
     const doc = {...mockData.doc1, sequence: 1};
-    await brEdvStorage.update({actor, edvId: mockEdvId, doc});
+    await brEdvStorage.update({edvId: mockEdvId, doc});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
       id: database.hash(mockData.doc1.id)
@@ -53,10 +44,9 @@ describe('update API', () => {
   });
   it('should fail to update a document with max safe sequence', async () => {
     let error;
-    const actor = actors['alpha@example.com'];
     const doc = {...mockData.doc1, sequence: Number.MAX_SAFE_INTEGER};
     try {
-      await brEdvStorage.update({actor, edvId: mockEdvId, doc});
+      await brEdvStorage.update({edvId: mockEdvId, doc});
       await database.collections.edvDoc.findOne({
         edvId: hashedMockEdvId,
         id: database.hash(mockData.doc1.id)
@@ -71,12 +61,10 @@ describe('update API', () => {
   });
   it('should fail to update document with unmatching ids',
     async () => {
-      const actor = actors['alpha@example.com'];
       const {doc1} = mockData;
       const doc = {...doc1};
       doc.id = await helpers.generateRandom();
       const record = await brEdvStorage.insert({
-        actor,
         edvId: mockEdvId,
         doc,
       });
@@ -104,12 +92,10 @@ describe('update API', () => {
   // FIXME: the current implementation does not check edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for another EDV', async () => {
-    const actor = actors['alpha@example.com'];
     let err;
     let record;
     try {
       record = await brEdvStorage.update({
-        actor,
         edvId: 'urn:uuid:something-else',
         doc: mockData.doc1
       });

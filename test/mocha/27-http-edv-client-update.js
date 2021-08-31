@@ -9,18 +9,14 @@ const {config} = bedrock;
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
-let actors;
 let urls;
 
 const brEdvStorage = require('bedrock-edv-storage');
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 
 describe('bedrock-edv-storage HTTP API - edv-client update', () => {
-  let passportStub;
-
   before(async () => {
-    await helpers.prepareDatabase(mockData);
-    actors = await helpers.getActors(mockData);
+    await helpers.prepareDatabase();
     // common URLs
     const {baseUri} = config.server;
     const root = `${baseUri}/edvs`;
@@ -30,14 +26,6 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
       invalidDocuments: `${invalid}/documents`,
       invalidQuery: `${invalid}/query`
     };
-  });
-
-  before(() => {
-    passportStub = helpers.stubPassport({actor: actors['alpha@example.com']});
-  });
-
-  after(() => {
-    passportStub.restore();
   });
 
   describe('update', () => {
@@ -51,22 +39,17 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
 
-      // corresponds to the passport authenticated user
-      const actor = actors['alpha@example.com'];
-
       ({edvClient} = await helpers.createEdv(
-        {actor, capabilityAgent, keystoreAgent, urls}));
+        {capabilityAgent, keystoreAgent, urls}));
     });
     // using the sequenceNumberTests from helpers
     for(const test of helpers.sequenceNumberTests) {
       it(test.updateTitle, async () => {
-        const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = test.sequence;
         const record = await brEdvStorage.insert({
-          actor,
           edvId: mockEdvId,
           doc,
         });
@@ -90,13 +73,11 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
     }
     it('should fail to update a document to max safe sequence number',
       async () => {
-        const actor = actors['alpha@example.com'];
         const {doc1} = mockData;
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = Number.MAX_SAFE_INTEGER - 1;
         const record = await brEdvStorage.insert({
-          actor,
           edvId: mockEdvId,
           doc,
         });
