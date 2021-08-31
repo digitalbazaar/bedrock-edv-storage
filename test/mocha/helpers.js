@@ -134,6 +134,10 @@ exports.removeCollection =
   async collectionName => exports.removeCollections([collectionName]);
 
 exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
+  if(!(serviceType && typeof serviceType === 'string')) {
+    throw new TypeError('"serviceType" must be a string.');
+  }
+
   // create a meter
   const meterService = `${bedrock.config.server.baseUri}/meters`;
   let meter = {

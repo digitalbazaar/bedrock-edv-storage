@@ -29,9 +29,9 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     };
   });
 
-  describe('insertConfig API', () => {
-    it.only('should create an EDV', async () => {
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f676';
+  describe.only('insertConfig API', () => {
+    it('should create an EDV', async () => {
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f676';
       const handle = 'testKey1';
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -50,30 +50,43 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertNoError(err);
       should.exist(edvClient);
       assertions.shouldBeEdvConfig({config: edvConfig});
-
-      urls.documents = `${edvConfig.id}/documents`;
-      urls.query = `${edvConfig.id}/query`;
     });
-    it('should fail for another account', async () => {
-      // controller must match the authenticated user which is alpha@example.com
-      let err;
-      let edv;
-      try {
-        const mockConfig =
-          {...mockData.config, controller: 'urn:other:account'};
-        edv = await EdvClient.createEdv({
-          url: urls.edvs,
-          config: mockConfig,
-          httpsAgent
+    it('should fail for non-meter controller', async () => {
+      // first create a meter using capability agent 1
+      let meterId;
+      {
+        const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f676';
+        const handle = 'testKey1';
+        const capabilityAgent = await CapabilityAgent.fromSecret(
+          {secret, handle});
+        const {id} = await helpers.createMeter({
+          capabilityAgent, serviceType: 'edv'
         });
+        meterId = id;
+      }
+
+      // then try to create an EDV using capability agent 2 using that meter
+      const secret = '75683e4e-0a9d-11ec-a32f-10bf48838a41';
+      const handle = 'testKey1';
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      let edvClient;
+      let edvConfig;
+      let err;
+      try {
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {capabilityAgent, keystoreAgent, urls, meterId}));
       } catch(e) {
         err = e;
       }
-      should.not.exist(edv);
+      should.not.exist(edvClient);
+      should.not.exist(edvConfig);
       should.exist(err);
       should.exist(err.response);
       err.status.should.equal(403);
-      err.data.type.should.equal('PermissionDenied');
+      err.data.type.should.equal('NotAllowedError');
     });
   }); // end `insertConfig`
 
@@ -219,7 +232,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
 
   describe('update config', () => {
     it('should update an EDV config', async () => {
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
       const handle = 'testKey3';
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
