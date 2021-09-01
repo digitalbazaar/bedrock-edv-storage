@@ -5,12 +5,11 @@
 
 const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
-const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
-const hashedMockEdvId = database.hash(mockEdvId);
+const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
 
 describe('docs.find API', () => {
   before(async () => {
@@ -44,7 +43,7 @@ describe('docs.find API', () => {
     documents.should.be.an('array');
     documents.should.have.length(1);
     documents[0].should.be.an('object');
-    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(doc);
   });
   it('should get a document by attribute and value', async () => {
@@ -66,7 +65,7 @@ describe('docs.find API', () => {
     documents.should.be.an('array');
     documents.should.have.length(1);
     documents[0].should.be.an('object');
-    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should get a document by attribute and value when multiple ' +
@@ -89,7 +88,7 @@ describe('docs.find API', () => {
     documents.should.be.an('array');
     documents.should.have.length(1);
     documents[0].should.be.an('object');
-    documents[0].edvId.should.equal(hashedMockEdvId);
+    documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should find no results', async () => {

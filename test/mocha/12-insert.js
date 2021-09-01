@@ -10,7 +10,7 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
-const hashedMockEdvId = database.hash(mockEdvId);
+const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
 
 describe('docs.insert API', () => {
   before(async () => {
@@ -28,10 +28,10 @@ describe('docs.insert API', () => {
       doc,
     });
     should.exist(record);
-    record.edvId.should.equal(hashedMockEdvId);
+    record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
     record.doc.should.eql(doc);
@@ -49,10 +49,10 @@ describe('docs.insert API', () => {
         doc,
       });
       should.exist(record);
-      record.edvId.should.equal(hashedMockEdvId);
+      record.localEdvId.should.deep.equal(localMockEdvId);
       record.doc.should.eql(doc);
       record = await database.collections.edvDoc.findOne({
-        edvId: hashedMockEdvId,
+        localEdvId: localMockEdvId,
         'doc.id': doc.id
       });
       record.doc.should.eql(doc);
@@ -109,10 +109,10 @@ describe('docs.insert API', () => {
       doc,
     });
     should.exist(record);
-    record.edvId.should.equal(hashedMockEdvId);
+    record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
     record.doc.should.eql(doc);
@@ -124,10 +124,10 @@ describe('docs.insert API', () => {
       doc
     });
     should.exist(record);
-    record.edvId.should.equal(hashedMockEdvId);
+    record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
     record.doc.should.eql(doc);
@@ -169,10 +169,10 @@ describe('docs.insert API', () => {
       doc,
     });
     should.exist(record);
-    record.edvId.should.equal(hashedMockEdvId);
+    record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(mockData.docWithUniqueAttributes2);
     record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
     record.doc.should.eql(doc);
@@ -191,22 +191,5 @@ describe('docs.insert API', () => {
     }
     should.exist(err);
     err.name.should.equal('DuplicateError');
-  });
-  // FIXME: enable this test, current implementation does not test edv id
-  // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
-  it.skip('should fail for an unknown EDV ID', async () => {
-    let err;
-    let record;
-    try {
-      record = await brEdvStorage.docs.insert({
-        edvId: 'urn:uuid:something-else',
-        doc: mockData.doc1
-      });
-    } catch(e) {
-      err = e;
-    }
-    should.exist(err);
-    should.not.exist(record);
-    err.name.should.equal('PermissionDenied');
   });
 }); // end `docs.insert`

@@ -10,7 +10,7 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
-const hashedMockEdvId = database.hash(mockEdvId);
+const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
 
 describe('docs.update API', () => {
   before(async () => {
@@ -24,7 +24,7 @@ describe('docs.update API', () => {
   it('should upsert a document', async () => {
     await brEdvStorage.docs.update({edvId: mockEdvId, doc: mockData.doc2});
     const record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': mockData.doc2.id
     });
     should.exist(record);
@@ -34,7 +34,7 @@ describe('docs.update API', () => {
     const doc = {...mockData.doc1, sequence: 1};
     await brEdvStorage.docs.update({edvId: mockEdvId, doc});
     const record = await database.collections.edvDoc.findOne({
-      edvId: hashedMockEdvId,
+      localEdvId: localMockEdvId,
       'doc.id': mockData.doc1.id
     });
     record.doc.should.eql(doc);
@@ -45,7 +45,7 @@ describe('docs.update API', () => {
     try {
       await brEdvStorage.docs.update({edvId: mockEdvId, doc});
       await database.collections.edvDoc.findOne({
-        edvId: hashedMockEdvId,
+        localEdvId: localMockEdvId,
         'doc.id': mockData.doc1.id
       });
     } catch(e) {
