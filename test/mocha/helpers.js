@@ -238,8 +238,7 @@ exports.createEdv = async ({
     keyResolver: _keyResolver,
     keyAgreementKey,
     hmac,
-    httpsAgent,
-    invocationSigner: capabilityAgent.getSigner(),
+    httpsAgent
   });
 
   return {edvClient, edvConfig};
