@@ -13,8 +13,10 @@ const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});
 
 describe('docs.update API', () => {
+  let collection;
   before(async () => {
     await helpers.prepareDatabase();
+    collection = database.collections['edv-storage-doc'];
   });
   before(async () => {
     const edvConfig = {...mockData.config};
@@ -23,7 +25,7 @@ describe('docs.update API', () => {
   });
   it('should upsert a document', async () => {
     await brEdvStorage.docs.update({edvId: mockEdvId, doc: mockData.doc2});
-    const record = await database.collections.edvDoc.findOne({
+    const record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': mockData.doc2.id
     });
@@ -33,7 +35,7 @@ describe('docs.update API', () => {
   it('should update a document', async () => {
     const doc = {...mockData.doc1, sequence: 1};
     await brEdvStorage.docs.update({edvId: mockEdvId, doc});
-    const record = await database.collections.edvDoc.findOne({
+    const record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': mockData.doc1.id
     });
@@ -44,7 +46,7 @@ describe('docs.update API', () => {
     const doc = {...mockData.doc1, sequence: Number.MAX_SAFE_INTEGER};
     try {
       await brEdvStorage.docs.update({edvId: mockEdvId, doc});
-      await database.collections.edvDoc.findOne({
+      await collection.findOne({
         localEdvId: localMockEdvId,
         'doc.id': mockData.doc1.id
       });

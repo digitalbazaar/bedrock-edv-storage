@@ -133,9 +133,9 @@ exports.prepareDatabase = async () => {
 
 exports.removeCollections = async (
   collectionNames = [
-    'edvConfig',
-    'edvDoc',
-    'edvDocChunk'
+    'edv-storage-config',
+    'edv-storage-doc',
+    'edv-storage-chunk'
   ]) => {
   await database.openCollections(collectionNames);
   for(const collectionName of collectionNames) {
