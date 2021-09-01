@@ -19,7 +19,7 @@
   Remove dependencies that are no longer needed because of this upgrade.
 
 ### Removed
-- **BREAKING**: Removed deprecated `fields` option from `storage.find` API.
+- **BREAKING**: Removed deprecated `fields` option from `storage.find` APIs.
   Use `options.projection` instead.
 
 ## 9.0.4 - 2021-08-19
