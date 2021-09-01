@@ -23,18 +23,16 @@ describe('docs.insert API', () => {
   });
   it('should insert a document', async () => {
     const {doc1: doc} = mockData;
-    const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(record);
     record.edvId.should.equal(hashedMockEdvId);
-    record.id.should.equal(hashedDocId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: hashedDocId
+      'doc.id': doc.id
     });
     record.doc.should.eql(doc);
   });
@@ -46,18 +44,16 @@ describe('docs.insert API', () => {
       const doc = {...doc1};
       doc.id = await helpers.generateRandom();
       doc.sequence = test.sequence;
-      const hashedDocId = database.hash(doc.id);
       let record = await brEdvStorage.docs.insert({
         edvId: mockEdvId,
         doc,
       });
       should.exist(record);
       record.edvId.should.equal(hashedMockEdvId);
-      record.id.should.equal(hashedDocId);
       record.doc.should.eql(doc);
       record = await database.collections.edvDoc.findOne({
         edvId: hashedMockEdvId,
-        id: hashedDocId
+        'doc.id': doc.id
       });
       record.doc.should.eql(doc);
     });
@@ -108,35 +104,31 @@ describe('docs.insert API', () => {
     });
   it('should insert a document with an attribute', async () => {
     const {docWithAttributes: doc} = mockData;
-    const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(record);
     record.edvId.should.equal(hashedMockEdvId);
-    record.id.should.equal(hashedDocId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: hashedDocId
+      'doc.id': doc.id
     });
     record.doc.should.eql(doc);
   });
   it('should insert a document with a unique attribute', async () => {
     const {docWithUniqueAttributes: doc} = mockData;
-    const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc
     });
     should.exist(record);
     record.edvId.should.equal(hashedMockEdvId);
-    record.id.should.equal(hashedDocId);
     record.doc.should.eql(doc);
     record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: hashedDocId
+      'doc.id': doc.id
     });
     record.doc.should.eql(doc);
   });
@@ -172,18 +164,16 @@ describe('docs.insert API', () => {
   });
   it('should insert a document with non-conflicting attribute', async () => {
     const {docWithUniqueAttributes2: doc} = mockData;
-    const hashedDocId = database.hash(doc.id);
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(record);
     record.edvId.should.equal(hashedMockEdvId);
-    record.id.should.equal(hashedDocId);
     record.doc.should.eql(mockData.docWithUniqueAttributes2);
     record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: hashedDocId
+      'doc.id': doc.id
     });
     record.doc.should.eql(doc);
   });

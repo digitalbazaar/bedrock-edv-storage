@@ -40,14 +40,12 @@ describe('chunks API', () => {
     const {doc1} = mockData;
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
-    const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(docInsertResult);
     docInsertResult.edvId.should.equal(hashedMockEdvId);
-    docInsertResult.id.should.equal(hashedDocId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -91,14 +89,12 @@ describe('chunks API', () => {
     const {doc1} = mockData;
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
-    const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(docInsertResult);
     docInsertResult.edvId.should.equal(hashedMockEdvId);
-    docInsertResult.id.should.equal(hashedDocId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -145,14 +141,12 @@ describe('chunks API', () => {
     const {doc1} = mockData;
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
-    const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(docInsertResult);
     docInsertResult.edvId.should.equal(hashedMockEdvId);
-    docInsertResult.id.should.equal(hashedDocId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -214,14 +208,12 @@ describe('chunks API', () => {
     const {doc1} = mockData;
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
-    const hashedDocId = database.hash(doc.id);
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
     should.exist(docInsertResult);
     docInsertResult.edvId.should.equal(hashedMockEdvId);
-    docInsertResult.id.should.equal(hashedDocId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 

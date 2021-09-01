@@ -25,7 +25,7 @@ describe('docs.update API', () => {
     await brEdvStorage.docs.update({edvId: mockEdvId, doc: mockData.doc2});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: database.hash(mockData.doc2.id)
+      'doc.id': mockData.doc2.id
     });
     should.exist(record);
     record.doc.should.eql(mockData.doc2);
@@ -35,7 +35,7 @@ describe('docs.update API', () => {
     await brEdvStorage.docs.update({edvId: mockEdvId, doc});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
-      id: database.hash(mockData.doc1.id)
+      'doc.id': mockData.doc1.id
     });
     record.doc.should.eql(doc);
   });
@@ -46,7 +46,7 @@ describe('docs.update API', () => {
       await brEdvStorage.docs.update({edvId: mockEdvId, doc});
       await database.collections.edvDoc.findOne({
         edvId: hashedMockEdvId,
-        id: database.hash(mockData.doc1.id)
+        'doc.id': mockData.doc1.id
       });
     } catch(e) {
       error = e;
