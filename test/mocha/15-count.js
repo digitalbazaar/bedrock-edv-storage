@@ -10,16 +10,16 @@ const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
 
-describe('count API', () => {
+describe('docs.count API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
     const {docWithAttributes: doc} = mockData;
-    await brEdvStorage.insert({
+    await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -27,7 +27,7 @@ describe('count API', () => {
   it('should get a document count by attribute', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
-    const count = await brEdvStorage.count({
+    const count = await brEdvStorage.docs.count({
       edvId: mockEdvId,
       query: {
         'doc.indexed.hmac.id': entry.hmac.id,
@@ -43,7 +43,7 @@ describe('count API', () => {
   it('should get a document count by attribute and value', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
-    const count = await brEdvStorage.count({
+    const count = await brEdvStorage.docs.count({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -62,7 +62,7 @@ describe('count API', () => {
     'values exist for the attribute via an array', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [, attribute] = entry.attributes;
-    const count = await brEdvStorage.count({
+    const count = await brEdvStorage.docs.count({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -79,7 +79,7 @@ describe('count API', () => {
   });
   it('should count no results', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
-    const count = await brEdvStorage.count({
+    const count = await brEdvStorage.docs.count({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -104,7 +104,7 @@ describe('count API', () => {
     let err;
     let count;
     try {
-      count = await brEdvStorage.count({
+      count = await brEdvStorage.docs.count({
         edvId: 'urn:uuid:something-else',
         query: {
           'doc.indexed.hmac.id': entry.hmac.id,
@@ -120,4 +120,4 @@ describe('count API', () => {
     should.not.exist(count);
     err.name.should.equal('PermissionDenied');
   });
-}); // end `count`
+}); // end `docs.count`

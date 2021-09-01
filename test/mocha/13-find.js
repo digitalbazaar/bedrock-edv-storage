@@ -12,16 +12,16 @@ const mockData = require('./mock.data');
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe('find API', () => {
+describe('docs.find API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
     const {docWithAttributes: doc} = mockData;
-    await brEdvStorage.insert({
+    await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -30,7 +30,7 @@ describe('find API', () => {
     const {docWithAttributes: doc} = mockData;
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
-    const records = await brEdvStorage.find({
+    const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
       query: {
         'doc.indexed.hmac.id': entry.hmac.id,
@@ -50,7 +50,7 @@ describe('find API', () => {
   it('should get a document by attribute and value', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
-    const records = await brEdvStorage.find({
+    const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -73,7 +73,7 @@ describe('find API', () => {
     'values exist for the attribute via an array', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [, attribute] = entry.attributes;
-    const records = await brEdvStorage.find({
+    const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -94,7 +94,7 @@ describe('find API', () => {
   });
   it('should find no results', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
-    const records = await brEdvStorage.find({
+    const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
       query: {
         $or: [{
@@ -120,7 +120,7 @@ describe('find API', () => {
     let err;
     let records;
     try {
-      records = await brEdvStorage.find({
+      records = await brEdvStorage.docs.find({
         edvId: 'urn:uuid:something-else',
         query: {
           'doc.indexed.hmac.id': entry.hmac.id,
@@ -136,4 +136,4 @@ describe('find API', () => {
     should.not.exist(records);
     err.name.should.equal('PermissionDenied');
   });
-}); // end `find`
+}); // end `docs.find`

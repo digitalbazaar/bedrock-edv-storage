@@ -10,22 +10,22 @@ const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa14`;
 
-describe('get API', () => {
+describe('docs.get API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
     const {doc1: doc} = mockData;
-    await brEdvStorage.insert({
+    await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
   });
   it('should get a document', async () => {
-    const record = await brEdvStorage.get({
+    const record = await brEdvStorage.docs.get({
       edvId: mockEdvId,
       id: mockData.doc1.id
     });
@@ -38,7 +38,7 @@ describe('get API', () => {
     let err;
     let record;
     try {
-      record = await brEdvStorage.get({
+      record = await brEdvStorage.docs.get({
         edvId: 'urn:uuid:something-else',
         id: mockData.doc1.id
       });
@@ -53,7 +53,7 @@ describe('get API', () => {
     let err;
     let record;
     try {
-      record = await brEdvStorage.get({
+      record = await brEdvStorage.docs.get({
         edvId: mockEdvId,
         // there is no document with this id
         id: 'z19pjdSMQMkBqqJ5zsaagncfX'
@@ -65,4 +65,4 @@ describe('get API', () => {
     should.not.exist(record);
     err.name.should.equal('NotFoundError');
   });
-}); // end `get`
+}); // end `docs.get`

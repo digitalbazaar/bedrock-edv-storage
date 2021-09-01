@@ -12,17 +12,17 @@ const mockData = require('./mock.data');
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe('update API', () => {
+describe('docs.update API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
   });
   it('should upsert a document', async () => {
-    await brEdvStorage.update({edvId: mockEdvId, doc: mockData.doc2});
+    await brEdvStorage.docs.update({edvId: mockEdvId, doc: mockData.doc2});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
       id: database.hash(mockData.doc2.id)
@@ -32,7 +32,7 @@ describe('update API', () => {
   });
   it('should update a document', async () => {
     const doc = {...mockData.doc1, sequence: 1};
-    await brEdvStorage.update({edvId: mockEdvId, doc});
+    await brEdvStorage.docs.update({edvId: mockEdvId, doc});
     const record = await database.collections.edvDoc.findOne({
       edvId: hashedMockEdvId,
       id: database.hash(mockData.doc1.id)
@@ -43,7 +43,7 @@ describe('update API', () => {
     let error;
     const doc = {...mockData.doc1, sequence: Number.MAX_SAFE_INTEGER};
     try {
-      await brEdvStorage.update({edvId: mockEdvId, doc});
+      await brEdvStorage.docs.update({edvId: mockEdvId, doc});
       await database.collections.edvDoc.findOne({
         edvId: hashedMockEdvId,
         id: database.hash(mockData.doc1.id)
@@ -62,7 +62,7 @@ describe('update API', () => {
     let err;
     let record;
     try {
-      record = await brEdvStorage.update({
+      record = await brEdvStorage.docs.update({
         edvId: 'urn:uuid:something-else',
         doc: mockData.doc1
       });
@@ -73,4 +73,4 @@ describe('update API', () => {
     should.not.exist(record);
     err.name.should.equal('PermissionDenied');
   });
-}); // end `update`
+}); // end `docs.update`
