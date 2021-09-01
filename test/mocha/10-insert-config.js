@@ -17,7 +17,7 @@ describe('edvs.insert API', () => {
     let record = await brEdvStorage.edvs.insert({config: edvConfig});
     should.exist(record);
     record.config.should.eql(edvConfig);
-    record = await database.collections.edvConfig.findOne({
+    record = await database.collections['edv-storage-config'].findOne({
       'config.id': edvConfig.id
     });
     record.config.should.eql(edvConfig);

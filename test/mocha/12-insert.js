@@ -13,8 +13,10 @@ const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});
 
 describe('docs.insert API', () => {
+  let collection;
   before(async () => {
     await helpers.prepareDatabase();
+    collection = database.collections['edv-storage-doc'];
   });
   before(async () => {
     const edvConfig = {...mockData.config};
@@ -30,7 +32,7 @@ describe('docs.insert API', () => {
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
-    record = await database.collections.edvDoc.findOne({
+    record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
@@ -51,7 +53,7 @@ describe('docs.insert API', () => {
       should.exist(record);
       record.localEdvId.should.deep.equal(localMockEdvId);
       record.doc.should.eql(doc);
-      record = await database.collections.edvDoc.findOne({
+      record = await collection.findOne({
         localEdvId: localMockEdvId,
         'doc.id': doc.id
       });
@@ -111,7 +113,7 @@ describe('docs.insert API', () => {
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
-    record = await database.collections.edvDoc.findOne({
+    record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
@@ -126,7 +128,7 @@ describe('docs.insert API', () => {
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(doc);
-    record = await database.collections.edvDoc.findOne({
+    record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
@@ -171,7 +173,7 @@ describe('docs.insert API', () => {
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
     record.doc.should.eql(mockData.docWithUniqueAttributes2);
-    record = await database.collections.edvDoc.findOne({
+    record = await collection.findOne({
       localEdvId: localMockEdvId,
       'doc.id': doc.id
     });
