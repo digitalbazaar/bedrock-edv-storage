@@ -85,7 +85,9 @@ exports.parseLocalId = ({id}) => {
   return {
     base: id.substring(0, idx),
     // convert to `Buffer` for storage savings (`z<base58-encoded ID>`)
-    localId: Buffer.from(base58.decode(localId.slice(1)))
+    // where the ID is multicodec encoded 16 byte random value
+    // 0x00 = identity tag, 0x10 = length (16 bytes) header
+    localId: Buffer.from(base58.decode(localId.slice(1)).slice(2))
   };
 };
 
