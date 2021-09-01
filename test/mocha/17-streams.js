@@ -16,7 +16,7 @@ let keyAgreementKey;
 const chunkSize = 1048576;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
-const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
+const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});
 
 describe('chunks API', () => {
   before(async () => {
