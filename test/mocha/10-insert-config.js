@@ -16,13 +16,10 @@ describe('edvs.insert API', () => {
     const edvConfig = {...mockData.config};
     let record = await brEdvStorage.edvs.insert({config: edvConfig});
     should.exist(record);
-    record.controller.should.equal(database.hash(edvConfig.controller));
-    record.id.should.equal(database.hash(record.config.id));
     record.config.should.eql(edvConfig);
     record = await database.collections.edvConfig.findOne({
-      id: database.hash(edvConfig.id)
+      'config.id': edvConfig.id
     });
-    record.controller.should.equal(database.hash(edvConfig.controller));
     record.config.should.eql(edvConfig);
   });
 }); // end `edvs.insert API`
