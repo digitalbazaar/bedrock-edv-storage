@@ -8,13 +8,13 @@ const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
-describe('insertConfig API', () => {
+describe('edvs.insert API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   it('should insert an EDV config', async () => {
     const edvConfig = {...mockData.config};
-    let record = await brEdvStorage.insertConfig({config: edvConfig});
+    let record = await brEdvStorage.edvs.insert({config: edvConfig});
     should.exist(record);
     record.controller.should.equal(database.hash(edvConfig.controller));
     record.id.should.equal(database.hash(record.config.id));
@@ -25,4 +25,4 @@ describe('insertConfig API', () => {
     record.controller.should.equal(database.hash(edvConfig.controller));
     record.config.should.eql(edvConfig);
   });
-}); // end `insertConfig`
+}); // end `edvs.insert API`

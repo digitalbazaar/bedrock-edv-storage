@@ -29,7 +29,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     };
   });
 
-  describe('insertConfig API', () => {
+  describe('createEdv', () => {
     it('should create an EDV', async () => {
       const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f676';
       const handle = 'testKey1';
@@ -88,9 +88,77 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       err.status.should.equal(403);
       err.data.type.should.equal('NotAllowedError');
     });
-  }); // end `insertConfig`
+  }); // end `createEdv`
 
-  describe('insert API', () => {
+  describe('updateConfig', () => {
+    it('should update an EDV config', async () => {
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const handle = 'testKey3';
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      const invocationSigner = capabilityAgent.getSigner();
+
+      const {edvClient, edvConfig} = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls});
+
+      const config = await EdvClient.findConfigs({
+        controller: edvConfig.controller, invocationSigner,
+        url: edvClient.id, httpsAgent
+      });
+
+      let err;
+      try {
+        config.sequence++;
+        await edvClient.updateConfig({config, invocationSigner});
+      } catch(e) {
+        err = e;
+      }
+      // no response is returned from sucessful update
+      assertNoError(err);
+    });
+    it('should not update an EDV config with wrong id', async () => {
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const handle = 'testKey3';
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+      const invocationSigner = capabilityAgent.getSigner();
+
+      let otherValidConfigId;
+      {
+        const {edvConfig} = await helpers.createEdv(
+          {capabilityAgent, keystoreAgent, urls});
+        otherValidConfigId = edvConfig.id;
+      }
+
+      let edvClient;
+      let edvConfig;
+      let config;
+      let err;
+      try {
+        ({edvClient, edvConfig} = await helpers.createEdv(
+          {capabilityAgent, keystoreAgent, urls}));
+        config = await EdvClient.findConfigs({
+          controller: edvConfig.controller, invocationSigner,
+          url: edvClient.id, httpsAgent
+        });
+        config.id = otherValidConfigId;
+        config.sequence++;
+        await edvClient.updateConfig({config, invocationSigner});
+      } catch(e) {
+        err = e;
+      }
+      should.exist(err);
+      err.data.type.should.equal('NotAllowedError');
+      should.exist(err.data.cause);
+      err.data.cause.type.should.equal('URLMismatchError');
+    });
+  }); // end `updateConfig`
+
+  describe('insert', () => {
     let capabilityAgent;
     let edvClient;
 
@@ -229,74 +297,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.content.should.not.eql(mockData.httpDocs.beta.content);
     });
   }); // end `update`
-
-  describe('update config', () => {
-    it('should update an EDV config', async () => {
-      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
-      const handle = 'testKey3';
-      const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
-
-      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
-      const invocationSigner = capabilityAgent.getSigner();
-
-      const {edvClient, edvConfig} = await helpers.createEdv(
-        {capabilityAgent, keystoreAgent, urls});
-
-      const config = await EdvClient.findConfigs({
-        controller: edvConfig.controller, invocationSigner,
-        url: edvClient.id, httpsAgent
-      });
-
-      let err;
-      try {
-        config.sequence++;
-        await edvClient.updateConfig({config, invocationSigner});
-      } catch(e) {
-        err = e;
-      }
-      // no response is returned from sucessful update
-      assertNoError(err);
-    });
-    it('should not update an EDV config with wrong id', async () => {
-      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
-      const handle = 'testKey3';
-      const capabilityAgent = await CapabilityAgent.fromSecret(
-        {secret, handle});
-
-      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
-      const invocationSigner = capabilityAgent.getSigner();
-
-      let otherValidConfigId;
-      {
-        const {edvConfig} = await helpers.createEdv(
-          {capabilityAgent, keystoreAgent, urls});
-        otherValidConfigId = edvConfig.id;
-      }
-
-      let edvClient;
-      let edvConfig;
-      let config;
-      let err;
-      try {
-        ({edvClient, edvConfig} = await helpers.createEdv(
-          {capabilityAgent, keystoreAgent, urls}));
-        config = await EdvClient.findConfigs({
-          controller: edvConfig.controller, invocationSigner,
-          url: edvClient.id, httpsAgent
-        });
-        config.id = otherValidConfigId;
-        config.sequence++;
-        await edvClient.updateConfig({config, invocationSigner});
-      } catch(e) {
-        err = e;
-      }
-      should.exist(err);
-      err.data.type.should.equal('NotAllowedError');
-      should.exist(err.data.cause);
-      err.data.cause.type.should.equal('URLMismatchError');
-    });
-  }); // end `update config`
 
   describe('get', () => {
     let capabilityAgent;
@@ -870,76 +870,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         alpha.content.should.eql(mockData.httpDocs.alpha.content);
       });
   }); // end `find`
-  // FIXME: remove/update this; `enableCapability` API is to be removed
-  describe.skip('capabilities', () => {
-    let testers = null;
-    beforeEach(async () => {
-      testers = await helpers.makeDelegationTesters({
-        testers: ['alice', 'bob', 'carol'],
-        mockData
-      });
-    });
-    it('should enable a capability', async () => {
-      let result;
-      let err;
-      const {edvClient: aliceEdvClient} = await helpers.createEdv({
-        capabilityAgent: testers.alice.capabilityAgent,
-        keystoreAgent: testers.alice.keystoreAgent,
-        urls
-      });
-      const allowedAction = 'write';
-      const doc = clone(mockData.httpDocs.alpha);
-      doc.id = await EdvClient.generateId();
-      const invocationSigner = testers.alice.capabilityAgent.getSigner();
-      // alice delegates a `write` capability to bob with bob as a delegator
-      // this will be stored in authorizations
-      const writeZcap = {
-        allowedAction,
-        invoker: testers.bob.verificationKey.id,
-        delegator: testers.bob.verificationKey.id,
-        // Documents are not zCaps so this route stores all zCaps
-        // for a document.
-        parentCapability: `${aliceEdvClient.id}/zcaps/documents/${doc.id}`,
-        invocationTarget: {
-          type: 'urn:datahub:document',
-          id: `${aliceEdvClient.id}/documents/${doc.id}`
-        }
-      };
-      try {
-        result = await aliceEdvClient.insert({
-          doc,
-          recipients: [
-            {
-              header: {
-                alg: helpers.JWE_ALG,
-                kid: testers.alice.keyAgreementKey.id
-              }
-            },
-            {
-              header: {
-                alg: helpers.JWE_ALG,
-                kid: testers.bob.keyAgreementKey.id
-              }
-            }
-          ],
-          invocationSigner
-        });
-        const capabilityToEnable = await helpers.delegate({
-          zcap: writeZcap,
-          signer: invocationSigner,
-          capabilityChain: [`${aliceEdvClient.id}/zcaps/documents/${doc.id}`],
-          documentLoader: mockData.documentLoader
-        });
-        assertions.shouldBeCapability({capability: capabilityToEnable});
-        await aliceEdvClient.enableCapability(
-          {capabilityToEnable, invocationSigner});
-      } catch(e) {
-        err = e;
-      }
-      assertNoError(err);
-      assertions.shouldBeEdvDocument({doc: result});
-    });
-  }); // end capabilities
+
   describe('delete', () => {
     let capabilityAgent;
     let edvClient;

@@ -19,7 +19,7 @@ const chunkSize = 1048576;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe('chunk API', () => {
+describe('chunks API', () => {
   before(async () => {
     await helpers.prepareDatabase();
     const {methodFor} = await didKeyDriver.generate();
@@ -29,7 +29,7 @@ describe('chunk API', () => {
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
   });
 
   beforeEach(async () => {
@@ -41,7 +41,7 @@ describe('chunk API', () => {
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
-    const docInsertResult = await brEdvStorage.insert({
+    const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -74,7 +74,7 @@ describe('chunk API', () => {
         ...value,
       };
       try {
-        result = await brEdvStorage.updateChunk(
+        result = await brEdvStorage.chunks.update(
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
@@ -92,7 +92,7 @@ describe('chunk API', () => {
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
-    const docInsertResult = await brEdvStorage.insert({
+    const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -126,7 +126,7 @@ describe('chunk API', () => {
         ...value,
       };
       try {
-        result = await brEdvStorage.updateChunk(
+        result = await brEdvStorage.chunks.update(
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
@@ -146,7 +146,7 @@ describe('chunk API', () => {
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
-    const docInsertResult = await brEdvStorage.insert({
+    const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -180,7 +180,7 @@ describe('chunk API', () => {
         ...value,
       };
       try {
-        result = await brEdvStorage.updateChunk(
+        result = await brEdvStorage.chunks.update(
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
@@ -192,7 +192,7 @@ describe('chunk API', () => {
     should.exist(result);
     result.should.be.a('boolean');
     result.should.equal(true);
-    const {chunk} = await brEdvStorage.getChunk(
+    const {chunk} = await brEdvStorage.chunks.get(
       {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
     should.exist(chunk);
     chunk.should.be.an('object');
@@ -215,7 +215,7 @@ describe('chunk API', () => {
     const doc = {...doc1};
     doc.jwe.recipients[0].header.kid = kid;
     const hashedDocId = database.hash(doc.id);
-    const docInsertResult = await brEdvStorage.insert({
+    const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -249,7 +249,7 @@ describe('chunk API', () => {
         ...value,
       };
       try {
-        result = await brEdvStorage.updateChunk(
+        result = await brEdvStorage.chunks.update(
           {edvId: mockEdvId, docId: doc.id, chunk});
       } catch(e) {
         error = e;
@@ -263,7 +263,7 @@ describe('chunk API', () => {
     result.should.equal(true);
     result = undefined;
     try {
-      result = await brEdvStorage.removeChunk(
+      result = await brEdvStorage.chunks.remove(
         {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
     } catch(e) {
       error = e;
@@ -274,7 +274,7 @@ describe('chunk API', () => {
     result.should.equal(true);
     result = undefined;
     try {
-      result = await brEdvStorage.getChunk(
+      result = await brEdvStorage.chunks.get(
         {edvId: mockEdvId, docId: doc.id, chunkIndex: 0});
     } catch(e) {
       error = e;

@@ -12,19 +12,19 @@ const mockData = require('./mock.data');
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 const hashedMockEdvId = database.hash(mockEdvId);
 
-describe('insert API', () => {
+describe('docs.insert API', () => {
   before(async () => {
     await helpers.prepareDatabase();
   });
   before(async () => {
     const edvConfig = {...mockData.config};
     edvConfig.id = mockEdvId;
-    await brEdvStorage.insertConfig({config: edvConfig});
+    await brEdvStorage.edvs.insert({config: edvConfig});
   });
   it('should insert a document', async () => {
     const {doc1: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
-    let record = await brEdvStorage.insert({
+    let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -47,7 +47,7 @@ describe('insert API', () => {
       doc.id = await helpers.generateRandom();
       doc.sequence = test.sequence;
       const hashedDocId = database.hash(doc.id);
-      let record = await brEdvStorage.insert({
+      let record = await brEdvStorage.docs.insert({
         edvId: mockEdvId,
         doc,
       });
@@ -71,7 +71,7 @@ describe('insert API', () => {
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = -1;
-        record = await brEdvStorage.insert({
+        record = await brEdvStorage.docs.insert({
           edvId: mockEdvId,
           doc,
         });
@@ -93,7 +93,7 @@ describe('insert API', () => {
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = Number.MAX_SAFE_INTEGER;
-        record = await brEdvStorage.insert({
+        record = await brEdvStorage.docs.insert({
           edvId: mockEdvId,
           doc,
         });
@@ -109,7 +109,7 @@ describe('insert API', () => {
   it('should insert a document with an attribute', async () => {
     const {docWithAttributes: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
-    let record = await brEdvStorage.insert({
+    let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -126,7 +126,7 @@ describe('insert API', () => {
   it('should insert a document with a unique attribute', async () => {
     const {docWithUniqueAttributes: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
-    let record = await brEdvStorage.insert({
+    let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc
     });
@@ -145,7 +145,7 @@ describe('insert API', () => {
     doc.id = 'z19pjdSMQMkBqqJ5zsbbgeeee';
     let err;
     try {
-      await brEdvStorage.insert({
+      await brEdvStorage.docs.insert({
         edvId: mockEdvId,
         doc
       });
@@ -160,7 +160,7 @@ describe('insert API', () => {
     doc.id = 'z19pjdSMQMkBqqJ5zsbbgffff';
     let err;
     try {
-      await brEdvStorage.update({
+      await brEdvStorage.docs.update({
         edvId: mockEdvId,
         doc
       });
@@ -173,7 +173,7 @@ describe('insert API', () => {
   it('should insert a document with non-conflicting attribute', async () => {
     const {docWithUniqueAttributes2: doc} = mockData;
     const hashedDocId = database.hash(doc.id);
-    let record = await brEdvStorage.insert({
+    let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
       doc,
     });
@@ -192,7 +192,7 @@ describe('insert API', () => {
     // attempt to insert the same document again
     let err;
     try {
-      await brEdvStorage.insert({
+      await brEdvStorage.docs.insert({
         edvId: mockEdvId,
         doc
       });
@@ -208,7 +208,7 @@ describe('insert API', () => {
     let err;
     let record;
     try {
-      record = await brEdvStorage.insert({
+      record = await brEdvStorage.docs.insert({
         edvId: 'urn:uuid:something-else',
         doc: mockData.doc1
       });
@@ -219,4 +219,4 @@ describe('insert API', () => {
     should.not.exist(record);
     err.name.should.equal('PermissionDenied');
   });
-}); // end `insert`
+}); // end `docs.insert`
