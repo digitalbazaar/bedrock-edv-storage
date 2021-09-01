@@ -78,6 +78,17 @@ exports.sequenceNumberTests = [
   sequence: d[1]
 }));
 
+exports.decodeLocalId = ({id}) => {
+  // format: <base>/<localId>
+  const idx = id.lastIndexOf('/');
+  const localId = id.substr(idx + 1);
+  return {
+    base: id.substring(0, idx),
+    // convert to `Buffer` for storage savings (`z<base58-encoded ID>`)
+    localId: Buffer.from(base58.decode(localId.slice(1)))
+  };
+};
+
 exports.generateRandom = async () => {
   // 128-bit random number, multibase encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)

@@ -5,7 +5,6 @@
 
 const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
-const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
@@ -17,7 +16,7 @@ let keyAgreementKey;
 const chunkSize = 1048576;
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa17`;
-const hashedMockEdvId = database.hash(mockEdvId);
+const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
 
 describe('chunks API', () => {
   before(async () => {
@@ -45,7 +44,7 @@ describe('chunks API', () => {
       doc,
     });
     should.exist(docInsertResult);
-    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -94,7 +93,7 @@ describe('chunks API', () => {
       doc,
     });
     should.exist(docInsertResult);
-    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -146,7 +145,7 @@ describe('chunks API', () => {
       doc,
     });
     should.exist(docInsertResult);
-    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 
@@ -213,7 +212,7 @@ describe('chunks API', () => {
       doc,
     });
     should.exist(docInsertResult);
-    docInsertResult.edvId.should.equal(hashedMockEdvId);
+    docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
     docInsertResult.doc.should.eql(doc);
     const {doc: {jwe}} = docInsertResult;
 

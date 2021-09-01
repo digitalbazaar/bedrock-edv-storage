@@ -19,6 +19,10 @@
   endpoint, which will be dynamically generated and use the delegator of the
   zcap as the controller, i.e., the delegator must invoke this root zcap to
   revoke the zcap they delegated.
+- **BREAKING**: This version of the module presumes that there will be only
+  one public address for accessing EDVs, i.e., the base URL (including the
+  origin) will be the same for every EDV stored. This assumption allows for
+  some storage optimizations.
 - Use ezcap-express to provide zcap revocation authorization implementation.
   Remove dependencies that are no longer needed because of this upgrade.
 
