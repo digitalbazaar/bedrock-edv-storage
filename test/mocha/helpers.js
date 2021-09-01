@@ -78,7 +78,7 @@ exports.sequenceNumberTests = [
   sequence: d[1]
 }));
 
-exports.decodeLocalId = ({id}) => {
+exports.parseLocalId = ({id}) => {
   // format: <base>/<localId>
   const idx = id.lastIndexOf('/');
   const localId = id.substr(idx + 1);

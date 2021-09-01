@@ -9,7 +9,7 @@ const helpers = require('./helpers');
 const mockData = require('./mock.data');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa13`;
-const {localId: localMockEdvId} = helpers.decodeLocalId({id: mockEdvId});
+const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});
 
 describe('docs.find API', () => {
   before(async () => {
