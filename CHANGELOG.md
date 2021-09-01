@@ -25,6 +25,8 @@
 ### Removed
 - **BREAKING**: Removed deprecated `fields` option from `storage.find` APIs.
   Use `options.projection` instead.
+- **BREAKING**: This module's JSON schema validators are no longer registered;
+  they should not be modified.
 
 ## 9.0.4 - 2021-08-19
 
