@@ -56,7 +56,7 @@ describe('revocation API', function() {
       }));
   });
 
-  it('should delegate & revoke access', async () => {
+  it.only('should delegate & revoke access', async () => {
     // convert bob's key ID to a did:key:
     await helpers.setKeyId(testers.bob.verificationKey);
 

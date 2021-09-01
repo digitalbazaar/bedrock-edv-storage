@@ -7,10 +7,7 @@ const {config} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
 const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
-const {httpClient} = require('@digitalbazaar/http-client');
 const mockData = require('./mock.data');
-const {agent} = require('bedrock-https-agent');
-const {createHeaderValue} = require('@digitalbazaar/http-digest-header');
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa16`;
 const hashedMockEdvId = database.hash(mockEdvId);
@@ -59,36 +56,6 @@ describe('update API', () => {
     error.message.should.equal(
       '"doc.sequence" number is too large.');
   });
-  it('should fail to update document with unmatching ids',
-    async () => {
-      const {doc1} = mockData;
-      const doc = {...doc1};
-      doc.id = await helpers.generateRandom();
-      const record = await brEdvStorage.insert({
-        edvId: mockEdvId,
-        doc,
-      });
-      const newid = await helpers.generateRandom();
-      const url = `${mockEdvId}/documents/${newid}`;
-      let err;
-      try {
-        const digest = await createHeaderValue({
-          data: record.doc, useMultihash: true
-        });
-        await httpClient.post(url, {
-          json: record.doc,
-          agent,
-          headers: {
-            digest
-          }
-        });
-      } catch(e) {
-        err = e;
-      }
-      should.exist(err);
-      err.data.message.should.equal(
-        'Could not update document; ID does not match.');
-    });
   // FIXME: the current implementation does not check edv id
   // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
   it.skip('should fail for another EDV', async () => {

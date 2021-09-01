@@ -15,7 +15,7 @@ const {EdvClient} = require('edv-client');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 let urls;
 
-describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
+describe('bedrock-edv-storage HTTP API - edv-client', () => {
   before(async () => {
     await helpers.prepareDatabase();
     // common URLs
@@ -104,7 +104,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       ({edvClient} = await helpers.createEdv(
         {capabilityAgent, keystoreAgent, urls}));
     });
-    it.only('should insert a document', async () => {
+    it('should insert a document', async () => {
       let result;
       let err;
       try {
@@ -251,9 +251,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       try {
         config.sequence++;
-        await EdvClient.updateConfig({
-          id: config.id, config, httpsAgent
-        });
+        await edvClient.updateConfig({config, invocationSigner});
       } catch(e) {
         err = e;
       }
@@ -261,13 +259,20 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       assertNoError(err);
     });
     it('should not update an EDV config with wrong id', async () => {
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f678';
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f678';
       const handle = 'testKey3';
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
 
       const keystoreAgent = await helpers.createKeystore({capabilityAgent});
       const invocationSigner = capabilityAgent.getSigner();
+
+      let otherValidConfigId;
+      {
+        const {edvConfig} = await helpers.createEdv(
+          {capabilityAgent, keystoreAgent, urls});
+        otherValidConfigId = edvConfig.id;
+      }
 
       let edvClient;
       let edvConfig;
@@ -280,17 +285,16 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
           controller: edvConfig.controller, invocationSigner,
           url: edvClient.id, httpsAgent
         });
-        const url = config.id;
-        config.id = '123';
+        config.id = otherValidConfigId;
         config.sequence++;
-        await EdvClient.updateConfig({
-          id: url, config, httpsAgent
-        });
+        await edvClient.updateConfig({config, invocationSigner});
       } catch(e) {
         err = e;
       }
       should.exist(err);
-      err.data.message.should.equal('Configuration "id" does not match.');
+      err.data.type.should.equal('NotAllowedError');
+      should.exist(err.data.cause);
+      err.data.cause.type.should.equal('URLMismatchError');
     });
   }); // end `update config`
 
@@ -365,7 +369,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       err.name.should.equal('NotFoundError');
     });
     it('should get an EDV config', async () => {
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f677';
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f677';
       const handle = 'testKey2';
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -396,7 +400,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 
-      const secret = ' b07e6b31-d910-438e-9a5f-08d945a5f679';
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f679';
       const handle = 'testKey4';
       const capabilityAgent = await CapabilityAgent.fromSecret(
         {secret, handle});
@@ -412,7 +416,7 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
           {capabilityAgent, keystoreAgent, urls, referenceId}));
         configs = await EdvClient.findConfigs({
           controller: edvConfig.controller, referenceId: edvConfig.referenceId,
-          url: root, httpsAgent
+          url: root, httpsAgent, invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -428,11 +432,17 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f679';
+      const handle = 'testKey4';
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
       let configs;
       let err;
       try {
         configs = await EdvClient.findConfigs({
-          referenceId: 'test', url: root, httpsAgent
+          referenceId: 'test', url: root, httpsAgent,
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -446,12 +456,18 @@ describe.only('bedrock-edv-storage HTTP API - edv-client', () => {
       const {baseUri} = config.server;
       const root = `${baseUri}/edvs`;
 
+      const secret = 'b07e6b31-d910-438e-9a5f-08d945a5f679';
+      const handle = 'testKey4';
+      const capabilityAgent = await CapabilityAgent.fromSecret(
+        {secret, handle});
+
       let configs;
       let err;
       try {
         configs = await EdvClient.findConfigs({
-          controller: 'urn:uuid:3ff914be-ba55-4332-b2fa-10534977137c',
-          url: root, httpsAgent
+          controller: capabilityAgent.id,
+          url: root, httpsAgent,
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
