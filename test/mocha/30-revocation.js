@@ -56,17 +56,22 @@ describe('revocation API', function() {
       }));
   });
 
-  it.only('should delegate & revoke access', async () => {
+  it('should delegate & revoke access', async () => {
     // convert bob's key ID to a did:key:
     await helpers.setKeyId(testers.bob.verificationKey);
+
+    // root zcap for alice's EDV
+    const rootZcap = `urn:zcap:root:${encodeURIComponent(aliceEdvConfig.id)}`;
 
     // alice is the controller of the EDV
     const capabilityDelegation = {
       id: `urn:zcap:${uuid()}`,
       '@context': ZCAP_CONTEXT_URL,
+      // attenuate so only read authority is granted
       allowedAction: 'read',
       invoker: testers.bob.verificationKey.id,
-      parentCapability: `${aliceEdvConfig.id}/zcaps/documents/${docId}`,
+      parentCapability: rootZcap,
+      // attenuate such that only this document can be read
       invocationTarget: {
         type: 'urn:datahub:document',
         id: `${aliceEdvConfig.id}/documents/${docId}`
@@ -188,15 +193,14 @@ describe('revocation API', function() {
     };
     // alice delegates a `write` capability to bob with bob as a delegator
     // this will be stored in authorizations
+    const rootZcap = `urn:zcap:root:${encodeURIComponent(mockEdvId)}`;
     const writeZcap = {
       id: `urn:zcap:${uuid()}`,
       '@context': ZCAP_CONTEXT_URL,
       allowedAction,
       invoker: testers.bob.verificationKey.id,
       delegator: testers.bob.verificationKey.id,
-      // Documents are not zCaps so this route stores all zCaps
-      // for a document.
-      parentCapability: `${mockEdvId}/zcaps/documents/${docId}`,
+      parentCapability: rootZcap,
       invocationTarget: {
         type: 'urn:datahub:document',
         id: `${mockEdvId}/documents/${docId}`
@@ -206,13 +210,6 @@ describe('revocation API', function() {
       edvId: mockEdvId,
       doc,
     });
-    // We are testing these methods:
-    //      await helpers.authorize({
-    //        req, expectedTarget, expectedRootCapability, expectedAction
-    //      });
-    // await brEdvStorage.update({edvId: mockEdvId, doc: mockData.doc2});
-    // await helpers.verifyDelegation({edvId, controller, capability});
-    // await brZCapStorage.revocations.insert({controller, capability});
     // test the default behavior that Alice can write to her own EDV,
     // but that bob and carol can not.
   });
