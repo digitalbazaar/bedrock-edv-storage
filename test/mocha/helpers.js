@@ -4,7 +4,7 @@
 'use strict';
 
 const bedrock = require('bedrock');
-const base58 = require('bs58');
+const base58 = require('base58-universal');
 const crypto = require('crypto');
 const database = require('bedrock-mongodb');
 const {promisify} = require('util');
