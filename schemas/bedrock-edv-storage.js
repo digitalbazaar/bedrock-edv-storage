@@ -3,6 +3,36 @@
  */
 'use strict';
 
+const controller = {
+  title: 'controller',
+  type: 'string'
+};
+
+const referenceId = {
+  title: 'referenceId',
+  type: 'string'
+};
+
+const delegator = {
+  anyOf: [{
+    type: 'string'
+  }, {
+    type: 'array',
+    minItems: 1,
+    items: {type: 'string'}
+  }]
+};
+
+const invoker = {
+  anyOf: [{
+    type: 'string'
+  }, {
+    type: 'array',
+    minItems: 1,
+    items: {type: 'string'}
+  }]
+};
+
 const edvConfig = {
   title: 'EDV Configuration',
   type: 'object',
@@ -212,7 +242,7 @@ const edvDocumentChunk = {
   }
 };
 
-const postDocumentQuery = {
+const edvDocumentQuery = {
   title: 'EDV Document Query',
   type: 'object',
   required: ['index'],
@@ -263,150 +293,136 @@ const getEdvsQuery = {
   }
 };
 
-const getAuthorizationsQuery = {
-  title: 'authorization query',
+const delegatedZcap = {
+  title: 'delegatedZcap',
   type: 'object',
-  required: ['id'],
   additionalProperties: false,
+  required: ['id', 'parentCapability', 'invocationTarget', 'proof'],
+  anyOf: [{
+    required: ['controller']
+  }, {
+    required: ['delegator']
+  }, {
+    required: ['invoker']
+  }],
   properties: {
+    controller,
+    invoker,
+    delegator,
     id: {
+      title: 'id',
       type: 'string'
     },
+    allowedAction: {
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    expires: {
+      // FIXME: w3c datetime
+      title: 'expires',
+      type: 'string'
+    },
+    '@context': {
+      title: '@context',
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'array',
+        minItems: 1,
+        items: {type: 'string'}
+      }]
+    },
+    invocationTarget: {
+      title: 'Invocation Target',
+      anyOf: [{
+        type: 'string'
+      }, {
+        type: 'object',
+        required: [
+          'type', 'id'
+        ],
+        additionalProperties: false,
+        properties: {
+          id: {
+            title: 'Invocation Target Id',
+            type: 'string'
+          },
+          type: {
+            title: 'Invocation Target Type',
+            type: 'string'
+          },
+          controller: {
+            title: 'controller',
+            type: 'string'
+          },
+          // was: verificationMethod
+          publicAlias: {
+            title: 'publicAlias',
+            type: 'string'
+          }
+        }
+      }]
+    },
+    parentCapability: {
+      title: 'Parent Capability',
+      type: 'string'
+    },
+    proof: {
+      title: 'Proof',
+      type: 'object',
+      additionalProperties: false,
+      required: [
+        'verificationMethod', 'type', 'created', 'proofPurpose',
+        'capabilityChain', 'proofValue'
+      ],
+      properties: {
+        verificationMethod: {
+          title: 'verificationMethod',
+          type: 'string'
+        },
+        type: {
+          title: 'type',
+          type: 'string'
+        },
+        created: {
+          title: 'created',
+          type: 'string'
+        },
+        proofPurpose: {
+          title: 'proofPurpose',
+          type: 'string'
+        },
+        capabilityChain: {
+          title: 'capabilityChain',
+          type: 'array',
+          minItems: 1,
+          items: {
+            type: ['string', 'object']
+          }
+        },
+        proofValue: {
+          title: 'proofValue',
+          type: 'string'
+        },
+      }
+    },
+    referenceId
   }
 };
 
-const zcap = {
-  allOf: [
-    {
-      anyOf: [
-        {required: ['invoker']},
-        {required: ['controller']},
-        {required: ['delegator']}
-      ]
-    },
-    {
-      title: 'zcap',
-      type: 'object',
-      additionalProperties: false,
-      required: ['id', 'parentCapability', 'invocationTarget'],
-      properties: {
-        id: {
-          title: 'id',
-          type: 'string'
-        },
-        allowedAction: {
-          anyOf: [{
-            type: 'string'
-          }, {
-            type: 'array',
-            minItems: 1,
-            items: {type: 'string'}
-          }]
-        },
-        caveat: {
-          title: 'Caveat',
-          type: 'object'
-        },
-        '@context': {
-          title: '@context',
-          anyOf: [{
-            type: 'string'
-          }, {
-            type: 'array',
-            minItems: 1,
-            items: {type: 'string'}
-          }]
-        },
-        controller: {
-          title: 'controller',
-          type: 'string'
-        },
-        delegator: {
-          anyOf: [{
-            type: 'string'
-          }, {
-            type: 'array',
-            minItems: 1,
-            items: {type: 'string'}
-          }]
-        },
-        invoker: {
-          anyOf: [{
-            type: 'string'
-          }, {
-            type: 'array',
-            minItems: 1,
-            items: {type: 'string'}
-          }]
-        },
-        invocationTarget: {
-          title: 'Invocation Target',
-          anyOf: [{
-            type: 'string'
-          }, {
-            type: 'object',
-            properties: {
-              id: {
-                title: 'Invocation Target Id',
-                type: 'string'
-              },
-              type: {
-                title: 'Invocation Target Type',
-                type: 'string'
-              }
-            }
-          }]
-        },
-        parentCapability: {
-          title: 'Parent Capability',
-          type: 'string'
-        },
-        proof: {
-          type: 'object',
-          additionalProperties: false,
-          properties: {
-            verificationMethod: {
-              title: 'verificationMethod',
-              type: 'string'
-            },
-            type: {
-              title: 'type',
-              type: 'string'
-            },
-            created: {
-              title: 'created',
-              type: 'string'
-            },
-            proofPurpose: {
-              title: 'proofPurpose',
-              type: 'string'
-            },
-            capabilityChain: {
-              title: 'capabilityChain',
-              type: 'array',
-              minItems: 1,
-              items: {type: 'string'}
-            },
-            proofValue: {
-              title: 'proofValue',
-              type: 'string'
-            },
-          }
-        },
-        referenceId: {
-          title: 'Reference Id',
-          type: 'string'
-        }
-      }
-    }]
-};
-
 module.exports = {
-  config: () => edvConfig,
-  chunk: () => edvDocumentChunk,
-  document: () => edvDocument,
-  postDocumentQuery: () => postDocumentQuery,
-  getEdvsQuery: () => getEdvsQuery,
-  zcap: () => zcap,
-  getAuthorizationsQuery: () => getAuthorizationsQuery,
+  config: edvConfig,
+  chunk: edvDocumentChunk,
+  document: edvDocument,
+  postConfigBody: edvConfig,
+  postChunkBody: edvDocumentChunk,
+  postDocumentBody: edvDocument,
+  postDocumentQueryBody: edvDocumentQuery,
+  getConfigsQuery: getEdvsQuery,
+  postRevocationBody: {...delegatedZcap}
 };
