@@ -6,6 +6,10 @@
 - **BREAKING** - Add storage and operation metering support. A meter ID
   must be provided to create a new keystore. This meter ID will be used to
   report keystore storage and operation usage to the associated meter.
+- Added namespaced `edvs`, `docs`, and `chunks` API exports for accessing
+  storage (e.g., `edvs.get` will return an EDV config). The older storage
+  functions that were namespaced within the function name (e.g., `getConfig`)
+  are deprecated.
 
 ### Changed
 - **BREAKING**: Simplify zcap revocation model. Now any party that has been
