@@ -23,6 +23,8 @@
   one public address for accessing EDVs, i.e., the base URL (including the
   origin) will be the same for every EDV stored. This assumption allows for
   some storage optimizations.
+- **BREAKING**: The database storage model has changed and is incompatible
+  with previous versions. There is no auto-migration built into this version.
 - Use ezcap-express to provide zcap revocation authorization implementation.
   Remove dependencies that are no longer needed because of this upgrade.
 
