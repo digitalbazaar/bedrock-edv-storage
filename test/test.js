@@ -27,7 +27,7 @@ bedrock.events.on('bedrock.init', async () => {
       const serviceIdentites = getServiceIdentities();
       const serviceIdentity = serviceIdentites.get(clientName);
       if(!serviceIdentity) {
-        throw new Error(`Could not find identity: "${clientName}"`);
+        throw new Error(`Could not find identity "${clientName}".`);
       }
       meter.serviceId = serviceIdentity.id;
       return {meter};
