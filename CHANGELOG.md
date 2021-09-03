@@ -10,6 +10,8 @@
   storage (e.g., `edvs.get` will return an EDV config). The older storage
   functions that were namespaced within the function name (e.g., `getConfig`)
   are deprecated.
+- Requires bedrock-app-identity to configure the identity for edv
+  applications.
 
 ### Changed
 - **BREAKING**: Simplify zcap revocation model. Now any party that has been
