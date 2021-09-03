@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 10.0.0 - 2021-08-xx
+## 10.0.0 - 2021-09-02
 
 ### Added
 - **BREAKING** - Add storage and operation metering support. A meter ID
