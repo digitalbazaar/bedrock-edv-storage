@@ -31,23 +31,24 @@
   },
   "peerDependencies": {
     "bedrock": "^4.1.1",
+    "bedrock-app-identity": "^1.0.0",
     "bedrock-did-context": "^2.0.0",
     "bedrock-did-io": "^4.0.2",
     "bedrock-jsonld-document-loader": "^1.2.0",
-    "bedrock-express": "^4.0.0",
-    "bedrock-meter-usage-reporter": "^3.0.0",
-    "bedrock-mongodb": "^8.2.0",
+    "bedrock-express": "^5.0.0",
+    "bedrock-meter-usage-reporter": "^4.0.0",
+    "bedrock-mongodb": "^8.4.0",
     "bedrock-security-context": "^4.1.0",
-    "bedrock-server": "^2.7.0",
-    "bedrock-validation": "^5.0.0",
+    "bedrock-server": "^3.0.0",
+    "bedrock-validation": "^5.2.0",
     "bedrock-veres-one-context": "^11.0.0",
-    "bedrock-zcap-storage": "^3.2.0"
+    "bedrock-zcap-storage": "^3.3.0"
   },
   "directories": {
     "lib": "./lib"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "devDependencies": {
     "eslint": "^7.24.0",

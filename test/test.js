@@ -2,6 +2,7 @@
  * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
  */
 const bedrock = require('bedrock');
+const {getServiceIdentities} = require('bedrock-app-identity');
 require('bedrock-edv-storage');
 require('bedrock-https-agent');
 require('bedrock-kms');
@@ -23,8 +24,12 @@ bedrock.events.on('bedrock.init', async () => {
     handler({meter} = {}) {
       // use configured meter usage reporter as service ID for tests
       const clientName = mockData.productIdMap.get(meter.product.id);
-      meter.serviceId = bedrock.config['meter-usage-reporter']
-        .clients[clientName].id;
+      const serviceIdentites = getServiceIdentities();
+      const serviceIdentity = serviceIdentites.get(clientName);
+      if(!serviceIdentity) {
+        throw new Error(`Could not find identity: "${clientName}"`);
+      }
+      meter.serviceId = serviceIdentity.id;
       return {meter};
     }
   });
