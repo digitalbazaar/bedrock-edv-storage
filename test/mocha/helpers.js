@@ -11,6 +11,7 @@ const {promisify} = require('util');
 const {util: {uuid}} = bedrock;
 const {EdvClient} = require('edv-client');
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
+const {getAppIdentity} = require('bedrock-app-identity');
 const {sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} =
   require('@digitalbazaar/webkms-client');
@@ -24,6 +25,7 @@ const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
 const {httpsAgent} = require('bedrock-https-agent');
 const mockData = require('./mock.data');
+const {ZcapClient} = require('@digitalbazaar/ezcap');
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -151,6 +153,15 @@ exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
     throw new TypeError('"serviceType" must be a string.');
   }
 
+  // create signer using the application's capability invocation key
+  const {keys: {capabilityInvocationKey}} = getAppIdentity();
+
+  const zcapClient = new ZcapClient({
+    agent: httpsAgent,
+    invocationSigner: capabilityInvocationKey.signer(),
+    SuiteClass: Ed25519Signature2020
+  });
+
   // create a meter
   const meterService = `${bedrock.config.server.baseUri}/meters`;
   let meter = {
@@ -160,10 +171,7 @@ exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
     }
   };
 
-  const response = await httpClient.post(meterService, {
-    agent: httpsAgent, json: meter
-  });
-  ({data: {meter}} = response);
+  ({data: {meter}} = await zcapClient.write({url: meterService, json: meter}));
 
   const {id} = meter;
   return {id: `${meterService}/${id}`};
