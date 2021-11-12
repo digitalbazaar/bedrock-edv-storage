@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 10.1.0 - TBD
+## 10.1.0 - 2021-11-12
 
 ### Added
 - Added optional `explain` param to get more details about database performance.
