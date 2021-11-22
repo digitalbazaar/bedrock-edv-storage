@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 10.1.1 - 2021-11-xx
+## 10.1.1 - 2021-11-22
 
 ### Fixed
 - Fixed error message when a configuration update fails.
