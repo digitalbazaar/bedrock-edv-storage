@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 10.1.1 - 2021-11-xx
+
+### Fixed
+- Fixed error message when a configuration update fails.
+- Fixed minor documentation typos.
+
 ## 10.1.0 - 2021-11-12
 
 ### Added
