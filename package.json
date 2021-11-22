@@ -37,7 +37,7 @@
     "bedrock-did-io": "^4.0.2",
     "bedrock-jsonld-document-loader": "^1.2.0",
     "bedrock-express": "^5.0.0",
-    "bedrock-meter-usage-reporter": "^4.0.0",
+    "bedrock-meter-usage-reporter": "^4.2.0",
     "bedrock-mongodb": "^8.4.0",
     "bedrock-security-context": "^4.1.0",
     "bedrock-server": "^3.0.0",

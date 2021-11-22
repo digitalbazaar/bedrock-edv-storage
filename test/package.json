@@ -49,7 +49,7 @@
     "bedrock-ledger-context": "^20.0.1",
     "bedrock-meter": "^1.0.0",
     "bedrock-meter-http": "^3.0.0",
-    "bedrock-meter-usage-reporter": "^4.0.0",
+    "bedrock-meter-usage-reporter": "^4.2.0",
     "bedrock-mongodb": "^8.2.0",
     "bedrock-package-manager": "^1.0.1",
     "bedrock-security-context": "^4.1.0",
