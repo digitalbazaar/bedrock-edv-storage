@@ -43,7 +43,7 @@
     "bedrock-server": "^3.0.0",
     "bedrock-validation": "^5.2.0",
     "bedrock-veres-one-context": "^11.0.0",
-    "bedrock-zcap-storage": "^3.3.0"
+    "bedrock-zcap-storage": "^4.0.0"
   },
   "directories": {
     "lib": "./lib"
