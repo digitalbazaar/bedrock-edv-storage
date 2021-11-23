@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 10.2.0 - 2021-11-xx
+## 10.2.0 - 2021-11-23
 
 ### Added
 - Do not allow zcap revocations to be stored if the meter associated with
