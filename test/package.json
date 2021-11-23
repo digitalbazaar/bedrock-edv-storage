@@ -58,7 +58,7 @@
     "bedrock-test": "^5.3.2",
     "bedrock-validation": "^5.0.0",
     "bedrock-veres-one-context": "^11.0.0",
-    "bedrock-zcap-storage": "^3.2.0",
+    "bedrock-zcap-storage": "^4.0.0",
     "cross-env": "^7.0.2",
     "edv-client": "^10.0.0",
     "jsonld-signatures": "^9.0.2",
