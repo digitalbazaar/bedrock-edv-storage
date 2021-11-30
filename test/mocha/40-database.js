@@ -55,6 +55,8 @@ describe('Docs Database Tests', () => {
         executionStats.totalDocsExamined.should.equal(1);
         executionStats.executionStages.inputStage.inputStage.inputStage.stage
           .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.inputStage.inputStage
+          .keyPattern.should.eql({localEdvId: 1, 'doc.id': 1});
       });
     it(`is properly indexed for 'localEdvId' in find()`,
       async () => {
@@ -66,8 +68,9 @@ describe('Docs Database Tests', () => {
         executionStats.nReturned.should.equal(1);
         executionStats.totalKeysExamined.should.equal(1);
         executionStats.totalDocsExamined.should.equal(1);
-        executionStats.executionStages.inputStage.stage
-          .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.keyPattern
+          .should.eql({localEdvId: 1, 'doc.id': 1});
       });
     it(`is properly indexed for 'localEdvId' and 'doc.id' in find()`,
       async () => {
@@ -79,8 +82,9 @@ describe('Docs Database Tests', () => {
         executionStats.nReturned.should.equal(1);
         executionStats.totalKeysExamined.should.equal(1);
         executionStats.totalDocsExamined.should.equal(1);
-        executionStats.executionStages.inputStage.stage
-          .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.keyPattern
+          .should.eql({localEdvId: 1, 'doc.id': 1});
       });
     it(`is properly indexed for 'localEdvId' in count()`,
       async () => {
@@ -92,8 +96,9 @@ describe('Docs Database Tests', () => {
         executionStats.nReturned.should.equal(1);
         executionStats.totalKeysExamined.should.equal(1);
         executionStats.totalDocsExamined.should.equal(1);
-        executionStats.executionStages.inputStage.stage
-          .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.keyPattern
+          .should.eql({localEdvId: 1, 'doc.id': 1});
       });
     it(`is properly indexed for 'localEdvId' and 'doc.id' in count()`,
       async () => {
@@ -105,8 +110,9 @@ describe('Docs Database Tests', () => {
         executionStats.nReturned.should.equal(1);
         executionStats.totalKeysExamined.should.equal(1);
         executionStats.totalDocsExamined.should.equal(1);
-        executionStats.executionStages.inputStage.stage
-          .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.keyPattern
+          .should.eql({localEdvId: 1, 'doc.id': 1});
       });
     it(`is properly indexed for 'localEdvId', 'doc.id' and 'doc.sequence' in ` +
       'update()', async () => {
@@ -121,6 +127,8 @@ describe('Docs Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage.keyPattern
+        .should.eql({localEdvId: 1, 'doc.id': 1});
     });
   });
 });
@@ -150,8 +158,9 @@ describe('EDV Database Tests', () => {
       executionStats.nReturned.should.equal(2);
       executionStats.totalKeysExamined.should.equal(2);
       executionStats.totalDocsExamined.should.equal(2);
-      executionStats.executionStages.inputStage.stage
-        .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.keyPattern
+        .should.eql({'config.controller': 1});
     });
     it(`is properly indexed for 'config.id' and 'config.controller' in find()`,
       async () => {
@@ -163,8 +172,9 @@ describe('EDV Database Tests', () => {
         executionStats.nReturned.should.equal(1);
         executionStats.totalKeysExamined.should.equal(1);
         executionStats.totalDocsExamined.should.equal(1);
-        executionStats.executionStages.inputStage.stage
-          .should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.stage.should.equal('IXSCAN');
+        executionStats.executionStages.inputStage.keyPattern
+          .should.eql({'config.id': 1});
       });
     it(`is properly indexed for 'config.id' and 'config.sequence' in ` +
       'update()', async () => {
@@ -178,6 +188,8 @@ describe('EDV Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage
+        .keyPattern.should.eql({'config.id': 1});
     });
     it(`is properly indexed for 'config.id' in get()`, async () => {
       const {executionStats} = await brEdvStorage.edvs.get({
@@ -189,6 +201,8 @@ describe('EDV Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage.inputStage
+        .keyPattern.should.eql({'config.id': 1});
     });
   });
 });
@@ -252,6 +266,8 @@ describe('Chunks Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage.keyPattern
+        .should.eql({localEdvId: 1, docId: 1, 'chunk.index': 1});
     });
     it(`is properly indexed for 'localEdvId', 'docId' and 'chunk.index' in ` +
       'get()', async () => {
@@ -266,6 +282,8 @@ describe('Chunks Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage.inputStage.keyPattern
+        .should.eql({localEdvId: 1, docId: 1, 'chunk.index': 1});
     });
     it(`is properly indexed for 'localEdvId', 'docId' and 'chunk.index' in ` +
       'remove()', async () => {
@@ -280,6 +298,8 @@ describe('Chunks Database Tests', () => {
       executionStats.totalDocsExamined.should.equal(1);
       executionStats.executionStages.inputStage.inputStage.stage
         .should.equal('IXSCAN');
+      executionStats.executionStages.inputStage.inputStage.keyPattern
+        .should.eql({localEdvId: 1, docId: 1, 'chunk.index': 1});
     });
   });
 });
