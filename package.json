@@ -28,7 +28,8 @@
     "@digitalbazaar/ezcap-express": "^4.2.0",
     "assert-plus": "^1.0.0",
     "base58-universal": "^1.0.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "p-all": "^3.0.0"
   },
   "peerDependencies": {
     "bedrock": "^4.1.1",
