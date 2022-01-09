@@ -1,5 +1,16 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.0.0 - 2022-01-xx
+
+### Added
+- Support IP-based restrictions on accessing EDVs. If an `ipAllowList`
+  is included in an EDV config then only requests from IPs that match
+  the list will be granted access.
+
+### Changed
+- **BREAKING**: Use ezcap-express@5 and webkms-switch@9. These changes
+  include major breaking simplifications to ZCAP-LD (zcapld@6).
+
 ## 10.2.0 - 2021-11-23
 
 ### Added
