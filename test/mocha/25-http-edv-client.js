@@ -152,9 +152,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         err = e;
       }
       should.exist(err);
-      err.data.type.should.equal('NotAllowedError');
-      should.exist(err.data.cause);
-      err.data.cause.type.should.equal('URLMismatchError');
+      err.data.type.should.equal('URLMismatchError');
     });
   }); // end `updateConfig`
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 'use strict';
 
@@ -283,17 +283,16 @@ exports.keyResolver = _keyResolver;
  *   as the invoker and delegator.
  * @param {object} options.signer - A capabilityAgent.getSigner()
  *   from the someone higher in the capabilityChain than the invoker.
- * @param {Array<string>} options.capabilityChain = An array of ids
- *   that must start with the rootCapability first.
+ * @param {object|string} options.parentCapability - The parent capability.
  *
  * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
  */
-exports.delegate = async ({zcap, signer, capabilityChain, documentLoader}) => {
+exports.delegate = async ({zcap, signer, parentCapability, documentLoader}) => {
   if(!zcap['@context']) {
     zcap['@context'] = ZCAP_CONTEXT_URL;
   }
   if(!zcap.id) {
-    zcap.id = `urn:zcap:${uuid()}`;
+    zcap.id = `urn:uuid:${uuid()}`;
   }
   let Suite = null;
   if(/^Ed25519/i.test(signer.type)) {
@@ -308,7 +307,7 @@ exports.delegate = async ({zcap, signer, capabilityChain, documentLoader}) => {
     suite: new Suite({
       signer
     }),
-    purpose: new CapabilityDelegation({capabilityChain}),
+    purpose: new CapabilityDelegation({parentCapability}),
     documentLoader
   });
 };

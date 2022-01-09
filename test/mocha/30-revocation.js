@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 'use strict';
 
@@ -63,26 +63,21 @@ describe('revocation API', function() {
     // root zcap for alice's EDV
     const rootZcap = `urn:zcap:root:${encodeURIComponent(aliceEdvConfig.id)}`;
 
-    // alice is the controller of the EDV
     const capabilityDelegation = {
-      id: `urn:zcap:${uuid()}`,
       '@context': ZCAP_CONTEXT_URL,
+      id: `urn:zcap:${uuid()}`,
       // attenuate so only read authority is granted
       allowedAction: 'read',
-      invoker: testers.bob.verificationKey.id,
+      controller: testers.bob.verificationKey.id,
       parentCapability: rootZcap,
       // attenuate such that only this document can be read
-      invocationTarget: {
-        type: 'urn:datahub:document',
-        id: `${aliceEdvConfig.id}/documents/${docId}`
-      }
+      invocationTarget: `${aliceEdvConfig.id}/documents/${docId}`,
+      expires: new Date(Date.now() + 300000).toISOString()
     };
     await helpers.delegate({
       zcap: capabilityDelegation,
       signer: testers.alice.capabilityAgent.getSigner(),
-      capabilityChain: [
-        capabilityDelegation.parentCapability,
-      ],
+      parentCapability: capabilityDelegation.parentCapability,
       documentLoader: mockData.documentLoader
     });
 
