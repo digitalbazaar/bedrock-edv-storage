@@ -51,7 +51,7 @@
     "bedrock-ledger-context": "^20.0.1",
     "bedrock-meter": "^1.0.0",
     "bedrock-meter-http": "digitalbazaar/bedrock-meter-http#zcapld-update",
-    "bedrock-meter-usage-reporter": "digitalbazaar/bedrock-meter-usage-reporter#zcapld-update",
+    "bedrock-meter-usage-reporter": "^5.0.0",
     "bedrock-mongodb": "^8.2.0",
     "bedrock-package-manager": "^1.0.1",
     "bedrock-security-context": "^4.1.0",
