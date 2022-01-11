@@ -11,7 +11,7 @@ const {config} = bedrock;
 const helpers = require('./helpers');
 const assertions = require('./assertions');
 const mockData = require('./mock.data');
-const {EdvClient} = require('edv-client');
+const {EdvClient} = require('@digitalbazaar/edv-client');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 let urls;
 
