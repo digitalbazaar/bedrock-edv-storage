@@ -42,7 +42,7 @@
     "bedrock-did-context": "^2.0.0",
     "bedrock-did-io": "^4.0.2",
     "bedrock-edv-storage": "file:..",
-    "bedrock-express": "digitalbazaar/bedrock-express#fix-asyncHandler",
+    "bedrock-express": "^6.2.0",
     "bedrock-https-agent": "^2.0.0",
     "bedrock-jsonld-document-loader": "^1.2.0",
     "bedrock-kms": "^7.0.0",
