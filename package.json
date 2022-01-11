@@ -47,7 +47,7 @@
     "bedrock-server": "^3.0.0",
     "bedrock-validation": "^5.2.0",
     "bedrock-veres-one-context": "^11.0.0",
-    "bedrock-zcap-storage": "digitalbazaar/bedrock-zcap-storage#zcapld-update"
+    "bedrock-zcap-storage": "^5.0.0"
   },
   "directories": {
     "lib": "./lib"
