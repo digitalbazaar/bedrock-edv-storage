@@ -6,8 +6,9 @@
 const {config, util: {uuid}} = require('bedrock');
 const brEdvStorage = require('bedrock-edv-storage');
 const {httpsAgent} = require('bedrock-https-agent');
-// const {AsymmetricKey, CapabilityAgent} = require('webkms-client');
-const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcapld');
+// const {AsymmetricKey, CapabilityAgent} = require(
+//  '@digitalbazaar/webkms-client');
+const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcap');
 // const database = require('bedrock-mongodb');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
