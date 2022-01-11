@@ -41,13 +41,13 @@
     "bedrock-did-io": "^5.0.0",
     "bedrock-jsonld-document-loader": "^1.2.0",
     "bedrock-express": "^6.2.0",
-    "bedrock-meter-usage-reporter": "^4.2.0",
+    "bedrock-meter-usage-reporter": "^5.0.0",
     "bedrock-mongodb": "^8.4.0",
     "bedrock-security-context": "^4.1.0",
     "bedrock-server": "^3.0.0",
     "bedrock-validation": "^5.2.0",
     "bedrock-veres-one-context": "^11.0.0",
-    "bedrock-zcap-storage": "^4.0.0"
+    "bedrock-zcap-storage": "digitalbazaar/bedrock-zcap-storage#zcapld-update"
   },
   "directories": {
     "lib": "./lib"
