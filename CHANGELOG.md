@@ -9,7 +9,7 @@
 
 ### Changed
 - **BREAKING**: Use ezcap-express@5. These changes include major breaking
-  simplifications to ZCAP-LD (zcapld@6).
+  simplifications to ZCAP (zcap@7).
 
 ## 10.2.0 - 2021-11-23
 
