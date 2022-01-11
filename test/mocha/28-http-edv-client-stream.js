@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 'use strict';
 
@@ -8,7 +8,7 @@ const bedrock = require('bedrock');
 const helpers = require('./helpers');
 const {config} = bedrock;
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
-const {EdvDocument} = require('edv-client');
+const {EdvDocument} = require('@digitalbazaar/edv-client');
 const brEdvStorage = require('bedrock-edv-storage');
 
 let urls;

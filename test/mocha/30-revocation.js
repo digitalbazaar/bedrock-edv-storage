@@ -10,9 +10,9 @@ const {httpsAgent} = require('bedrock-https-agent');
 //  '@digitalbazaar/webkms-client');
 const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcap');
 // const database = require('bedrock-mongodb');
+const {EdvClient} = require('@digitalbazaar/edv-client');
 const helpers = require('./helpers');
 const mockData = require('./mock.data');
-const {EdvClient} = require('edv-client');
 
 // all tests involve write
 const allowedAction = 'write';
