@@ -31,7 +31,7 @@
     "@digitalbazaar/did-method-key": "^2.0.0",
     "@digitalbazaar/ed25519-signature-2020": "^3.0.0",
     "@digitalbazaar/ed25519-verification-key-2020": "^3.1.0",
-    "@digitalbazaar/edv-client": "digitalbazaar/edv-client#zcapld-update",
+    "@digitalbazaar/edv-client": "^11.0.0",
     "@digitalbazaar/ezcap": "^2.0.1",
     "@digitalbazaar/http-client": "^2.0.0",
     "@digitalbazaar/minimal-cipher": "^4.0.0",
