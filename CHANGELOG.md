@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 11.0.0 - 2022-01-xx
+## 11.0.0 - 2022-01-11
 
 ### Added
 - Support IP-based restrictions on accessing EDVs. If an `ipAllowList`
