@@ -57,7 +57,7 @@
     "bedrock-security-context": "^5.0.0",
     "bedrock-server": "^3.0.0",
     "bedrock-ssm-mongodb": "^7.0.1",
-    "bedrock-test": "^5.3.2",
+    "bedrock-test": "^6.0.0",
     "bedrock-validation": "^5.0.0",
     "bedrock-veres-one-context": "^11.0.0",
     "bedrock-zcap-storage": "^5.0.0",
