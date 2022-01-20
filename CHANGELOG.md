@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.0.1 - 2022-01-xx
+
+### Fixed
+- Do not expose details from errors that are not marked public.
+
 ## 11.0.0 - 2022-01-11
 
 ### Added
