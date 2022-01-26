@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 11.0.2 - 2022-01-xx
+## 11.0.2 - 2022-01-25
 
 ### Fixed
 - Fix bad thrown exception when the same chunk is updated concurrently.
