@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 11.1.0 - 2022-01-xx
+## 11.1.0 - 2022-01-31
 
 ### Added
 - Expose query endpoint at `/documents/query` to enable zcaps with
