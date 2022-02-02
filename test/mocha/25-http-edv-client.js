@@ -795,7 +795,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       try {
         result = await edvClient.find({
-          has: ['content.subgroup'],
+          has: ['content.group', 'content.subgroup'],
           invocationSigner: capabilityAgent.getSigner(),
         });
       } catch(e) {
