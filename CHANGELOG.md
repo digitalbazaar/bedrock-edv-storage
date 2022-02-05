@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.2.0 - 2022-02-xx
+
+### Added
+- Support `limit` in queries.
+
 ## 11.1.0 - 2022-01-31
 
 ### Added

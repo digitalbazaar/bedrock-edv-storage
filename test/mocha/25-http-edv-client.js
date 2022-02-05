@@ -632,6 +632,51 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertions.shouldBeEdvDocument({doc: delta});
       delta.content.should.eql(mockData.httpDocs.delta.content);
     });
+    it('should apply a limit to getting documents by attribute', async () => {
+      // NOTE: the client was instructed to index the `content.apples` attribute
+      // before the documents were inserted
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          has: ['content.apples'],
+          invocationSigner: capabilityAgent.getSigner(),
+          limit: 1
+        });
+      } catch(e) {
+        err = e;
+      }
+      const {documents, hasMore} = result;
+      assertNoError(err);
+      documents.should.be.an('array');
+      documents.should.have.length(1);
+      const alpha = documents.find(r => r.id === mockData.httpDocs.alpha.id);
+      assertions.shouldBeEdvDocument({doc: alpha});
+      alpha.content.should.eql(mockData.httpDocs.alpha.content);
+      should.exist(hasMore);
+      hasMore.should.equal(true);
+    });
+    it('should reach a limit to getting documents by attribute', async () => {
+      // NOTE: the client was instructed to index the `content.apples` attribute
+      // before the documents were inserted
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          has: ['content.apples'],
+          invocationSigner: capabilityAgent.getSigner(),
+          limit: 4
+        });
+      } catch(e) {
+        err = e;
+      }
+      const {documents, hasMore} = result;
+      assertNoError(err);
+      documents.should.be.an('array');
+      documents.should.have.length(4);
+      should.exist(hasMore);
+      hasMore.should.equal(false);
+    });
     it('should get a document count when count is set to true', async () => {
       let result1;
       let result2;

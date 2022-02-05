@@ -274,6 +274,11 @@ const edvDocumentQuery = {
       items: [{
         type: 'string'
       }]
+    },
+    limit: {
+      type: 'integer',
+      minimum: 1,
+      maximum: 1000
     }
   }
 };
