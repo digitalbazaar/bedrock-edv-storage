@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.3.1 - 2022-02-xx
+
+### Fixed
+- Fix `getTotalSize()` functions to return a size of `0` when
+  the databases are empty.
+
 ## 11.3.0 - 2022-02-08
 
 ### Changed
