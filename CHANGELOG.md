@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 11.3.1 - 2022-02-xx
+## 11.3.1 - 2022-02-08
 
 ### Fixed
 - Fix `getTotalSize()` functions to return a size of `0` when
