@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.3.0 - 2022-02-xx
+
+### Changed
+- Use updated bedrock-veres-one-context@12.
+
 ## 11.2.0 - 2022-02-05
 
 ### Added
