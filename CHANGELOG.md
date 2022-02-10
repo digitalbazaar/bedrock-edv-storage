@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.4.0 - 2022-02-xx
+
+### Added
+- Use `bedrock-validation@5.4` with better JSON schema compilation.
+
 ## 11.3.1 - 2022-02-08
 
 ### Fixed
