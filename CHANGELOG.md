@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 11.5.0 - 2022-02-xx
+## 11.5.0 - 2022-02-10
 
 ### Changed
 - Use `bedrock-did-io@6`.
