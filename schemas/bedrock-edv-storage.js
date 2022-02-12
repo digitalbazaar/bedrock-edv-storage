@@ -1,10 +1,32 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 'use strict';
 
+const cidrRegex = require('cidr-regex');
+
 const controller = {
   title: 'controller',
+  type: 'string'
+};
+
+const id = {
+  title: 'id',
+  type: 'string'
+};
+
+const ipAllowList = {
+  type: 'array',
+  minItems: 1,
+  items: {
+    type: 'string',
+    // leading and trailing slashes in regex must be removed
+    pattern: cidrRegex.v4({exact: true}).toString().slice(1, -1),
+  }
+};
+
+const meterId = {
+  title: 'Meter ID',
   type: 'string'
 };
 
@@ -13,24 +35,24 @@ const referenceId = {
   type: 'string'
 };
 
-const delegator = {
-  anyOf: [{
-    type: 'string'
-  }, {
-    type: 'array',
-    minItems: 1,
-    items: {type: 'string'}
-  }]
+const sequence = {
+  title: 'sequence',
+  type: 'integer',
+  minimum: 0,
+  maximum: Number.MAX_SAFE_INTEGER - 1
 };
 
-const invoker = {
-  anyOf: [{
-    type: 'string'
-  }, {
-    type: 'array',
-    minItems: 1,
-    items: {type: 'string'}
-  }]
+const hmac = {
+  title: 'hmac',
+  type: 'object',
+  required: ['id', 'type'],
+  additionalProperties: false,
+  properties: {
+    id,
+    type: {
+      type: 'string'
+    }
+  }
 };
 
 const edvConfig = {
@@ -39,48 +61,24 @@ const edvConfig = {
   required: ['controller', 'sequence', 'keyAgreementKey', 'hmac', 'meterId'],
   additionalProperties: false,
   properties: {
-    id: {
-      type: 'string'
-    },
-    controller: {
-      type: 'string'
-    },
+    id,
+    controller,
     keyAgreementKey: {
       type: 'object',
       required: ['id', 'type'],
       additionalProperties: false,
       properties: {
-        id: {
-          type: 'string'
-        },
+        id,
         type: {
           type: 'string'
         }
       }
     },
-    hmac: {
-      type: 'object',
-      required: ['id', 'type'],
-      additionalProperties: false,
-      properties: {
-        id: {
-          type: 'string'
-        },
-        type: {
-          type: 'string'
-        }
-      }
-    },
-    sequence: {
-      type: 'integer',
-      minimum: 0
-    },
-    referenceId: {
-      type: 'string'
-    },
-    meterId: {
-      type: 'string'
-    }
+    ipAllowList,
+    hmac,
+    meterId,
+    referenceId,
+    sequence
   }
 };
 
@@ -146,23 +144,8 @@ const indexedEntry = {
   required: ['hmac', 'sequence', 'attributes'],
   additionalProperties: false,
   properties: {
-    hmac: {
-      type: 'object',
-      required: ['id', 'type'],
-      additionalProperties: false,
-      properties: {
-        id: {
-          type: 'string'
-        },
-        type: {
-          type: 'string'
-        }
-      }
-    },
-    sequence: {
-      type: 'integer',
-      minimum: 0
-    },
+    hmac,
+    sequence,
     attributes: {
       type: 'array',
       items: [{
@@ -191,13 +174,8 @@ const edvDocument = {
   required: ['id', 'sequence', 'jwe'],
   additionalProperties: false,
   properties: {
-    id: {
-      type: 'string'
-    },
-    sequence: {
-      type: 'integer',
-      minimum: 0
-    },
+    id,
+    sequence,
     indexed: {
       type: 'array',
       items: [indexedEntry]
@@ -235,10 +213,7 @@ const edvDocumentChunk = {
       type: 'integer',
       minimum: 0
     },
-    sequence: {
-      type: 'integer',
-      minimum: 0
-    }
+    sequence
   }
 };
 
@@ -289,12 +264,8 @@ const getEdvsQuery = {
   required: ['controller', 'referenceId'],
   additionalProperties: false,
   properties: {
-    controller: {
-      type: 'string'
-    },
-    referenceId: {
-      type: 'string'
-    }
+    controller,
+    referenceId
   }
 };
 
@@ -302,22 +273,13 @@ const delegatedZcap = {
   title: 'delegatedZcap',
   type: 'object',
   additionalProperties: false,
-  required: ['id', 'parentCapability', 'invocationTarget', 'proof'],
-  anyOf: [{
-    required: ['controller']
-  }, {
-    required: ['delegator']
-  }, {
-    required: ['invoker']
-  }],
+  required: [
+    '@context', 'controller', 'expires', 'id', 'invocationTarget',
+    'parentCapability', 'proof'
+  ],
   properties: {
     controller,
-    invoker,
-    delegator,
-    id: {
-      title: 'id',
-      type: 'string'
-    },
+    id,
     allowedAction: {
       anyOf: [{
         type: 'string'
@@ -344,34 +306,7 @@ const delegatedZcap = {
     },
     invocationTarget: {
       title: 'Invocation Target',
-      anyOf: [{
-        type: 'string'
-      }, {
-        type: 'object',
-        required: [
-          'type', 'id'
-        ],
-        additionalProperties: false,
-        properties: {
-          id: {
-            title: 'Invocation Target Id',
-            type: 'string'
-          },
-          type: {
-            title: 'Invocation Target Type',
-            type: 'string'
-          },
-          controller: {
-            title: 'controller',
-            type: 'string'
-          },
-          // was: verificationMethod
-          publicAlias: {
-            title: 'publicAlias',
-            type: 'string'
-          }
-        }
-      }]
+      type: 'string',
     },
     parentCapability: {
       title: 'Parent Capability',

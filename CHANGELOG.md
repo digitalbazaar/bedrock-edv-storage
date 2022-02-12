@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.5.1 - 2022-02-xx
+
+### Changed
+- Improve internal implementation of JSON schema validators.
+
 ## 11.5.0 - 2022-02-10
 
 ### Changed
