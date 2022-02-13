@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.5.2 - 2022-02-xx
+
+### Fixed
+- Require safe integers for chunk indexes, offsets, and sequences.
+
 ## 11.5.1 - 2022-02-12
 
 ### Changed
