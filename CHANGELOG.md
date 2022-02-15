@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 11.5.3 - 2022-02-xx
+
+### Fixed
+- Apply `10mb` limit to HTTP payloads. Previous limit was erroneously 8kb.
+
 ## 11.5.2 - 2022-02-13
 
 ### Fixed
