@@ -1,6 +1,6 @@
 {
   "name": "bedrock-edv-storage",
-  "version": "11.5.3",
+  "version": "11.5.4-0",
   "description": "Bedrock Encrypted Data Vault Storage",
   "main": "./lib",
   "scripts": {
