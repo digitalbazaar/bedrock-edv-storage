@@ -50,7 +50,7 @@
     "bedrock-kms-http": "^12.0.0",
     "bedrock-ledger-context": "^21.0.1",
     "bedrock-meter": "^1.0.0",
-    "bedrock-meter-http": "^5.0.0",
+    "bedrock-meter-http": "^6.0.0",
     "bedrock-meter-usage-reporter": "^5.0.0",
     "bedrock-mongodb": "^8.2.0",
     "bedrock-package-manager": "^1.0.1",
