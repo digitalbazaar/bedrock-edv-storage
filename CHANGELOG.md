@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 13.0.0 - 2022-03-xx
+## 13.0.0 - 2022-03-11
 
 ### Added
 - Add `config.authorizeZcapInvocationOptions` to allow configuration of
