@@ -1,10 +1,13 @@
 # bedrock-edv-storage ChangeLog
 
-## 12.1.0 - 2022-03-xx
+## 13.0.0 - 2022-03-xx
 
 ### Added
 - Add `config.authorizeZcapInvocationOptions` to allow configuration of
   `authorizeZcapInvocation` middleware in `ezcap-express`.
+
+### Changed
+- **BREAKING**: Make default TTL for zcaps 1 year.
 
 ## 12.0.0 - 2022-03-01
 
