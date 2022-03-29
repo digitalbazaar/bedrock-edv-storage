@@ -1,5 +1,25 @@
 # bedrock-edv-storage ChangeLog
 
+## 13.1.0 - 2022-03-xx
+
+### Changed
+- Update peer deps:
+  - `bedrock@4.5`
+  - `bedrock-did-context@2.1`
+  - `bedrock-express@6.4.1`
+  - `bedrock-jsonld-document-loader@1.3`
+  - `bedrock-mongodb@8.5`
+  - `bedrock-security-context@5.1`
+  - `bedrock-validation@5.6.3`
+  - `bedrock-veres-one-context@12.1`
+  - `bedrock-zcap-storage@5.2`.
+
+### Removed
+- Remove unused peer deps:
+  - `bedrock-server`.
+- Update internals to use esm style and use `esm.js` to
+  transpile to CommonJS.
+
 ## 13.0.0 - 2022-03-11
 
 ### Added
