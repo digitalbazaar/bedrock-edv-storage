@@ -1,9 +1,7 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const cidrRegex = require('cidr-regex');
+import cidrRegex from 'cidr-regex';
 
 const controller = {
   title: 'controller',
@@ -355,14 +353,16 @@ const delegatedZcap = {
   }
 };
 
-module.exports = {
-  config: edvConfig,
-  chunk: edvDocumentChunk,
-  document: edvDocument,
-  postConfigBody: edvConfig,
-  postChunkBody: edvDocumentChunk,
-  postDocumentBody: edvDocument,
-  postDocumentQueryBody: edvDocumentQuery,
-  getConfigsQuery: getEdvsQuery,
-  postRevocationBody: {...delegatedZcap}
+const postRevocationBody = {...delegatedZcap};
+
+export {
+  edvConfig as config,
+  edvDocumentChunk as chunk,
+  edvDocument as document,
+  edvConfig as postConfigBody,
+  edvDocumentChunk as postChunkBody,
+  edvDocument as postDocumentBody,
+  edvDocumentQuery as postDocumentQueryBody,
+  getEdvsQuery as getConfigsQuery,
+  postRevocationBody
 };

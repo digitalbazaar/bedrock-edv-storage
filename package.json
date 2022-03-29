@@ -32,24 +32,24 @@
     "cidr-regex": "^3.1.1",
     "cors": "^2.8.5",
     "crypto-ld": "^6.0.0",
+    "esm": "^3.2.25",
     "forwarded": "^0.2.0",
     "netmask": "^2.0.2",
     "p-all": "^3.0.0"
   },
   "peerDependencies": {
-    "bedrock": "^4.3.0",
+    "bedrock": "^4.5.0",
     "bedrock-app-identity": "^1.0.0",
-    "bedrock-did-context": "^2.0.0",
+    "bedrock-did-context": "^2.1.0",
     "bedrock-did-io": "^6.0.2",
-    "bedrock-jsonld-document-loader": "^1.2.0",
-    "bedrock-express": "^6.2.0",
+    "bedrock-jsonld-document-loader": "^1.3.0",
+    "bedrock-express": "^6.4.1",
     "bedrock-meter-usage-reporter": "^5.0.0",
-    "bedrock-mongodb": "^8.4.0",
-    "bedrock-security-context": "^5.0.0",
-    "bedrock-server": "^3.0.0",
-    "bedrock-validation": "^5.4.1",
-    "bedrock-veres-one-context": "^12.0.0",
-    "bedrock-zcap-storage": "^5.0.0"
+    "bedrock-mongodb": "^8.5.0",
+    "bedrock-security-context": "^5.1.0",
+    "bedrock-validation": "^5.6.3",
+    "bedrock-veres-one-context": "^12.1.0",
+    "bedrock-zcap-storage": "^5.1.0"
   },
   "directories": {
     "lib": "./lib"
@@ -58,7 +58,9 @@
     "node": ">=14"
   },
   "devDependencies": {
-    "eslint": "^7.24.0",
-    "eslint-config-digitalbazaar": "^2.6.1"
+    "eslint": "^7.32.0",
+    "eslint-config-digitalbazaar": "^2.8.0",
+    "eslint-plugin-jsdoc": "^37.9.7",
+    "jsdoc-to-markdown": "^6.0.1"
   }
 }
