@@ -284,6 +284,7 @@ exports.keyResolver = _keyResolver;
  * @param {object} options.signer - A capabilityAgent.getSigner()
  *   from the someone higher in the capabilityChain than the invoker.
  * @param {object|string} options.parentCapability - The parent capability.
+ * @param {Function} options.documentLoader - The document loader to use.
  *
  * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
  */
