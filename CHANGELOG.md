@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 13.1.0 - 2022-03-xx
+## 13.1.0 - 2022-03-29
 
 ### Changed
 - Update peer deps:
