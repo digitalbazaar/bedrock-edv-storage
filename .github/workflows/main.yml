@@ -19,8 +19,8 @@ jobs:
     - name: Run eslint
       run: npm run lint
   test-node:
-    runs-on: ubuntu-latest
     needs: [lint]
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     services:
       mongodb:
@@ -37,6 +37,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
+        npm install
         cd test
         npm install
     - name: Run test with Node.js ${{ matrix.node-version }}
@@ -45,8 +46,8 @@ jobs:
         npm test
   coverage:
     needs: [test-node]
-    timeout-minutes: 10
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     services:
       mongodb:
         image: mongo:4.2
@@ -62,6 +63,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
+        npm install
         cd test
         npm install
     - name: Generate coverage report
@@ -69,7 +71,7 @@ jobs:
         cd test
         npm run coverage-ci
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       with:
-        file: ./test/coverage.lcov
+        file: ./test/coverage/lcov.info
         fail_ci_if_error: true
