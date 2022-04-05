@@ -1,12 +1,10 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const brEdvStorage = require('bedrock-edv-storage');
-const database = require('bedrock-mongodb');
-const helpers = require('./helpers');
-const mockData = require('./mock.data');
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as database from '@bedrock/mongodb';
+import * as helpers from './helpers.js';
+import {mockData} from './mock.data.js';
 
 describe('edvs.insert API', () => {
   before(async () => {

@@ -1,5 +1,18 @@
 # bedrock-edv-storage ChangeLog
 
+## 14.0.0 - 2022-04-xx
+
+### Changed
+- **BREAKING**: Rename package to `@bedrock/edv-storage`.
+- **BREAKING**: Convert to module (ESM).
+- **BREAKING**: Remove default export.
+- **BREAKING**: Require node 14.x.
+
+### Removed
+- **BREAKING**: Remove deprecated unnamespaced API; use broken out `edvs`,
+  `docs`, `chunks` APIs (e.g., `insertConfig` => `edvs.insert`,
+  `insert` => `docs.insert`, `updateChunk` => `chunks.update`).
+
 ## 13.1.0 - 2022-03-29
 
 ### Changed

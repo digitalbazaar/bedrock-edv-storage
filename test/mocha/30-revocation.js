@@ -1,18 +1,17 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const {config, util: {uuid}} = require('bedrock');
-const brEdvStorage = require('bedrock-edv-storage');
-const {httpsAgent} = require('bedrock-https-agent');
-// const {AsymmetricKey, CapabilityAgent} = require(
-//  '@digitalbazaar/webkms-client');
+import * as bedrock from '@bedrock/core';
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as helpers from './helpers.js';
+import {createRequire} from 'module';
+import {httpsAgent} from '@bedrock/https-agent';
+import {mockData} from './mock.data.js';
+const require = createRequire(import.meta.url);
 const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcap');
-// const database = require('bedrock-mongodb');
 const {EdvClient} = require('@digitalbazaar/edv-client');
-const helpers = require('./helpers');
-const mockData = require('./mock.data');
+
+const {config, util: {uuid}} = bedrock;
 
 // all tests involve write
 const allowedAction = 'write';

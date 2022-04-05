@@ -1,21 +1,21 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-const bedrock = require('bedrock');
-const {getServiceIdentities} = require('bedrock-app-identity');
-require('bedrock-edv-storage');
-require('bedrock-https-agent');
-require('bedrock-kms');
-require('bedrock-kms-http');
-require('bedrock-meter');
-require('bedrock-meter-usage-reporter');
-const {handlers} = require('bedrock-meter-http');
-require('bedrock-server');
-// this is responsible for providing the `ssm-v1` key store
-require('bedrock-ssm-mongodb');
-require('bedrock-test');
+import * as bedrock from '@bedrock/core';
+import {getServiceIdentities} from '@bedrock/app-identity';
+import '@bedrock/edv-storage';
+import '@bedrock/https-agent';
+import '@bedrock/kms';
+import '@bedrock/kms-http';
+import '@bedrock/meter';
+import {handlers} from '@bedrock/meter-http';
+import '@bedrock/meter-usage-reporter';
+import '@bedrock/security-context';
+import '@bedrock/server';
+import '@bedrock/ssm-mongodb';
+import '@bedrock/test';
 
-const mockData = require('./mocha/mock.data');
+import {mockData} from './mocha/mock.data.js';
 
 bedrock.events.on('bedrock.init', async () => {
   /* Handlers need to be added before `bedrock.start` is called. These are

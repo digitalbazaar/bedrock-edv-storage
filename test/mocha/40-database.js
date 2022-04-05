@@ -1,12 +1,10 @@
-/*
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const {config} = require('bedrock');
-const brEdvStorage = require('bedrock-edv-storage');
-const helpers = require('./helpers');
-const mockData = require('./mock.data');
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as helpers from './helpers.js';
+import {config} from '@bedrock/core';
+import {mockData} from './mock.data.js';
 
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 
