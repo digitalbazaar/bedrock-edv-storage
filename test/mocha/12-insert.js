@@ -1,13 +1,11 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const {config} = require('bedrock');
-const brEdvStorage = require('bedrock-edv-storage');
-const database = require('bedrock-mongodb');
-const helpers = require('./helpers');
-const mockData = require('./mock.data');
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as database from '@bedrock/mongodb';
+import * as helpers from './helpers.js';
+import {config} from '@bedrock/core';
+import {mockData} from './mock.data.js';
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});

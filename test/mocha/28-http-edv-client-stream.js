@@ -1,15 +1,14 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as helpers from './helpers.js';
+import {config} from '@bedrock/core';
+import {createRequire} from 'module';
+const require = createRequire(import.meta.url);
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
-const bedrock = require('bedrock');
-const helpers = require('./helpers');
-const {config} = bedrock;
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 const {EdvDocument} = require('@digitalbazaar/edv-client');
-const brEdvStorage = require('bedrock-edv-storage');
 
 let urls;
 

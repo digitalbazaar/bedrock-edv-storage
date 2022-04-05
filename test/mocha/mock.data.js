@@ -1,17 +1,14 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
+import {config} from '@bedrock/core';
+import {didIo} from '@bedrock/did-io';
+import {documentLoader} from '@bedrock/jsonld-document-loader';
 
-const {config} = require('bedrock');
-const {didIo} = require('bedrock-did-io');
-const {documentLoader} = require('bedrock-jsonld-document-loader');
-
-const data = {};
-module.exports = data;
+export const mockData = {};
 
 // mock product IDs and reverse lookup for webkms/edv/etc service products
-data.productIdMap = new Map([
+mockData.productIdMap = new Map([
   // webkms service
   ['webkms', 'urn:uuid:80a82316-e8c2-11eb-9570-10bf48838a41'],
   ['urn:uuid:80a82316-e8c2-11eb-9570-10bf48838a41', 'webkms'],
@@ -20,32 +17,32 @@ data.productIdMap = new Map([
   ['urn:uuid:dbd15f08-ff67-11eb-893b-10bf48838a41', 'edv']
 ]);
 
-data.baseUrl = config.server.baseUri;
+mockData.baseUrl = config.server.baseUri;
 const keyStore = '/kms/keystores/z19tghrZEvcUY5YAG8tPi33P3';
 
-data.config = {
-  id: `${data.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
+mockData.config = {
+  id: `${mockData.baseUrl}/edvs/z19uMCiPNET4YbcPpBcab5mEE`,
   controller: 'did:key:z6Mksbz5LDhX9WAYZxZ8sHinN7xeSSB3PWYRxTdJGrMyshN2',
   sequence: 0,
   keyAgreementKey: {
-    id: `${data.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
+    id: `${mockData.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
     type: 'X25519KeyAgreementKey2020',
   },
   hmac: {
-    id: `${data.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
+    id: `${mockData.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
     type: 'Sha256HmacKey2019'
   },
   meterId: 'https://localhost:18443/meters/zLd2ijgM1PoJvvULK9Wwx37'
 };
 
 /* eslint-disable quotes, quote-props */
-data.doc1 = {
+mockData.doc1 = {
   "id": "z1ABxUcbcnSyMtnenFmeARhUn",
   "sequence": 0,
   "indexed": [
     {
       "hmac": {
-        "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+        "id": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
         "type": "Sha256HmacKey2019"
       },
       "sequence": 0,
@@ -58,7 +55,7 @@ data.doc1 = {
       {
         "header": {
           "alg": "ECDH-ES+A256KW",
-          "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+          "kid": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
           "HM00migkUSdZjvqmq4b7ixiXnfeLieA7QX2ew6OF4oPUA3HovaMnOw"
@@ -70,13 +67,13 @@ data.doc1 = {
   }
 };
 
-data.doc2 = {
+mockData.doc2 = {
   "id": "z19pjdSMQMkBqqJ5zsaagncfU",
   "sequence": 0,
   "indexed": [
     {
       "hmac": {
-        "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+        "id": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
         "type": "Sha256HmacKey2019"
       },
       "sequence": 0,
@@ -89,7 +86,7 @@ data.doc2 = {
       {
         "header": {
           "alg": "ECDH-ES+A256KW",
-          "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+          "kid": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
           "HM00migkUSdZjvqmq4b7ixiXnfeLieA7QX2ew6OF4oPUA3HovaMnOw"
@@ -101,13 +98,13 @@ data.doc2 = {
   }
 };
 
-data.docWithAttributes = {
+mockData.docWithAttributes = {
   "id": "z19pjdSMQMkBqqJ5zsbbgbbbb",
   "sequence": 0,
   "indexed": [
     {
       "hmac": {
-        "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+        "id": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
         "type": "Sha256HmacKey2019"
       },
       "sequence": 0,
@@ -129,7 +126,7 @@ data.docWithAttributes = {
       {
         "header": {
           "alg": "ECDH-ES+A256KW",
-          "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+          "kid": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
           "OR1vdCNvf_B68mfUxFQVT-vyXVrBembuiM40mAAjDC1-Qu5iArDbug"
@@ -141,13 +138,13 @@ data.docWithAttributes = {
   }
 };
 
-data.docWithUniqueAttributes = {
+mockData.docWithUniqueAttributes = {
   "id": "z19pjdSMQMkBqqJ5zsbbgcccc",
   "sequence": 0,
   "indexed": [
     {
       "hmac": {
-        "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+        "id": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
         "type": "Sha256HmacKey2019"
       },
       "sequence": 0,
@@ -170,7 +167,7 @@ data.docWithUniqueAttributes = {
       {
         "header": {
           "alg": "ECDH-ES+A256KW",
-          "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+          "kid": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
           "OR1vdCNvf_B68mfUxFQVT-vyXVrBembuiM40mAAjDC1-Qu5iArDbug"
@@ -182,26 +179,26 @@ data.docWithUniqueAttributes = {
   }
 };
 
-data.docWithUniqueAttributes2 = {
+mockData.docWithUniqueAttributes2 = {
   "id": "z19pjdSMQMkBqqJ5zsbbggggg",
   "sequence": 0,
   "indexed": [
     {
       "hmac": {
-        "id": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
+        "id": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`,
         "type": "Sha256HmacKey2019"
       },
       "sequence": 0,
       "attributes": [
         {
           "name": "CUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloZ",
-          // different from `data.docWithAttributes`, so permitted
+          // different from `mockData.docWithAttributes`, so permitted
           "value": "RV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUBro",
           "unique": true
         },
         {
           "name": "DUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloZ",
-          // same as `data.docWithAttributes` but not unique, so permitted
+          // same as `mockData.docWithAttributes` but not unique, so permitted
           "value": "QV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUBro"
         }
       ]
@@ -213,7 +210,7 @@ data.docWithUniqueAttributes2 = {
       {
         "header": {
           "alg": "ECDH-ES+A256KW",
-          "kid": `${data.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
+          "kid": `${mockData.baseUrl}/kms/z19rREpJY9J14W53mvhGHaTJo`
         },
         "encrypted_key":
           "OR1vdCNvf_B68mfUxFQVT-vyXVrBembuiM40mAAjDC1-Qu5iArDbug"
@@ -226,7 +223,7 @@ data.docWithUniqueAttributes2 = {
 };
 /* eslint-enable */
 
-const httpDocs = data.httpDocs = {};
+const httpDocs = mockData.httpDocs = {};
 
 httpDocs.alpha = {
   id: 'z19pjdSMQMkBqqJ5zsbbaaaaa',
@@ -273,7 +270,7 @@ httpDocs.delta = {
   }
 };
 
-data.documentLoader = async function _documentLoader(url) {
+mockData.documentLoader = async function _documentLoader(url) {
   let document;
   if(url.startsWith('did:')) {
     document = await didIo.get({did: url, forceConstruct: true});

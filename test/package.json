@@ -7,9 +7,9 @@
   "scripts": {
     "test": "node --preserve-symlinks test.js test",
     "debug": "node --preserve-symlinks test.js test --log-level=debug",
-    "coverage": "cross-env NODE_ENV=test ESM_OPTIONS='{cache:false}' nyc --reporter=lcov --reporter=text-summary npm test",
-    "coverage-ci": "cross-env NODE_ENV=test ESM_OPTIONS='{cache:false}' nyc --reporter=lcovonly npm test",
-    "coverage-report": "nyc report"
+    "coverage": "cross-env NODE_ENV=test c8 --reporter=lcov --reporter=text-summary npm test",
+    "coverage-ci": "cross-env NODE_ENV=test c8 --reporter=lcovonly npm test",
+    "coverage-report": "c8 report"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,29 @@
   },
   "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
+    "@bedrock/core": "^5.0.0",
+    "@bedrock/app-identity": "^2.0.0",
+    "@bedrock/did-context": "^3.0.0",
+    "@bedrock/did-io": "^7.0.0",
+    "@bedrock/edv-storage": "file:..",
+    "@bedrock/express": "^7.0.0",
+    "@bedrock/https-agent": "^3.0.0",
+    "@bedrock/jsonld-document-loader": "^2.0.0",
+    "@bedrock/kms": "^9.0.0",
+    "@bedrock/kms-http": "^13.0.0",
+    "@bedrock/ledger-context": "^22.0.0",
+    "@bedrock/meter": "^2.0.0",
+    "@bedrock/meter-http": "^7.0.0",
+    "@bedrock/meter-usage-reporter": "^6.0.0",
+    "@bedrock/mongodb": "^9.0.0",
+    "@bedrock/package-manager": "^2.0.0",
+    "@bedrock/security-context": "^6.0.0",
+    "@bedrock/server": "^4.0.0",
+    "@bedrock/ssm-mongodb": "^8.0.0",
+    "@bedrock/test": "^7.0.0",
+    "@bedrock/validation": "^6.0.0",
+    "@bedrock/veres-one-context": "^13.0.0",
+    "@bedrock/zcap-storage": "^6.0.0",
     "@digitalbazaar/did-method-key": "^2.0.0",
     "@digitalbazaar/ed25519-signature-2020": "^3.0.0",
     "@digitalbazaar/ed25519-verification-key-2020": "^3.1.0",
@@ -38,41 +61,18 @@
     "@digitalbazaar/webkms-client": "^10.0.0",
     "@digitalbazaar/zcap": "^7.0.1",
     "base58-universal": "^1.0.0",
-    "bedrock": "^4.5.0",
-    "bedrock-app-identity": "^1.0.0",
-    "bedrock-did-context": "^2.1.0",
-    "bedrock-did-io": "^6.0.2",
-    "bedrock-edv-storage": "file:..",
-    "bedrock-express": "^6.4.1",
-    "bedrock-https-agent": "^2.3.0",
-    "bedrock-jsonld-document-loader": "^1.2.0",
-    "bedrock-kms": "^8.3.1",
-    "bedrock-kms-http": "^12.1.0",
-    "bedrock-ledger-context": "^21.1.0",
-    "bedrock-meter": "^1.0.0",
-    "bedrock-meter-http": "^6.0.0",
-    "bedrock-meter-usage-reporter": "^5.0.0",
-    "bedrock-mongodb": "^8.5.0",
-    "bedrock-package-manager": "^1.2.0",
-    "bedrock-security-context": "^5.1.0",
-    "bedrock-server": "^3.2.1",
-    "bedrock-ssm-mongodb": "^7.2.0",
-    "bedrock-test": "^6.0.0",
-    "bedrock-validation": "^5.6.3",
-    "bedrock-veres-one-context": "^12.1.0",
-    "bedrock-zcap-storage": "^5.1.0",
+    "c8": "^7.11.0",
     "cross-env": "^7.0.2",
     "jsonld-signatures": "^9.3.0",
-    "nyc": "^15.1.0",
     "web-streams-polyfill": "~3.0.3"
   },
-  "nyc": {
+  "c8": {
     "excludeNodeModules": false,
     "include": [
-      "node_modules/bedrock-edv-storage/**"
+      "node_modules/@bedrock/edv-storage/**"
     ],
     "exclude": [
-      "node_modules/bedrock-edv-storage/node_modules/**"
+      "node_modules/@bedrock/edv-storage/node_modules/**"
     ]
   }
 }

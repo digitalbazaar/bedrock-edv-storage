@@ -1,17 +1,15 @@
 /*!
  * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-require('bedrock-edv-storage');
-const bedrock = require('bedrock');
-const {config} = bedrock;
-const helpers = require('./helpers');
-const mockData = require('./mock.data');
+import * as brEdvStorage from '@bedrock/edv-storage';
+import * as helpers from './helpers.js';
+import {config} from '@bedrock/core';
+import {mockData} from './mock.data.js';
+import {createRequire} from 'module';
+const require = createRequire(import.meta.url);
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
-let urls;
 
-const brEdvStorage = require('bedrock-edv-storage');
+let urls;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 
 describe('bedrock-edv-storage HTTP API - edv-client update', () => {

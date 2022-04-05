@@ -1,19 +1,19 @@
 /*!
- * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-require('bedrock-edv-storage');
-const bedrock = require('bedrock');
-const {httpsAgent} = require('bedrock-https-agent');
-const {util: {clone}} = bedrock;
-const {config} = bedrock;
-const helpers = require('./helpers');
-const assertions = require('./assertions');
-const mockData = require('./mock.data');
+import * as assertions from './assertions.js';
+import * as bedrock from '@bedrock/core';
+import * as helpers from './helpers.js';
+import '@bedrock/edv-storage';
+import {createRequire} from 'module';
+import {httpsAgent} from '@bedrock/https-agent';
+import {mockData} from './mock.data.js';
+const require = createRequire(import.meta.url);
 const {EdvClient} = require('@digitalbazaar/edv-client');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
+
 let urls;
+const {config, util: {clone}} = bedrock;
 
 describe('bedrock-edv-storage HTTP API - edv-client', () => {
   before(async () => {

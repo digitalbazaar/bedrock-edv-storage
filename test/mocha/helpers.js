@@ -1,18 +1,19 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-'use strict';
-
-const bedrock = require('bedrock');
+import * as bedrock from '@bedrock/core';
+import * as database from '@bedrock/mongodb';
+import {createRequire} from 'module';
+import crypto from 'crypto';
+import {getAppIdentity} from '@bedrock/app-identity';
+import {httpsAgent} from '@bedrock/https-agent';
+import {promisify} from 'util';
+import {sign} from 'jsonld-signatures';
+import {mockData} from './mock.data.js';
+const require = createRequire(import.meta.url);
 const base58 = require('base58-universal');
-const crypto = require('crypto');
-const database = require('bedrock-mongodb');
-const {promisify} = require('util');
-const {util: {uuid}} = bedrock;
 const {EdvClient} = require('@digitalbazaar/edv-client');
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
-const {getAppIdentity} = require('bedrock-app-identity');
-const {sign} = require('jsonld-signatures');
 const {KeystoreAgent, KmsClient, CapabilityAgent} =
   require('@digitalbazaar/webkms-client');
 const {CapabilityDelegation, constants: {ZCAP_CONTEXT_URL}} =
@@ -23,9 +24,9 @@ const {Ed25519VerificationKey2020} =
 const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
-const {httpsAgent} = require('bedrock-https-agent');
-const mockData = require('./mock.data');
 const {ZcapClient} = require('@digitalbazaar/ezcap');
+
+const {util: {uuid}} = bedrock;
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;
@@ -33,17 +34,17 @@ const _chunkSize = 1048576;
 const getRandomBytes = promisify(crypto.randomBytes);
 
 // for key generation
-exports.KMS_MODULE = 'ssm-v1';
+export const KMS_MODULE = 'ssm-v1';
 // algorithm required for the jwe headers
-exports.JWE_ALG = 'ECDH-ES+A256KW';
+export const JWE_ALG = 'ECDH-ES+A256KW';
 
 // creates a unit8 array of variable size
 // that can be used as stream data
-exports.getRandomUint8 = ({size = 50} = {}) => {
+export function getRandomUint8({size = 50} = {}) {
   return new Uint8Array(size).map(
     // 255 is the max value of a Unit8
     () => Math.floor(Math.random() * 255));
-};
+}
 
 /* eslint-disable-next-line max-len */
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
@@ -55,7 +56,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 // test various sequence numbers at edge case zones
-exports.sequenceNumberTests = [
+export const sequenceNumberTests = [
   // low values
   ['0', 0],
   ['1', 1],
@@ -80,7 +81,7 @@ exports.sequenceNumberTests = [
   sequence: d[1]
 }));
 
-exports.parseLocalId = ({id}) => {
+export function parseLocalId({id}) {
   // format: <base>/<localId>
   const idx = id.lastIndexOf('/');
   const localId = id.substr(idx + 1);
@@ -91,9 +92,9 @@ exports.parseLocalId = ({id}) => {
     // 0x00 = identity tag, 0x10 = length (16 bytes) header
     localId: Buffer.from(base58.decode(localId.slice(1)).slice(2))
   };
-};
+}
 
-exports.generateRandom = async () => {
+export async function generateRandom() {
   // 128-bit random number, multibase encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)
   const buf = Buffer.concat([
@@ -102,9 +103,9 @@ exports.generateRandom = async () => {
   ]);
   // multibase encoding for base58 starts with 'z'
   return 'z' + base58.encode(buf);
-};
+}
 
-exports.makeDelegationTesters = async ({testers = []}) => {
+export async function makeDelegationTesters({testers = []}) {
   const testData = {};
   for(const tester of testers) {
     const testerData = testData[tester] = {
@@ -127,28 +128,29 @@ exports.makeDelegationTesters = async ({testers = []}) => {
       {type: 'hmac'});
   }
   return testData;
-};
+}
 
-exports.prepareDatabase = async () => {
+export async function prepareDatabase() {
   await exports.removeCollections();
-};
+}
 
-exports.removeCollections = async (
+export async function removeCollections(
   collectionNames = [
     'edv-storage-config',
     'edv-storage-doc',
     'edv-storage-chunk'
-  ]) => {
+  ]) {
   await database.openCollections(collectionNames);
   for(const collectionName of collectionNames) {
     await database.collections[collectionName].removeMany({});
   }
-};
+}
 
-exports.removeCollection =
-  async collectionName => exports.removeCollections([collectionName]);
+export async function removeCollection(collectionName) {
+  return removeCollections([collectionName]);
+}
 
-exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
+export async function createMeter({capabilityAgent, serviceType} = {}) {
   if(!(serviceType && typeof serviceType === 'string')) {
     throw new TypeError('"serviceType" must be a string.');
   }
@@ -175,15 +177,15 @@ exports.createMeter = async ({capabilityAgent, serviceType} = {}) => {
 
   const {id} = meter;
   return {id: `${meterService}/${id}`};
-};
+}
 
 // the `keystores` endpoint uses session based authentication which is
 // mocked
-exports.createKeystore = async ({
+export async function createKeystore({
   capabilityAgent, ipAllowList, referenceId, meterId,
   kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`,
   kmsModule = 'ssm-v1',
-}) => {
+}) {
   if(!meterId) {
     // create a meter for the keystore
     ({id: meterId} = await exports.createMeter({
@@ -213,12 +215,12 @@ exports.createKeystore = async ({
   });
   const kmsClient = new KmsClient({httpsAgent});
   return new KeystoreAgent({capabilityAgent, keystoreId, kmsClient});
-};
+}
 
-exports.createEdv = async ({
+export async function createEdv({
   capabilityAgent, keystoreAgent, urls,
   keyAgreementKey, hmac, referenceId, meterId
-}) => {
+}) {
   if(!meterId) {
     // create a meter for the keystore
     ({id: meterId} = await exports.createMeter({
@@ -256,24 +258,23 @@ exports.createEdv = async ({
 
   const edvClient = new EdvClient({
     id: edvConfig.id,
-    keyResolver: _keyResolver,
+    keyResolver,
     keyAgreementKey,
     hmac,
     httpsAgent
   });
 
   return {edvClient, edvConfig};
-};
+}
 
 // FIXME: make more restrictive, support `did:key` and `did:v1`
-async function _keyResolver({id}) {
+export async function keyResolver({id}) {
   if(id.startsWith('did:key:')) {
     return didKeyDriver.get({url: id});
   }
   const response = await httpClient.get(id, {agent: httpsAgent});
   return response.data;
 }
-exports.keyResolver = _keyResolver;
 
 /**
  * Delegates a zCap.
@@ -288,7 +289,9 @@ exports.keyResolver = _keyResolver;
  *
  * @returns {Promise<object>} A signed zCap with a Linked Data Proof.
  */
-exports.delegate = async ({zcap, signer, parentCapability, documentLoader}) => {
+export async function delegate({
+  zcap, signer, parentCapability, documentLoader
+}) {
   if(!zcap['@context']) {
     zcap['@context'] = ZCAP_CONTEXT_URL;
   }
@@ -311,9 +314,9 @@ exports.delegate = async ({zcap, signer, parentCapability, documentLoader}) => {
     purpose: new CapabilityDelegation({parentCapability}),
     documentLoader
   });
-};
+}
 
-exports.setKeyId = async key => {
+export async function setKeyId(key) {
   // the keyDescription is required to get publicKeyBase58
   const keyDescription = await key.getKeyDescription();
   // create public ID (did:key) for bob's key
@@ -322,13 +325,13 @@ exports.setKeyId = async key => {
     .fingerprint();
   // invocationTarget.verificationMethod = `did:key:${fingerprint}`;
   key.id = `did:key:${fingerprint}#${fingerprint}`;
-};
+}
 
-exports.createEncryptStream = async ({
+export async function createEncryptStream({
   data,
   recipients,
   chunkSize = _chunkSize
-}) => {
+}) {
   const stream = new ReadableStream({
     pull(controller) {
       controller.enqueue(data);
@@ -336,14 +339,14 @@ exports.createEncryptStream = async ({
     }
   });
   const encryptStream = await cipher.createEncryptStream(
-    {recipients, keyResolver: _keyResolver, chunkSize});
+    {recipients, keyResolver, chunkSize});
   // pipe user supplied `stream` through the encrypt stream
   //const readable = forStorage.pipeThrough(encryptStream);
   const readable = stream.pipeThrough(encryptStream);
   return readable.getReader();
-};
+}
 
-exports.decryptStream = async ({chunks, keyAgreementKey}) => {
+export async function decryptStream({chunks, keyAgreementKey}) {
   const stream = new ReadableStream({
     pull(controller) {
       chunks.forEach(c => controller.enqueue(c));
@@ -376,4 +379,4 @@ exports.decryptStream = async ({chunks, keyAgreementKey}) => {
     }
   }
   return Uint8Array.from(data);
-};
+}
