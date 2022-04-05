@@ -1,9 +1,9 @@
 {
   "name": "bedrock-edv-storage-test",
   "version": "0.0.1-0",
+  "type": "module",
   "description": "Bedrock EDV storage test",
   "private": true,
-  "main": "./lib",
   "scripts": {
     "test": "node --preserve-symlinks test.js test",
     "debug": "node --preserve-symlinks test.js test --log-level=debug",
