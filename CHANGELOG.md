@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 14.0.0 - 2022-04-xx
+## 14.0.0 - 2022-04-05
 
 ### Changed
 - **BREAKING**: Rename package to `@bedrock/edv-storage`.
