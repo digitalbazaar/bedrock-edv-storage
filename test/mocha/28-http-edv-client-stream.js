@@ -1,8 +1,8 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
+import {chunks} from '@bedrock/edv-storage';
 import {config} from '@bedrock/core';
 import {createRequire} from 'module';
 const require = createRequire(import.meta.url);
@@ -180,8 +180,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     result.stream.should.be.an('object');
 
     // intentionally clear the database of first chunk
-    await brEdvStorage.removeChunk(
-      {edvId: edvClient.id, docId: doc.id, chunkIndex: 0});
+    await chunks.remove({edvId: edvClient.id, docId: doc.id, chunkIndex: 0});
     let err;
     try {
       const expectedStream = await edvDoc.getStream({doc: result});

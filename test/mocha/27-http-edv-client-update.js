@@ -1,9 +1,9 @@
 /*!
  * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
  */
-import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
+import {docs} from '@bedrock/edv-storage';
 import {mockData} from './mock.data.js';
 import {createRequire} from 'module';
 const require = createRequire(import.meta.url);
@@ -47,7 +47,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = test.sequence;
-        const record = await brEdvStorage.insert({
+        const record = await docs.insert({
           edvId: mockEdvId,
           doc,
         });
@@ -75,7 +75,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         const doc = {...doc1};
         doc.id = await helpers.generateRandom();
         doc.sequence = Number.MAX_SAFE_INTEGER - 1;
-        const record = await brEdvStorage.insert({
+        const record = await docs.insert({
           edvId: mockEdvId,
           doc,
         });

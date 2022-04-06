@@ -3,7 +3,6 @@
  */
 import * as bedrock from '@bedrock/core';
 import {getServiceIdentities} from '@bedrock/app-identity';
-import '@bedrock/edv-storage';
 import '@bedrock/https-agent';
 import '@bedrock/kms';
 import '@bedrock/kms-http';
@@ -13,6 +12,7 @@ import '@bedrock/meter-usage-reporter';
 import '@bedrock/security-context';
 import '@bedrock/server';
 import '@bedrock/ssm-mongodb';
+import '@bedrock/edv-storage';
 import '@bedrock/test';
 
 import {mockData} from './mocha/mock.data.js';
