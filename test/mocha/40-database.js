@@ -4,8 +4,9 @@
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
+import {createRequire} from 'module';
 import {mockData} from './mock.data.js';
-
+const require = createRequire(import.meta.url);
 const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
 
 let kid;

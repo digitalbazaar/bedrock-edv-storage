@@ -8,7 +8,7 @@ import crypto from 'crypto';
 import {getAppIdentity} from '@bedrock/app-identity';
 import {httpsAgent} from '@bedrock/https-agent';
 import {promisify} from 'util';
-import {sign} from 'jsonld-signatures';
+import jsigs from 'jsonld-signatures';
 import {mockData} from './mock.data.js';
 const require = createRequire(import.meta.url);
 const base58 = require('base58-universal');
@@ -26,6 +26,7 @@ const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {httpClient} = require('@digitalbazaar/http-client');
 const {ZcapClient} = require('@digitalbazaar/ezcap');
 
+const {sign} = jsigs;
 const {util: {uuid}} = bedrock;
 
 const cipher = new Cipher();
@@ -117,9 +118,7 @@ export async function makeDelegationTesters({testers = []}) {
       handle: testerData.handle
     });
     const keystoreAgent = testerData.keystoreAgent =
-      await exports.createKeystore({
-        capabilityAgent: testerData.capabilityAgent
-      });
+      await createKeystore({capabilityAgent: testerData.capabilityAgent});
     testerData.keyAgreementKey = await keystoreAgent.generateKey(
       {type: 'keyAgreement'});
     testerData.verificationKey = await keystoreAgent.generateKey(
@@ -131,7 +130,7 @@ export async function makeDelegationTesters({testers = []}) {
 }
 
 export async function prepareDatabase() {
-  await exports.removeCollections();
+  await removeCollections();
 }
 
 export async function removeCollections(
@@ -188,7 +187,7 @@ export async function createKeystore({
 }) {
   if(!meterId) {
     // create a meter for the keystore
-    ({id: meterId} = await exports.createMeter({
+    ({id: meterId} = await createMeter({
       capabilityAgent, serviceType: 'webkms'
     }));
   }
@@ -223,7 +222,7 @@ export async function createEdv({
 }) {
   if(!meterId) {
     // create a meter for the keystore
-    ({id: meterId} = await exports.createMeter({
+    ({id: meterId} = await createMeter({
       capabilityAgent, serviceType: 'edv'
     }));
   }
