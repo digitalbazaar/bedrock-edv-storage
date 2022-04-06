@@ -2,6 +2,7 @@
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import * as bedrock from '@bedrock/core';
+import '@bedrock/ssm-mongodb';
 import {getServiceIdentities} from '@bedrock/app-identity';
 import '@bedrock/https-agent';
 import '@bedrock/kms';
@@ -11,7 +12,6 @@ import {handlers} from '@bedrock/meter-http';
 import '@bedrock/meter-usage-reporter';
 import '@bedrock/security-context';
 import '@bedrock/server';
-import '@bedrock/ssm-mongodb';
 import '@bedrock/edv-storage';
 import '@bedrock/test';
 
