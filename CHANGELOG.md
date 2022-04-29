@@ -1,5 +1,21 @@
 # bedrock-edv-storage ChangeLog
 
+## 15.0.0 - 2022-04-xx
+
+### Changed
+- **BREAKING**: Update peer deps:
+  - `@bedrock/core@6`
+  - `@bedrock/app-identity@3`
+  - `@bedrock/did-context@4`
+  - `@bedrock/did-io@8`
+  - `@bedrock/express@8`
+  - `@bedrock/meter-usage-reporter@7`
+  - `@bedrock/mongodb@10`
+  - `@bedrock/security-context@7`
+  - `@bedrock/validation@7`
+  - `@bedrock/veres-one-context@14`
+  - `@bedrock/zcap-storage@7`.
+
 ## 14.0.0 - 2022-04-05
 
 ### Changed
