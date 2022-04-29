@@ -38,18 +38,18 @@
     "p-all": "^3.0.0"
   },
   "peerDependencies": {
-    "@bedrock/core": "^5.0.0",
-    "@bedrock/app-identity": "^2.0.0",
-    "@bedrock/did-context": "^3.0.0",
-    "@bedrock/did-io": "^7.0.0",
-    "@bedrock/jsonld-document-loader": "^2.0.0",
-    "@bedrock/express": "^7.0.0",
-    "@bedrock/meter-usage-reporter": "^6.0.0",
-    "@bedrock/mongodb": "^9.0.0",
-    "@bedrock/security-context": "^6.0.0",
-    "@bedrock/validation": "^6.0.0",
-    "@bedrock/veres-one-context": "^13.0.0",
-    "@bedrock/zcap-storage": "^6.0.0"
+    "@bedrock/core": "^6.0.0",
+    "@bedrock/app-identity": "^3.0.0",
+    "@bedrock/did-context": "^4.0.0",
+    "@bedrock/did-io": "^8.0.0",
+    "@bedrock/jsonld-document-loader": "^3.0.0",
+    "@bedrock/express": "^8.0.0",
+    "@bedrock/meter-usage-reporter": "^7.0.0",
+    "@bedrock/mongodb": "^10.0.0",
+    "@bedrock/security-context": "^7.0.0",
+    "@bedrock/validation": "^7.0.0",
+    "@bedrock/veres-one-context": "^14.0.0",
+    "@bedrock/zcap-storage": "^7.0.0"
   },
   "directories": {
     "lib": "./lib"
