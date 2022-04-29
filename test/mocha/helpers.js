@@ -3,13 +3,15 @@
  */
 import * as bedrock from '@bedrock/core';
 import * as database from '@bedrock/mongodb';
-import {createRequire} from 'module';
-import crypto from 'crypto';
+import {createRequire} from 'node:module';
+import crypto from 'node:crypto';
 import {getAppIdentity} from '@bedrock/app-identity';
+import {httpClient} from '@digitalbazaar/http-client';
 import {httpsAgent} from '@bedrock/https-agent';
-import {promisify} from 'util';
+import {promisify} from 'node:util';
 import jsigs from 'jsonld-signatures';
 import {mockData} from './mock.data.js';
+import {v4 as uuid} from 'uuid';
 const require = createRequire(import.meta.url);
 const base58 = require('base58-universal');
 const {EdvClient} = require('@digitalbazaar/edv-client');
@@ -23,11 +25,9 @@ const {Ed25519VerificationKey2020} =
   require('@digitalbazaar/ed25519-verification-key-2020');
 const {Cipher} = require('@digitalbazaar/minimal-cipher');
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
-const {httpClient} = require('@digitalbazaar/http-client');
 const {ZcapClient} = require('@digitalbazaar/ezcap');
 
 const {sign} = jsigs;
-const {util: {uuid}} = bedrock;
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;

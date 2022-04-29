@@ -1,17 +1,16 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
-import * as bedrock from '@bedrock/core';
+import {config} from '@bedrock/core';
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
-import {createRequire} from 'module';
+import {createRequire} from 'node:module';
 import {httpsAgent} from '@bedrock/https-agent';
 import {mockData} from './mock.data.js';
+import {v4 as uuid} from 'uuid';
 const require = createRequire(import.meta.url);
 const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcap');
 const {EdvClient} = require('@digitalbazaar/edv-client');
-
-const {config, util: {uuid}} = bedrock;
 
 // all tests involve write
 const allowedAction = 'write';

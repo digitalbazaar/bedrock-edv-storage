@@ -2,8 +2,8 @@
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import {config} from '@bedrock/core';
-import {fileURLToPath} from 'url';
-import path from 'path';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
 import '@bedrock/https-agent';
 import '@bedrock/mongodb';
 

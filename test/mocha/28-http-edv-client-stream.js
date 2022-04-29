@@ -4,7 +4,7 @@
 import * as helpers from './helpers.js';
 import {chunks} from '@bedrock/edv-storage';
 import {config} from '@bedrock/core';
-import {createRequire} from 'module';
+import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 const {ReadableStream} = require('web-streams-polyfill/ponyfill');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');

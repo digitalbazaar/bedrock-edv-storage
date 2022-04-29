@@ -2,18 +2,18 @@
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import * as assertions from './assertions.js';
-import * as bedrock from '@bedrock/core';
 import * as helpers from './helpers.js';
+import {config} from '@bedrock/core';
 import '@bedrock/edv-storage';
-import {createRequire} from 'module';
+import {createRequire} from 'node:module';
 import {httpsAgent} from '@bedrock/https-agent';
+import {klona} from 'klona';
 import {mockData} from './mock.data.js';
 const require = createRequire(import.meta.url);
 const {EdvClient} = require('@digitalbazaar/edv-client');
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 
 let urls;
-const {config, util: {clone}} = bedrock;
 
 describe('bedrock-edv-storage HTTP API - edv-client', () => {
   before(async () => {
@@ -196,7 +196,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       // instruct client to index documents
       edvClient.ensureIndex({attribute: 'content.apples'});
-      const doc = clone(mockData.httpDocs.beta);
+      const doc = klona(mockData.httpDocs.beta);
       doc.id = await EdvClient.generateId();
       try {
         result = await edvClient.insert({
@@ -271,7 +271,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.content.should.eql(mockData.httpDocs.alpha.content);
     });
     it('should update a document', async () => {
-      const firstDoc = clone(mockData.httpDocs.beta);
+      const firstDoc = klona(mockData.httpDocs.beta);
       const insertResult = await edvClient.insert({
         doc: firstDoc,
         invocationSigner: capabilityAgent.getSigner(),
