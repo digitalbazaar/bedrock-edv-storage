@@ -5,7 +5,7 @@ import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
 import {docs} from '@bedrock/edv-storage';
 import {mockData} from './mock.data.js';
-import {createRequire} from 'module';
+import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
 
