@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 15.1.0 - 2022-05-xx
+## 15.1.0 - 2022-05-13
 
 ### Added
 - Include full error as non-public cause in onError handler.
