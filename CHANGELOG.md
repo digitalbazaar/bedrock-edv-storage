@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 15.2.0 - 2022-05-xx
+
+### Added
+- Add max age header for CORS, defaulting to the max acceptable time for
+  modern browsers of 86400 seconds (24 hours).
+
 ## 15.1.0 - 2022-05-13
 
 ### Added
