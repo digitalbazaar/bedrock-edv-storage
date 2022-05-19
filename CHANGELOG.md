@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 15.2.0 - 2022-05-xx
+## 15.2.0 - 2022-05-19
 
 ### Added
 - Add max age header for CORS, defaulting to the max acceptable time for
