@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 15.2.1 - 2022-xx-xx
+
+### Changed
+- Use `package.json` `files` field.
+
 ## 15.2.0 - 2022-05-19
 
 ### Added
