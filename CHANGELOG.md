@@ -1,8 +1,16 @@
 # bedrock-edv-storage ChangeLog
 
-## 15.2.1 - 2022-xx-xx
+## 16.0.0 - 2022-xx-xx
 
 ### Changed
+- **BREAKING**: Requre Node.js >=16.
+- Update dependencies.
+- **BREAKING**: Update peer dependencies
+  - `@bedrock/app-identity@4`
+  - `@bedrock/did-io@9`
+  - `@bedrock/meter-usage-reporter@8`
+  - `@bedrock/zcap-storage@8`
+- Test on Node.js 18.x.
 - Use `package.json` `files` field.
 - Lint module.
 

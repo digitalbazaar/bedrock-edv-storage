@@ -4,13 +4,13 @@
 import {config} from '@bedrock/core';
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
-import {createRequire} from 'node:module';
 import {httpsAgent} from '@bedrock/https-agent';
 import {mockData} from './mock.data.js';
 import {v4 as uuid} from 'uuid';
-const require = createRequire(import.meta.url);
-const {constants: {ZCAP_CONTEXT_URL}} = require('@digitalbazaar/zcap');
-const {EdvClient} = require('@digitalbazaar/edv-client');
+import {constants as zcapConstants} from '@digitalbazaar/zcap';
+import {EdvClient} from '@digitalbazaar/edv-client';
+
+const {ZCAP_CONTEXT_URL} = zcapConstants;
 
 // all tests involve write
 const allowedAction = 'write';

@@ -4,13 +4,13 @@
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
-import {createRequire} from 'node:module';
 import {mockData} from './mock.data.js';
-const require = createRequire(import.meta.url);
-const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
+import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
 
 let kid;
 let keyAgreementKey;
+
+const didKeyDriver = _didKeyDriver();
 
 const chunkSize = 1048576;
 

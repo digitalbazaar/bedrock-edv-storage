@@ -3,7 +3,6 @@
  */
 import * as bedrock from '@bedrock/core';
 import * as database from '@bedrock/mongodb';
-import {createRequire} from 'node:module';
 import crypto from 'node:crypto';
 import {getAppIdentity} from '@bedrock/app-identity';
 import {httpClient} from '@digitalbazaar/http-client';
@@ -12,22 +11,26 @@ import {promisify} from 'node:util';
 import jsigs from 'jsonld-signatures';
 import {mockData} from './mock.data.js';
 import {v4 as uuid} from 'uuid';
-const require = createRequire(import.meta.url);
-const base58 = require('base58-universal');
-const {EdvClient} = require('@digitalbazaar/edv-client');
-const didKeyDriver = require('@digitalbazaar/did-method-key').driver();
-const {KeystoreAgent, KmsClient, CapabilityAgent} =
-  require('@digitalbazaar/webkms-client');
-const {CapabilityDelegation, constants: {ZCAP_CONTEXT_URL}} =
-  require('@digitalbazaar/zcap');
-const {Ed25519Signature2020} = require('@digitalbazaar/ed25519-signature-2020');
-const {Ed25519VerificationKey2020} =
-  require('@digitalbazaar/ed25519-verification-key-2020');
-const {Cipher} = require('@digitalbazaar/minimal-cipher');
-const {ReadableStream} = require('web-streams-polyfill/ponyfill');
-const {ZcapClient} = require('@digitalbazaar/ezcap');
+import * as base58 from 'base58-universal';
+import {EdvClient} from '@digitalbazaar/edv-client';
+import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
+import {
+  KeystoreAgent, KmsClient, CapabilityAgent
+} from '@digitalbazaar/webkms-client';
+import {
+  CapabilityDelegation, constants as zcapConstants
+} from '@digitalbazaar/zcap';
+import {Ed25519Signature2020} from '@digitalbazaar/ed25519-signature-2020';
+import {
+  Ed25519VerificationKey2020
+} from '@digitalbazaar/ed25519-verification-key-2020';
+import {Cipher} from '@digitalbazaar/minimal-cipher';
+import {ZcapClient} from '@digitalbazaar/ezcap';
 
 const {sign} = jsigs;
+
+const didKeyDriver = _didKeyDriver();
+const {ZCAP_CONTEXT_URL} = zcapConstants;
 
 const cipher = new Cipher();
 const _chunkSize = 1048576;

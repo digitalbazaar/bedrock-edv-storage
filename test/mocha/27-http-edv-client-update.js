@@ -5,9 +5,7 @@ import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
 import {docs} from '@bedrock/edv-storage';
 import {mockData} from './mock.data.js';
-import {createRequire} from 'node:module';
-const require = createRequire(import.meta.url);
-const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
+import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 
 let urls;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
