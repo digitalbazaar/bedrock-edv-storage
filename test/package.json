@@ -64,6 +64,7 @@
     "c8": "^7.11.3",
     "cross-env": "^7.0.3",
     "jsonld-signatures": "^10.0.0",
+    "klona": "^2.0.5",
     "uuid": "^8.3.2",
     "web-streams-polyfill": "^3.2.1"
   },
