@@ -7,8 +7,8 @@
   "scripts": {
     "test": "node --preserve-symlinks test.js test",
     "debug": "node --preserve-symlinks test.js test --log-level=debug",
-    "coverage": "cross-env NODE_ENV=test c8 --reporter=lcov --reporter=text-summary npm test",
-    "coverage-ci": "cross-env NODE_ENV=test c8 --reporter=lcovonly npm test",
+    "coverage": "cross-env NODE_ENV=test c8 npm test",
+    "coverage-ci": "cross-env NODE_ENV=test c8 --reporter=lcovonly --reporter=text-summary --reporter=text npm test",
     "coverage-report": "c8 report"
   },
   "repository": {
@@ -74,6 +74,11 @@
     ],
     "exclude": [
       "node_modules/@bedrock/edv-storage/node_modules/**"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "text"
     ]
   }
 }
