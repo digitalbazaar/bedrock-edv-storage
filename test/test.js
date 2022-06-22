@@ -1,6 +1,8 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
+import './polyfills.js';
+
 import * as bedrock from '@bedrock/core';
 import '@bedrock/ssm-mongodb';
 import {getServiceIdentities} from '@bedrock/app-identity';

@@ -5,13 +5,11 @@ import * as assertions from './assertions.js';
 import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
 import '@bedrock/edv-storage';
-import {createRequire} from 'node:module';
 import {httpsAgent} from '@bedrock/https-agent';
 import {klona} from 'klona';
 import {mockData} from './mock.data.js';
-const require = createRequire(import.meta.url);
-const {EdvClient} = require('@digitalbazaar/edv-client');
-const {CapabilityAgent} = require('@digitalbazaar/webkms-client');
+import {EdvClient} from '@digitalbazaar/edv-client';
+import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 
 let urls;
 
