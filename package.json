@@ -42,12 +42,12 @@
     "p-all": "^3.0.0"
   },
   "peerDependencies": {
-    "@bedrock/core": "^6.0.0",
     "@bedrock/app-identity": "^3.0.0",
+    "@bedrock/core": "^6.0.0",
     "@bedrock/did-context": "^4.0.0",
     "@bedrock/did-io": "^8.0.0",
-    "@bedrock/jsonld-document-loader": "^3.0.0",
     "@bedrock/express": "^8.0.0",
+    "@bedrock/jsonld-document-loader": "^3.0.0",
     "@bedrock/meter-usage-reporter": "^7.0.0",
     "@bedrock/mongodb": "^10.0.0",
     "@bedrock/security-context": "^7.0.0",
@@ -62,9 +62,10 @@
     "node": ">=14"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-digitalbazaar": "^2.8.0",
-    "eslint-plugin-jsdoc": "^37.9.7",
+    "eslint": "^8.18.0",
+    "eslint-config-digitalbazaar": "^3.0.0",
+    "eslint-plugin-jsdoc": "^39.3.3",
+    "eslint-plugin-unicorn": "^42.0.0",
     "jsdoc-to-markdown": "^7.1.1"
   }
 }

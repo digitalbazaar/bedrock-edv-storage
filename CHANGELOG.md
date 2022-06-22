@@ -4,6 +4,7 @@
 
 ### Changed
 - Use `package.json` `files` field.
+- Lint module.
 
 ## 15.2.0 - 2022-05-19
 
