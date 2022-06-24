@@ -3,9 +3,9 @@
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
+import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
 import {config} from '@bedrock/core';
 import {mockData} from './mock.data.js';
-import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
 
 let kid;
 let keyAgreementKey;

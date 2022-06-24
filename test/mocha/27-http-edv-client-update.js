@@ -2,10 +2,10 @@
  * Copyright (c) 2018-2021 Digital Bazaar, Inc. All rights reserved.
  */
 import * as helpers from './helpers.js';
+import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {config} from '@bedrock/core';
 import {docs} from '@bedrock/edv-storage';
 import {mockData} from './mock.data.js';
-import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 
 let urls;
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;

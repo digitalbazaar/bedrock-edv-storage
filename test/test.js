@@ -4,17 +4,17 @@
 import './polyfills.js';
 
 import * as bedrock from '@bedrock/core';
-import '@bedrock/ssm-mongodb';
 import {getServiceIdentities} from '@bedrock/app-identity';
+import {handlers} from '@bedrock/meter-http';
+import '@bedrock/edv-storage';
 import '@bedrock/https-agent';
 import '@bedrock/kms';
 import '@bedrock/kms-http';
 import '@bedrock/meter';
-import {handlers} from '@bedrock/meter-http';
 import '@bedrock/meter-usage-reporter';
 import '@bedrock/security-context';
 import '@bedrock/server';
-import '@bedrock/edv-storage';
+import '@bedrock/ssm-mongodb';
 import '@bedrock/test';
 
 import {mockData} from './mocha/mock.data.js';

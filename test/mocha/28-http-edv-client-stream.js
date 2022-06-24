@@ -2,9 +2,9 @@
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import * as helpers from './helpers.js';
+import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {chunks} from '@bedrock/edv-storage';
 import {config} from '@bedrock/core';
-import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {EdvDocument} from '@digitalbazaar/edv-client';
 
 let urls;
