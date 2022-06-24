@@ -14,6 +14,10 @@
 - Use `package.json` `files` field.
 - Lint module.
 
+### Added
+- Support IPv6 CIDRs in `ipAllowList`.
+  - Switching from `netmask` to `ipaddr.js` to support IPv6.
+
 ## 15.2.0 - 2022-05-19
 
 ### Added
