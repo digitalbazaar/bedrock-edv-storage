@@ -1,30 +1,30 @@
 /*!
  * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
  */
+import * as base58 from 'base58-universal';
 import * as bedrock from '@bedrock/core';
 import * as database from '@bedrock/mongodb';
-import crypto from 'node:crypto';
-import {getAppIdentity} from '@bedrock/app-identity';
-import {httpClient} from '@digitalbazaar/http-client';
-import {httpsAgent} from '@bedrock/https-agent';
-import {promisify} from 'node:util';
-import jsigs from 'jsonld-signatures';
-import {mockData} from './mock.data.js';
-import {v4 as uuid} from 'uuid';
-import * as base58 from 'base58-universal';
-import {EdvClient} from '@digitalbazaar/edv-client';
-import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
 import {
-  KeystoreAgent, KmsClient, CapabilityAgent
+  CapabilityAgent, KeystoreAgent, KmsClient
 } from '@digitalbazaar/webkms-client';
 import {
   CapabilityDelegation, constants as zcapConstants
 } from '@digitalbazaar/zcap';
+import {driver as _didKeyDriver} from '@digitalbazaar/did-method-key';
+import {Cipher} from '@digitalbazaar/minimal-cipher';
+import crypto from 'node:crypto';
 import {Ed25519Signature2020} from '@digitalbazaar/ed25519-signature-2020';
 import {
   Ed25519VerificationKey2020
 } from '@digitalbazaar/ed25519-verification-key-2020';
-import {Cipher} from '@digitalbazaar/minimal-cipher';
+import {EdvClient} from '@digitalbazaar/edv-client';
+import {getAppIdentity} from '@bedrock/app-identity';
+import {httpClient} from '@digitalbazaar/http-client';
+import {httpsAgent} from '@bedrock/https-agent';
+import jsigs from 'jsonld-signatures';
+import {mockData} from './mock.data.js';
+import {promisify} from 'node:util';
+import {v4 as uuid} from 'uuid';
 import {ZcapClient} from '@digitalbazaar/ezcap';
 
 const {sign} = jsigs;

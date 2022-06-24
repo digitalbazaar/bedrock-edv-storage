@@ -3,13 +3,13 @@
  */
 import * as assertions from './assertions.js';
 import * as helpers from './helpers.js';
+import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {config} from '@bedrock/core';
-import '@bedrock/edv-storage';
+import {EdvClient} from '@digitalbazaar/edv-client';
 import {httpsAgent} from '@bedrock/https-agent';
 import {klona} from 'klona';
 import {mockData} from './mock.data.js';
-import {EdvClient} from '@digitalbazaar/edv-client';
-import {CapabilityAgent} from '@digitalbazaar/webkms-client';
+import '@bedrock/edv-storage';
 
 let urls;
 
