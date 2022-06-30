@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 16.0.0 - 2022-xx-xx
+## 16.0.0 - 2022-06-30
 
 ### Changed
 - **BREAKING**: Requre Node.js >=16.
