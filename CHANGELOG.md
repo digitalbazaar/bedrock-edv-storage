@@ -3,7 +3,7 @@
 ## 16.0.0 - 2022-06-30
 
 ### Changed
-- **BREAKING**: Requre Node.js >=16.
+- **BREAKING**: Require Node.js >=16.
 - Update dependencies.
 - **BREAKING**: Update peer dependencies
   - `@bedrock/app-identity@4`
