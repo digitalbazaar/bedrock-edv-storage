@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 16.1.0 -
+
+### Changed
+- Allow json bodies to be more than just Arrays or Objects.
+
 ## 16.0.0 - 2022-06-30
 
 ### Changed
