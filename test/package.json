@@ -36,7 +36,7 @@
     "@bedrock/express": "^8.0.0",
     "@bedrock/https-agent": "^4.0.0",
     "@bedrock/jsonld-document-loader": "^3.0.0",
-    "@bedrock/kms": "^11.0.0",
+    "@bedrock/kms": "github:digitalbazaar/bedrock-kms#use-mongo-driver-4-rc",
     "@bedrock/kms-http": "^15.0.0",
     "@bedrock/ledger-context": "^23.0.0",
     "@bedrock/meter": "github:digitalbazaar/bedrock-meter#use-mongo-driver-4-rc",
