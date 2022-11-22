@@ -42,7 +42,7 @@
     "@bedrock/meter": "github:digitalbazaar/bedrock-meter#use-mongo-driver-4-rc",
     "@bedrock/meter-http": "^10.0.0",
     "@bedrock/meter-usage-reporter": "^8.0.0",
-    "@bedrock/mongodb": "github:digitalbazaar/bedrock-mongodb#mongo-driver-4-rc",
+    "@bedrock/mongodb": "github:digitalbazaar/bedrock-mongodb#mongo-driver-4-rc-fix-duplicate-error",
     "@bedrock/package-manager": "^3.0.0",
     "@bedrock/security-context": "^7.0.0",
     "@bedrock/server": "^5.0.0",

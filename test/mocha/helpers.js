@@ -144,7 +144,7 @@ export async function removeCollections(
   ]) {
   await database.openCollections(collectionNames);
   for(const collectionName of collectionNames) {
-    await database.collections[collectionName].removeMany({});
+    await database.collections[collectionName].deleteMany({});
   }
 }
 
