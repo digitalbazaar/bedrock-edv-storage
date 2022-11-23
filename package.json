@@ -49,7 +49,7 @@
     "@bedrock/express": "^8.0.0",
     "@bedrock/jsonld-document-loader": "^3.0.0",
     "@bedrock/meter-usage-reporter": "^8.0.0",
-    "@bedrock/mongodb": "^10.0.0",
+    "@bedrock/mongodb": "^11.0.0",
     "@bedrock/security-context": "^7.0.0",
     "@bedrock/validation": "^7.0.0",
     "@bedrock/veres-one-context": "^14.0.1",
