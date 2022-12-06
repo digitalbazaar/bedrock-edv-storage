@@ -1,5 +1,21 @@
 # bedrock-edv-storage ChangeLog
 
+## 16.2.0 - 2022-12-dd
+
+### Changed
+- The combination of a `controller` and a `referenceId` is no longer enforced
+  via a unique index, but is instead enforced via code. This means that using
+  a `referenceId` when creating an EDV may slow down its creation. The use of
+  `referenceId` is now discouraged; it is a correlator that should not be
+  given to the server and should instead be maintained on the client. Clients
+  are recommended to have a policy whereby EDV instances are tracked locally
+  and that enables the detection of unlocally-mapped EDV instances for
+  subsequent garbage collection. This change is considered backwards
+  compatible. New database collections are created and the unique index is
+  no longer created. Systems that have that index should remove it if they
+  want to be able to shard, but otherwise it is not expected to create a
+  problem.
+
 ## 16.1.0 - 2022-10-10
 
 ### Changed
