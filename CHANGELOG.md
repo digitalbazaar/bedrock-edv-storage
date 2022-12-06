@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 16.2.0 - 2022-12-dd
+## 16.2.0 - 2022-12-06
 
 ### Changed
 - The combination of a `controller` and a `referenceId` is no longer enforced
