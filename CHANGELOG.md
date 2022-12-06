@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 16.2.1 - 2022-12-dd
+
+### Fixed
+- Ensure `meta` is retrieved from records when aggregating storage costs.
+
 ## 16.2.0 - 2022-12-06
 
 ### Changed
