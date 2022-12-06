@@ -99,7 +99,7 @@ export function parseLocalId({id}) {
 }
 
 export async function generateRandom() {
-  // 128-bit random number, multibase encoded
+  // 128-bit random number, multibase, multihash encoded
   // 0x00 = identity tag, 0x10 = length (16 bytes)
   const buf = Buffer.concat([
     Buffer.from([0x00, 0x10]),
