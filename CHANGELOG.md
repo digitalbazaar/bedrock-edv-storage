@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 16.3.0 - 2022-12-dd
+## 16.2.2 - 2022-12-06
 
 ### Changed
 - Ensure `referenceId` cannot be changed to avoid conflicts.
