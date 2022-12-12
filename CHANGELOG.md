@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 16.2.4 - 2022-12-dd
+
+### Fixed
+- Fix call to remove pending config record.
+
 ## 16.2.3 - 2022-12-12
 
 ### Fixed
