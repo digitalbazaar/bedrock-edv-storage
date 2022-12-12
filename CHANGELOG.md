@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 16.2.3 - 2022-12-dd
+## 16.2.3 - 2022-12-12
 
 ### Fixed
 - Fix `projection` in reference ID mapping queries.
