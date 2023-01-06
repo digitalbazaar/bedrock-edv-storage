@@ -63,4 +63,18 @@ describe('docs.get API', () => {
     should.not.exist(record);
     err.name.should.equal('NotFoundError');
   });
+  it('should get the total size', async function() {
+    let result;
+    let error;
+    try {
+      result = await brEdvStorage.docs.getTotalSize({edvId: mockEdvId});
+    } catch(e) {
+      error = e;
+    }
+    should.not.exist(error, 'getTotalSize should not error.');
+    should.exist(result, 'getTotalSize result should exist.');
+    result.should.be.an('object', 'getTotalSize result should be an object');
+    result.should.have.property(
+      'size', 661, 'getTotalSize result.size should equal 661');
+  });
 }); // end `docs.get`
