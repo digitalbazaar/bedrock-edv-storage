@@ -31,7 +31,7 @@
     "@bedrock/app-identity": "^4.0.0",
     "@bedrock/core": "^6.0.1",
     "@bedrock/did-context": "^4.0.0",
-    "@bedrock/did-io": "^9.0.1",
+    "@bedrock/did-io": "^10.1.0",
     "@bedrock/edv-storage": "file:..",
     "@bedrock/express": "^8.0.0",
     "@bedrock/https-agent": "^4.0.0",
