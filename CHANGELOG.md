@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 17.0.0 - 2023-08-TBD
+
+### Changed
+- **BREAKING**: Drop support for Node.js <= 16.
+- **BREAKING**: Update `@bedrock/did-io` peer dependency to v10.1.
+
 ## 16.2.4 - 2022-12-12
 
 ### Fixed
