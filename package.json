@@ -59,7 +59,7 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "devDependencies": {
     "eslint": "^8.18.0",
