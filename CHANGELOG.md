@@ -11,6 +11,7 @@
   - Use `@bedrock/meter-usage-reporter@9`. This version requires Node.js 18+.
   - Use `@bedrock/security-context@8`. This version requires Node.js 18+.
   - Use `@bedrock/veres-one-context@15`. This version requires Node.js 18+.
+- Update test deps.
 
 ## 17.0.0 - 2023-08-28
 
