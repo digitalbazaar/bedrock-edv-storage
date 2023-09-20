@@ -44,15 +44,15 @@
   "peerDependencies": {
     "@bedrock/app-identity": "^4.0.0",
     "@bedrock/core": "^6.0.1",
-    "@bedrock/did-context": "^4.0.0",
+    "@bedrock/did-context": "^5.0.0",
     "@bedrock/did-io": "^10.1.0",
     "@bedrock/express": "^8.0.0",
-    "@bedrock/jsonld-document-loader": "^3.0.0",
-    "@bedrock/meter-usage-reporter": "^8.0.0",
+    "@bedrock/jsonld-document-loader": "^4.0.0",
+    "@bedrock/meter-usage-reporter": "^9.0.0",
     "@bedrock/mongodb": "^10.0.0",
-    "@bedrock/security-context": "^7.0.0",
+    "@bedrock/security-context": "^8.0.0",
     "@bedrock/validation": "^7.0.0",
-    "@bedrock/veres-one-context": "^14.0.1",
+    "@bedrock/veres-one-context": "^15.0.0",
     "@bedrock/zcap-storage": "^8.0.0"
   },
   "directories": {
