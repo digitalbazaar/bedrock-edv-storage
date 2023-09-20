@@ -4,6 +4,7 @@
 
 ### Changed
 - Use `@digitalbazaar/ed25519-signature-2020@5`.
+- Use `cidr-regex@4`. This version is pure ESM.
 
 ## 17.0.0 - 2023-08-28
 
