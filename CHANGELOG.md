@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 18.0.0 - 2023-09-xx
+## 18.0.0 - 2023-09-21
 
 ### Changed
 - Use `@digitalbazaar/ed25519-signature-2020@5`.
