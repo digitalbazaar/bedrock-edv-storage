@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 18.1.0 - 2024-mm-dd
+
+### Changed
+- Use `@digitalbazaar/ed25519-multikey` to resolve ed25519 verification methods.
+  No changes to deployments are expected.
+
 ## 18.0.0 - 2023-09-21
 
 ### Changed
