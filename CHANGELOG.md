@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 19.0.0 - 2024-08-xx
+## 19.0.0 - 2024-08-02
 
 ### Changed
 - **BREAKING**: Update peer deps:
