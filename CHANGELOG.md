@@ -1,5 +1,15 @@
 # bedrock-edv-storage ChangeLog
 
+## 19.0.0 - 2024-08-xx
+
+### Changed
+- **BREAKING**: Update peer deps:
+  - `@bedrock/did-context@6`
+  - `@bedrock/jsonld-document-loader@5.1.0`
+  - `@bedrock/security-context@9`
+  - `@bedrock/veres-one-context@16`
+- Update minor, test, and dev dependencies.
+
 ## 18.1.0 - 2024-06-15
 
 ### Changed

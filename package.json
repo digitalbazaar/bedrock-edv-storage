@@ -29,30 +29,30 @@
   "homepage": "https://github.com/digitalbazaar/bedrock-edv-storage",
   "dependencies": {
     "@digitalbazaar/ed25519-multikey": "^1.1.0",
-    "@digitalbazaar/ed25519-signature-2020": "^5.0.0",
-    "@digitalbazaar/ezcap-express": "^7.0.0",
+    "@digitalbazaar/ed25519-signature-2020": "^5.4.0",
+    "@digitalbazaar/ezcap-express": "^7.1.0",
     "assert-plus": "^1.0.0",
     "base58-universal": "^2.0.0",
-    "body-parser": "^1.20.0",
-    "cidr-regex": "^4.0.0",
+    "body-parser": "^1.20.2",
+    "cidr-regex": "^4.1.1",
     "cors": "^2.8.5",
     "forwarded": "^0.2.0",
-    "ipaddr.js": "^2.0.1",
-    "p-all": "^4.0.0"
+    "ipaddr.js": "^2.2.0",
+    "p-all": "^5.0.0"
   },
   "peerDependencies": {
     "@bedrock/app-identity": "^4.0.0",
-    "@bedrock/core": "^6.0.1",
-    "@bedrock/did-context": "^5.0.0",
-    "@bedrock/did-io": "^10.1.0",
-    "@bedrock/express": "^8.0.0",
-    "@bedrock/jsonld-document-loader": "^4.0.0",
-    "@bedrock/meter-usage-reporter": "^9.0.0",
-    "@bedrock/mongodb": "^10.0.0",
-    "@bedrock/security-context": "^8.0.0",
-    "@bedrock/validation": "^7.0.0",
-    "@bedrock/veres-one-context": "^15.0.0",
-    "@bedrock/zcap-storage": "^8.0.0"
+    "@bedrock/core": "^6.1.3",
+    "@bedrock/did-context": "^6.0.0",
+    "@bedrock/did-io": "^10.3.1",
+    "@bedrock/express": "^8.3.1",
+    "@bedrock/jsonld-document-loader": "^5.1.0",
+    "@bedrock/meter-usage-reporter": "^9.0.1",
+    "@bedrock/mongodb": "^10.2.0",
+    "@bedrock/security-context": "^9.0.0",
+    "@bedrock/validation": "^7.1.0",
+    "@bedrock/veres-one-context": "^16.0.0",
+    "@bedrock/zcap-storage": "^8.0.1"
   },
   "directories": {
     "lib": "./lib"
