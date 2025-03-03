@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as assertions from './assertions.js';
 import * as helpers from './helpers.js';
@@ -446,7 +446,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(configs);
       should.exist(err);
       err.data.message.should.equal(
-        'A validation error occured in the \'edv query\' validator.');
+        'A validation error occurred in the \'edv query\' validator.');
     });
     it('should fail to get an EDV without referenceId', async () => {
       const {baseUri} = config.server;
@@ -471,7 +471,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       should.not.exist(configs);
       should.exist(err);
       err.data.message.should.equal(
-        'A validation error occured in the \'edv query\' validator.');
+        'A validation error occurred in the \'edv query\' validator.');
     });
   }); // end `get`
 
