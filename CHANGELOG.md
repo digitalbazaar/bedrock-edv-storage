@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 19.0.1 - 2025-mm-dd
+
+### Fixed
+- Return passed `record` instead of resulting record from mongodb calls to
+  enable using newer mongodb driver.
+
 ## 19.0.0 - 2024-08-02
 
 ### Changed
