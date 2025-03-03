@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as database from '@bedrock/mongodb';
@@ -268,7 +268,7 @@ describe('edvs.insert API', () => {
     const result = await database.collections['edv-storage-config'].updateOne(
       {'config.id': edvConfig.id},
       {$set: {'meta.state': 'pending'}});
-    result.result.n.should.equal(1);
+    result.modifiedCount.should.equal(1);
 
     // try to get EDV config
     {
