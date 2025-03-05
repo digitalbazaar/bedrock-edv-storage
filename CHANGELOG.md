@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 19.0.2 - 2025-mm-dd
+## 19.0.2 - 2025-03-04
 
 ### Fixed
 - Do not pass `writeOptions` in database calls.
