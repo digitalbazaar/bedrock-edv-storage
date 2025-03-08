@@ -1,5 +1,27 @@
 # bedrock-edv-storage ChangeLog
 
+## 20.0.0 - 2025-03-xx
+
+### Changed
+- Update dependencies.
+  - `@digitalbazaar/ed25519-multikey@1.3.1`.
+  - `body-parser@1.20.3`.
+  - `cidr-regex@4.1.3`.
+- Update peer dependencies.
+  - `@bedrock/core@6.3.0`.
+  - `@bedrock/did-io@10.4.0`.
+  - `@bedrock/jsonld-document-loader@5.2.0`.
+  - **BREAKING**: `@bedrock/meter-usage-reporter@10`.
+    - Updated for `@bedrock/mongodb@11`.
+  - **BREAKING**: `@bedrock/mongodb@11`.
+    - Use MongoDB driver 6.x and update error names and details.
+    - See changelog for details.
+  - `@bedrock/validation@7.1.1`.
+  - **BREAKING**: `@bedrock/zcap-storage@9`.
+    - Updated for `@bedrock/mongodb@11`.
+- Update dev dependencies.
+- Update test dependencies.
+
 ## 19.0.2 - 2025-03-04
 
 ### Fixed
