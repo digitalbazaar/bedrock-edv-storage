@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import {config} from '@bedrock/core';
 import {didIo} from '@bedrock/did-io';
@@ -35,7 +35,7 @@ mockData.config = {
   meterId: 'https://localhost:18443/meters/zLd2ijgM1PoJvvULK9Wwx37'
 };
 
-/* eslint-disable quotes, quote-props */
+/* eslint-disable quotes, quote-props, max-len */
 mockData.doc1 = {
   "id": "z1ABxUcbcnSyMtnenFmeARhUn",
   "sequence": 0,
@@ -221,6 +221,11 @@ mockData.docWithUniqueAttributes2 = {
     "tag": "pfZO0JulJcrc3trOZy8rjA"
   }
 };
+
+mockData.docWithAttributesAttributes = [
+  'A1u9VuS0+oJSucYVfIT1CEx6wS6YFIHZgJsJwz8eGJQ=:CUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloY:QV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUBro',
+  'A1u9VuS0+oJSucYVfIT1CEx6wS6YFIHZgJsJwz8eGJQ=:CUQaxPtSLtd8L3WBAIkJ4DiVJeqoF6bdnhR7lSaPloY:QV58Va4904K-18_L5g_vfARXRWEB00knFSGPpukUSis'
+];
 /* eslint-enable */
 
 const httpDocs = mockData.httpDocs = {};

@@ -1,5 +1,25 @@
 # bedrock-edv-storage ChangeLog
 
+## 20.1.0 - 2025-mm-dd
+
+### Added
+- Add `documentCompatibilityVersion` for enabling migrating EDV docs from
+  one version to another.
+- Add EDV document version `0` => `1` migration code. Documents will be
+  migrated from version `0` to version `1` but maintain version `0`
+  compatibility when installing and using this version. A configuration
+  change that sets `documentCompatibilityVersion=1` must be used to use
+  version `1` features. This config value must only be set after all
+  deployments accessing the same database have been updated to at least
+  this version of this module. Once the configuration change has been made,
+  previous versions of this module MUST NOT be used or database corruption
+  may occur.
+- Add a faster index for document attribute queries that will be used when
+  `documentCompatibilityVersion=1` is set in the config. Once this value
+  has been set in the config, no previous versions of the module can be
+  used safely with the same database; using older versions may cause
+  database corruption.
+
 ## 20.0.0 - 2025-03-08
 
 ### Changed

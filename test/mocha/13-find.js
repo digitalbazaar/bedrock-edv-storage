@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
@@ -44,7 +44,7 @@ describe('docs.find API', () => {
     documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(doc);
   });
-  it('should get a document by attribute and value', async () => {
+  it('should get a document by attribute and value w/version 0', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [attribute] = entry.attributes;
     const records = await brEdvStorage.docs.find({
@@ -67,7 +67,7 @@ describe('docs.find API', () => {
     documents[0].doc.should.eql(mockData.docWithAttributes);
   });
   it('should get a document by attribute and value when multiple ' +
-    'values exist for the attribute via an array', async () => {
+    'values exist for the attribute via an array w/version 0', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const [, attribute] = entry.attributes;
     const records = await brEdvStorage.docs.find({
@@ -89,7 +89,46 @@ describe('docs.find API', () => {
     documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(mockData.docWithAttributes);
   });
-  it('should find no results', async () => {
+  it('should get a document by attribute and value w/version 1', async () => {
+    const records = await brEdvStorage.docs.find({
+      edvId: mockEdvId,
+      query: {
+        $or: [{
+          attributes: {
+            $all: [mockData.docWithAttributesAttributes[0]]
+          }
+        }]
+      }
+    });
+    should.exist(records);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(1);
+    documents[0].should.be.an('object');
+    documents[0].localEdvId.should.deep.equal(localMockEdvId);
+    documents[0].doc.should.eql(mockData.docWithAttributes);
+  });
+  it('should get a document by attribute and value when multiple ' +
+    'values exist for the attribute via an array w/version 1', async () => {
+    const records = await brEdvStorage.docs.find({
+      edvId: mockEdvId,
+      query: {
+        $or: [{
+          attributes: {
+            $all: [mockData.docWithAttributesAttributes[1]]
+          }
+        }]
+      }
+    });
+    should.exist(records);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(1);
+    documents[0].should.be.an('object');
+    documents[0].localEdvId.should.deep.equal(localMockEdvId);
+    documents[0].doc.should.eql(mockData.docWithAttributes);
+  });
+  it('should find no results w/version 0', async () => {
     const entry = mockData.docWithAttributes.indexed[0];
     const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
@@ -110,27 +149,20 @@ describe('docs.find API', () => {
     documents.should.be.an('array');
     documents.should.have.length(0);
   });
-  // FIXME: the current implementation does not check for a valid edv id
-  // see: https://github.com/digitalbazaar/bedrock-edv-storage/issues/12
-  it.skip('should fail for another EDV', async () => {
-    const entry = mockData.docWithAttributes.indexed[0];
-    let err;
-    let records;
-    try {
-      records = await brEdvStorage.docs.find({
-        edvId: 'urn:uuid:something-else',
-        query: {
-          'doc.indexed.hmac.id': entry.hmac.id,
-          'doc.indexed.attributes': {
-            $all: [{$elemMatch: {name: 'foo', value: 'does-not-exist'}}]
+  it('should find no results w/version 1', async () => {
+    const records = await brEdvStorage.docs.find({
+      edvId: mockEdvId,
+      query: {
+        $or: [{
+          attributes: {
+            $all: ['does:not:exist']
           }
-        }
-      });
-    } catch(e) {
-      err = e;
-    }
-    should.exist(err);
-    should.not.exist(records);
-    err.name.should.equal('PermissionDenied');
+        }]
+      }
+    });
+    should.exist(records);
+    const {documents} = records;
+    documents.should.be.an('array');
+    documents.should.have.length(0);
   });
 }); // end `docs.find`
