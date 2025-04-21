@@ -1,11 +1,16 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as database from '@bedrock/mongodb';
 import * as helpers from './helpers.js';
 import {config} from '@bedrock/core';
 import {mockData} from './mock.data.js';
+
+// import to test helper
+import {
+  _handleDocumentCompatibility
+} from '@bedrock/edv-storage/lib/storage/docs.js';
 
 const mockEdvId = `${config.server.baseUri}/edvs/z19xXoFRcobgskDQ6ywrRaa12`;
 const {localId: localMockEdvId} = helpers.parseLocalId({id: mockEdvId});
@@ -191,5 +196,49 @@ describe('docs.insert API', () => {
     }
     should.exist(err);
     err.name.should.equal('DuplicateError');
+  });
+
+  it('should handle migration from doc version 0 to version 1', async () => {
+    await helpers.prepareDatabase();
+
+    // insert version `0` doc record
+    const {docWithAttributes: doc} = mockData;
+    const record = {
+      localEdvId: localMockEdvId,
+      meta: {created: 1745195062490, updated: 1745195062490},
+      doc
+    };
+    await collection.insertOne(record);
+
+    // get record
+    const record2 = await collection.findOne({
+      localEdvId: localMockEdvId,
+      'doc.id': doc.id
+    });
+
+    // it should not have attributes
+    should.not.exist(record2.attributes);
+
+    // force migration to version `1`
+    await _handleDocumentCompatibility({
+      checkIndexPromise: Promise.resolve(true),
+      background: false
+    });
+
+    // fetch record
+    const record3 = await collection.findOne({
+      localEdvId: localMockEdvId,
+      'doc.id': doc.id
+    });
+
+    const expectedAttributes = mockData.docWithAttributesAttributes;
+    // sequence should be the same (`0`)
+    record3.doc.sequence.should.equal(0);
+    // version should be set
+    should.exist(record3.version);
+    record3.version.should.equal(1);
+    // attributes should now be set
+    should.exist(record3.attributes);
+    record3.attributes.should.deep.equal(expectedAttributes);
   });
 }); // end `docs.insert`
