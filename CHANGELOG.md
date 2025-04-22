@@ -1,5 +1,12 @@
 # bedrock-edv-storage ChangeLog
 
+## 20.1.1 - 2025-04-dd
+
+### Fixed
+- Gracefully handle case where `documentCompatibilityVersion` is set to `1`
+  and concurrent processes try to remove the old version `0` index (this
+  should not cause the application to restart once).
+
 ## 20.1.0 - 2025-04-22
 
 ### Added
