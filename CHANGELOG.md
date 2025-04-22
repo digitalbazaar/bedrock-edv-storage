@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 20.1.0 - 2025-mm-dd
+## 20.1.0 - 2025-04-22
 
 ### Added
 - Add `documentCompatibilityVersion` for enabling migrating EDV docs from
