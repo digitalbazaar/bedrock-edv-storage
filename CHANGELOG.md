@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 20.1.1 - 2025-04-dd
+## 20.1.1 - 2025-04-22
 
 ### Fixed
 - Gracefully handle case where `documentCompatibilityVersion` is set to `1`
