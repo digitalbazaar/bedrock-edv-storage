@@ -44,51 +44,6 @@ describe('docs.find API', () => {
     documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(doc);
   });
-  it('should get a document by attribute and value w/version 0', async () => {
-    const entry = mockData.docWithAttributes.indexed[0];
-    const [attribute] = entry.attributes;
-    const records = await brEdvStorage.docs.find({
-      edvId: mockEdvId,
-      query: {
-        $or: [{
-          'doc.indexed.hmac.id': entry.hmac.id,
-          'doc.indexed.attributes': {
-            $elemMatch: attribute
-          }
-        }]
-      }
-    });
-    should.exist(records);
-    const {documents} = records;
-    documents.should.be.an('array');
-    documents.should.have.length(1);
-    documents[0].should.be.an('object');
-    documents[0].localEdvId.should.deep.equal(localMockEdvId);
-    documents[0].doc.should.eql(mockData.docWithAttributes);
-  });
-  it('should get a document by attribute and value when multiple ' +
-    'values exist for the attribute via an array w/version 0', async () => {
-    const entry = mockData.docWithAttributes.indexed[0];
-    const [, attribute] = entry.attributes;
-    const records = await brEdvStorage.docs.find({
-      edvId: mockEdvId,
-      query: {
-        $or: [{
-          'doc.indexed.hmac.id': entry.hmac.id,
-          'doc.indexed.attributes': {
-            $elemMatch: attribute
-          }
-        }]
-      }
-    });
-    should.exist(records);
-    const {documents} = records;
-    documents.should.be.an('array');
-    documents.should.have.length(1);
-    documents[0].should.be.an('object');
-    documents[0].localEdvId.should.deep.equal(localMockEdvId);
-    documents[0].doc.should.eql(mockData.docWithAttributes);
-  });
   it('should get a document by attribute and value w/version 1', async () => {
     const records = await brEdvStorage.docs.find({
       edvId: mockEdvId,
@@ -127,27 +82,6 @@ describe('docs.find API', () => {
     documents[0].should.be.an('object');
     documents[0].localEdvId.should.deep.equal(localMockEdvId);
     documents[0].doc.should.eql(mockData.docWithAttributes);
-  });
-  it('should find no results w/version 0', async () => {
-    const entry = mockData.docWithAttributes.indexed[0];
-    const records = await brEdvStorage.docs.find({
-      edvId: mockEdvId,
-      query: {
-        $or: [{
-          'doc.indexed.hmac.id': entry.hmac.id,
-          'doc.indexed.attributes': {
-            $elemMatch: {
-              name: 'foo',
-              value: 'does-not-exist'
-            }
-          }
-        }]
-      }
-    });
-    should.exist(records);
-    const {documents} = records;
-    documents.should.be.an('array');
-    documents.should.have.length(0);
   });
   it('should find no results w/version 1', async () => {
     const records = await brEdvStorage.docs.find({

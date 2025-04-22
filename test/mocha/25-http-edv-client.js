@@ -721,62 +721,6 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result3.should.have.keys('count');
       result3.count.should.equal(0);
     });
-
-    it('should get a document by attribute and value w/version 0', async () => {
-      const compatBefore = DOC_COMPATIBILITY_VERSION;
-      _setDocumentCompatibilityVersion(0);
-      try {
-        // both alpha and beta have `apples` attribute
-        let result;
-        let err;
-        try {
-          result = await edvClient.find({
-            equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
-            invocationSigner: capabilityAgent.getSigner(),
-          });
-        } catch(e) {
-          err = e;
-        }
-        const {documents} = result;
-        assertNoError(err);
-        documents.should.be.an('array');
-        documents.should.have.length(1);
-        assertions.shouldBeEdvDocument({doc: documents[0]});
-        documents[0].content.should.eql(mockData.httpDocs.beta.content);
-        documents[0].id.should.equal(mockData.httpDocs.beta.id);
-      } finally {
-        _setDocumentCompatibilityVersion(compatBefore);
-      }
-    });
-    it('should get a document by attribute and value where multiple values ' +
-      'exist for an attribute via an array w/version 0', async () => {
-      const compatBefore = DOC_COMPATIBILITY_VERSION;
-      _setDocumentCompatibilityVersion(0);
-      try {
-        // both alpha and beta have `apples` attribute
-        let result;
-        let err;
-        try {
-          result = await edvClient.find({
-            equals: [{
-              'content.apples': mockData.httpDocs.alpha.content.apples[1]
-            }],
-            invocationSigner: capabilityAgent.getSigner(),
-          });
-        } catch(e) {
-          err = e;
-        }
-        const {documents} = result;
-        assertNoError(err);
-        documents.should.be.an('array');
-        documents.should.have.length(1);
-        assertions.shouldBeEdvDocument({doc: documents[0]});
-        documents[0].content.should.eql(mockData.httpDocs.alpha.content);
-        documents[0].id.should.equal(mockData.httpDocs.alpha.id);
-      } finally {
-        _setDocumentCompatibilityVersion(compatBefore);
-      }
-    });
     it('should get a document by attribute and value w/version 1', async () => {
       const compatBefore = DOC_COMPATIBILITY_VERSION;
       _setDocumentCompatibilityVersion(1);
