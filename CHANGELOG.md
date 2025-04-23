@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.0.0 - 2025-04-dd
+## 21.0.0 - 2025-04-23
 
 ### Removed
 - **BREAKING**: Remove support for `documentCompatibilityVersion=0`; the
