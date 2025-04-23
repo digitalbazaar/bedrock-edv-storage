@@ -1,5 +1,14 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.0.0 - 2025-04-dd
+
+### Removed
+- **BREAKING**: Remove support for `documentCompatibilityVersion=0`; the
+  default setting is now `documentCompatibilityVersion=1`. This version
+  can be safely used with brand new databases. For existing databases,
+  all software accessing the same database MUST be upgraded to `20.1.1`
+  prior to upgrading to `21.0.0` or later.
+
 ## 20.1.1 - 2025-04-22
 
 ### Fixed
