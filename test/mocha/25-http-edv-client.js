@@ -7,7 +7,6 @@ import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {config} from '@bedrock/core';
 import {EdvClient} from '@digitalbazaar/edv-client';
 import {httpsAgent} from '@bedrock/https-agent';
-import {klona} from 'klona';
 import {mockData} from './mock.data.js';
 import '@bedrock/edv-storage';
 
@@ -200,7 +199,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       let err;
       // instruct client to index documents
       edvClient.ensureIndex({attribute: 'content.apples'});
-      const doc = klona(mockData.httpDocs.beta);
+      const doc = structuredClone(mockData.httpDocs.beta);
       doc.id = await EdvClient.generateId();
       try {
         result = await edvClient.insert({
@@ -275,7 +274,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.content.should.eql(mockData.httpDocs.alpha.content);
     });
     it('should update a document', async () => {
-      const firstDoc = klona(mockData.httpDocs.beta);
+      const firstDoc = structuredClone(mockData.httpDocs.beta);
       const insertResult = await edvClient.insert({
         doc: firstDoc,
         invocationSigner: capabilityAgent.getSigner(),
