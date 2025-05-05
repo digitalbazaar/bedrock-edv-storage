@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as base58 from 'base58-universal';
 import * as bedrock from '@bedrock/core';
@@ -24,7 +24,7 @@ import {httpsAgent} from '@bedrock/https-agent';
 import jsigs from 'jsonld-signatures';
 import {mockData} from './mock.data.js';
 import {promisify} from 'node:util';
-import {v4 as uuid} from 'uuid';
+import {randomUUID as uuid} from 'node:crypto';
 import {ZcapClient} from '@digitalbazaar/ezcap';
 
 const {sign} = jsigs;
