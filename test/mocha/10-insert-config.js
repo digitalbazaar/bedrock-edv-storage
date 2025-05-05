@@ -5,7 +5,7 @@ import * as brEdvStorage from '@bedrock/edv-storage';
 import * as database from '@bedrock/mongodb';
 import * as helpers from './helpers.js';
 import {mockData} from './mock.data.js';
-import {v4 as uuid} from 'uuid';
+import {randomUUID as uuid} from 'node:crypto';
 
 describe('edvs.insert API', () => {
   before(async () => {

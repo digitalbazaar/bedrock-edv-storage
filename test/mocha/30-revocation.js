@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as helpers from './helpers.js';
@@ -7,7 +7,7 @@ import {config} from '@bedrock/core';
 import {EdvClient} from '@digitalbazaar/edv-client';
 import {httpsAgent} from '@bedrock/https-agent';
 import {mockData} from './mock.data.js';
-import {v4 as uuid} from 'uuid';
+import {randomUUID as uuid} from 'node:crypto';
 import {constants as zcapConstants} from '@digitalbazaar/zcap';
 
 const {ZCAP_CONTEXT_URL} = zcapConstants;
