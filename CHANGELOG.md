@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.0.1 - 2025-mm-dd
+## 21.0.1 - 2025-07-16
 
 ### Fixed
 - Ensure document attribute index is cleared when unique attribute list is
