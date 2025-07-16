@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2018-2022 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2018-2025 Digital Bazaar, Inc. All rights reserved.
  */
 import * as brEdvStorage from '@bedrock/edv-storage';
 import * as database from '@bedrock/mongodb';
@@ -38,6 +38,40 @@ describe('docs.update API', () => {
       'doc.id': mockData.doc1.id
     });
     record.doc.should.eql(doc);
+  });
+  it('should update a document and remove its attributes', async () => {
+    // add doc
+    await brEdvStorage.docs.update({
+      edvId: mockEdvId, doc: mockData.docWithUniqueAttributes
+    });
+
+    // ensure attributes exist
+    {
+      const record = await collection.findOne({
+        localEdvId: localMockEdvId,
+        'doc.id': mockData.docWithUniqueAttributes.id
+      });
+      record.doc.sequence.should.equal(0);
+      should.exist(record.attributes);
+      should.exist(record.uniqueAttributes);
+    }
+
+    // update doc to remove attributes
+    const doc = {...mockData.docWithUniqueAttributes, sequence: 1};
+    doc.indexed = structuredClone(doc.indexed);
+    doc.indexed[0].attributes = [];
+    await brEdvStorage.docs.update({edvId: mockEdvId, doc});
+
+    // ensure attributes have been cleared
+    {
+      const record = await collection.findOne({
+        localEdvId: localMockEdvId,
+        'doc.id': mockData.docWithUniqueAttributes.id
+      });
+      record.doc.sequence.should.equal(1);
+      should.not.exist(record.attributes);
+      should.not.exist(record.uniqueAttributes);
+    }
   });
   it('should fail to update a document with max safe sequence', async () => {
     let error;
