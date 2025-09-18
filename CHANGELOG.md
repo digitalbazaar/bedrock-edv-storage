@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.1.0 - 2025-mm-dd
+## 21.1.0 - 2025-09-18
 
 ### Added
 - Add `returnDocuments` flag to EDV doc query routes to control whether
