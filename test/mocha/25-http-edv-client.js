@@ -635,6 +635,33 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       assertions.shouldBeEdvDocument({doc: delta});
       delta.content.should.eql(mockData.httpDocs.delta.content);
     });
+    it('should get document IDs for docs with attribute', async () => {
+      // NOTE: the client was instructed to index the `content.apples` attribute
+      // before the documents were inserted
+      let result;
+      let err;
+      try {
+        result = await edvClient.find({
+          returnDocuments: false,
+          has: ['content.apples'],
+          invocationSigner: capabilityAgent.getSigner(),
+        });
+      } catch(e) {
+        err = e;
+      }
+      const {documentIds} = result;
+      assertNoError(err);
+      documentIds.should.be.an('array');
+      documentIds.should.have.length(4);
+      const alpha = documentIds.find(id => id === mockData.httpDocs.alpha.id);
+      should.exist(alpha);
+      const beta = documentIds.find(id => id === mockData.httpDocs.beta.id);
+      should.exist(beta);
+      const gamma = documentIds.find(id => id === mockData.httpDocs.gamma.id);
+      should.exist(gamma);
+      const delta = documentIds.find(id => id === mockData.httpDocs.delta.id);
+      should.exist(delta);
+    });
     it('should apply a limit to getting documents by attribute', async () => {
       // NOTE: the client was instructed to index the `content.apples` attribute
       // before the documents were inserted
