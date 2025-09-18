@@ -1,5 +1,16 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.1.0 - 2025-mm-dd
+
+### Added
+- Add `returnDocuments` flag to EDV doc query routes to control whether
+  full documents or only document IDs are returned. Default behavior
+  remains the same (backwards compatible), but if `returnDocuments=false`
+  is set, then `documentIds` will be returned in the query results instead
+  of `documents`. The `documentIds` array will contain every local EDV doc
+  ID that matched the query.
+- Add etag-based HTTP caching when fetching EDV documents and chunks.
+
 ## 21.0.1 - 2025-07-16
 
 ### Fixed

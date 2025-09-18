@@ -248,6 +248,9 @@ const edvDocumentQuery = {
         type: 'string'
       }]
     },
+    returnDocuments: {
+      type: 'boolean'
+    },
     limit: {
       type: 'integer',
       minimum: 1,
