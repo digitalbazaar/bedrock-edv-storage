@@ -53,7 +53,7 @@
     "@bedrock/security-context": "^9.0.0",
     "@bedrock/validation": "^7.1.1",
     "@bedrock/veres-one-context": "^16.0.0",
-    "@bedrock/zcap-storage": "^9.0.0"
+    "@bedrock/zcap-storage": "^9.3.0"
   },
   "directories": {
     "lib": "./lib"

@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.2.0 - 2025-mm-dd
+
+### Changed
+- Update peer dependencies:
+  - `@bedrock/zcap-storage@9.3`.
+
 ## 21.1.0 - 2025-09-18
 
 ### Added

@@ -50,7 +50,7 @@
     "@bedrock/test": "^8.2.0",
     "@bedrock/validation": "^7.1.1",
     "@bedrock/veres-one-context": "^16.0.0",
-    "@bedrock/zcap-storage": "^9.0.0",
+    "@bedrock/zcap-storage": "^9.3.0",
     "@digitalbazaar/did-method-key": "^4.0.0",
     "@digitalbazaar/ed25519-signature-2020": "^5.4.0",
     "@digitalbazaar/edv-client": "^16.3.0",
