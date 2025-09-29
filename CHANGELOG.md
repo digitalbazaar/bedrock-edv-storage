@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.2.0 - 2025-mm-dd
+## 21.2.0 - 2025-09-28
 
 ### Changed
 - Update peer dependencies:
