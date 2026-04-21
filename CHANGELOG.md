@@ -3,9 +3,15 @@
 ## 21.3.0 - 2026-04-xx
 
 ### Changed
+- Update dependencies.
+  - `cidr-regex@5`.
+- Update all minor dependencies.
 - Update all dev dependencies.
   - `@digitalbazaar/eslint-config@8`.
   - `eslint@9`.
+- Update all test dependencies.
+- Add used test dependencies.
+- Remove unused test dependencies.
 - **NOTE**: Update supported platforms.
   - Test on Node.js >=20.
   - Update `engines.node` to `>=20`.
