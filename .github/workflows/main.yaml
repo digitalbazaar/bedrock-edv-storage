@@ -23,7 +23,6 @@ jobs:
     - name: Run eslint
       run: npm run lint
   test-node:
-    needs: [lint]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     services:
@@ -51,7 +50,6 @@ jobs:
         cd test
         npm test
   coverage:
-    needs: [test-node]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     services:
