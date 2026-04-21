@@ -40,7 +40,7 @@ describe('chunks API', () => {
     doc.jwe.recipients[0].header.kid = kid;
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(docInsertResult);
     docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
@@ -67,7 +67,7 @@ describe('chunks API', () => {
       chunks++;
       const chunk = {
         sequence: doc.sequence,
-        ...value,
+        ...value
       };
       try {
         result = await brEdvStorage.chunks.update(
@@ -89,7 +89,7 @@ describe('chunks API', () => {
     doc.jwe.recipients[0].header.kid = kid;
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(docInsertResult);
     docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
@@ -117,7 +117,7 @@ describe('chunks API', () => {
       chunks++;
       const chunk = {
         sequence: doc.sequence,
-        ...value,
+        ...value
       };
       try {
         result = await brEdvStorage.chunks.update(
@@ -141,7 +141,7 @@ describe('chunks API', () => {
     doc.jwe.recipients[0].header.kid = kid;
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(docInsertResult);
     docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
@@ -169,7 +169,7 @@ describe('chunks API', () => {
       chunks++;
       const chunk = {
         sequence: doc.sequence,
-        ...value,
+        ...value
       };
       try {
         result = await brEdvStorage.chunks.update(
@@ -208,7 +208,7 @@ describe('chunks API', () => {
     doc.jwe.recipients[0].header.kid = kid;
     const docInsertResult = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(docInsertResult);
     docInsertResult.localEdvId.should.deep.equal(localMockEdvId);
@@ -236,7 +236,7 @@ describe('chunks API', () => {
       chunks++;
       const chunk = {
         sequence: doc.sequence,
-        ...value,
+        ...value
       };
       try {
         result = await brEdvStorage.chunks.update(

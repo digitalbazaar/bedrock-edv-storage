@@ -50,7 +50,6 @@ export function getRandomUint8({size = 50} = {}) {
     () => Math.floor(Math.random() * 255));
 }
 
-/* eslint-disable-next-line max-len */
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -114,7 +113,7 @@ export async function makeDelegationTesters({testers = []}) {
   for(const tester of testers) {
     const testerData = testData[tester] = {
       secret: uuid(),
-      handle: `${tester}Key`,
+      handle: `${tester}Key`
     };
     testerData.capabilityAgent = await CapabilityAgent.fromSecret({
       secret: testerData.secret,
@@ -186,7 +185,7 @@ export async function createMeter({capabilityAgent, serviceType} = {}) {
 export async function createKeystore({
   capabilityAgent, ipAllowList, referenceId, meterId,
   kmsBaseUrl = `${bedrock.config.server.baseUri}/kms`,
-  kmsModule = 'ssm-v1',
+  kmsModule = 'ssm-v1'
 }) {
   if(!meterId) {
     // create a meter for the keystore
@@ -255,7 +254,7 @@ export async function createEdv({
     config: newEdvConfig,
     httpsAgent,
     invocationSigner: capabilityAgent.getSigner(),
-    url: urls.edvs,
+    url: urls.edvs
   });
 
   const edvClient = new EdvClient({

@@ -19,7 +19,7 @@ describe('docs.count API', () => {
     const {docWithAttributes: doc} = mockData;
     await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
   });
   it('should get a document count by attribute', async () => {

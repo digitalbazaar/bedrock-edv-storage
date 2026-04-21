@@ -19,7 +19,7 @@ const ipAllowList = {
   items: {
     type: 'string',
     // leading and trailing slashes in regex must be removed
-    pattern: cidrRegex.v4({exact: true}).toString().slice(1, -1),
+    pattern: cidrRegex.v4({exact: true}).toString().slice(1, -1)
   }
 };
 
@@ -236,7 +236,7 @@ const edvDocumentQuery = {
       type: 'array',
       minItems: 1,
       items: [{
-        type: 'object',
+        type: 'object'
         // items will be `key: value` pairs where values are strings but
         // keys are free-form
       }]
@@ -307,7 +307,7 @@ const delegatedZcap = {
     },
     invocationTarget: {
       title: 'Invocation Target',
-      type: 'string',
+      type: 'string'
     },
     parentCapability: {
       title: 'Parent Capability',
@@ -349,7 +349,7 @@ const delegatedZcap = {
         proofValue: {
           title: 'proofValue',
           type: 'string'
-        },
+        }
       }
     },
     referenceId
