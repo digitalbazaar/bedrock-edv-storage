@@ -51,7 +51,7 @@ describe('revocation API', function() {
         capabilityAgent: testers.alice.capabilityAgent,
         hmac: testers.alice.hmac,
         keyAgreementKey: testers.alice.keyAgreementKey,
-        urls,
+        urls
       }));
   });
 
@@ -81,14 +81,14 @@ describe('revocation API', function() {
     });
 
     const docContent = {
-      foo: 'bar',
+      foo: 'bar'
     };
 
     // alice creates a document in the EDV
     await aliceEdvClient.insert({
       doc: {
         id: docId,
-        content: docContent,
+        content: docContent
       },
       invocationSigner: testers.alice.capabilityAgent.getSigner(),
       recipients: [{header: {
@@ -97,7 +97,7 @@ describe('revocation API', function() {
       }}, {header: {
         kid: testers.bob.keyAgreementKey.id,
         alg: JWE_ALG
-      }}],
+      }}]
     });
 
     let resultAliceGet;
@@ -106,7 +106,7 @@ describe('revocation API', function() {
       // alice can read the document she created
       resultAliceGet = await aliceEdvClient.get({
         id: docId,
-        invocationSigner: testers.alice.capabilityAgent.getSigner(),
+        invocationSigner: testers.alice.capabilityAgent.getSigner()
       });
     } catch(e) {
       err = e;
@@ -124,14 +124,14 @@ describe('revocation API', function() {
     const resultBobGet = await bobEdvClient.get({
       id: docId,
       capability: capabilityDelegation,
-      invocationSigner: testers.bob.verificationKey,
+      invocationSigner: testers.bob.verificationKey
     });
     resultBobGet.content.should.eql(docContent);
 
     // alice revokes bob's capability
     await aliceEdvClient.revokeCapability({
       capabilityToRevoke: capabilityDelegation,
-      invocationSigner: testers.alice.capabilityAgent.getSigner(),
+      invocationSigner: testers.alice.capabilityAgent.getSigner()
     });
 
     // bob can no longer read the document alice created
@@ -141,7 +141,7 @@ describe('revocation API', function() {
       resultBobGetAfterRevocation = await bobEdvClient.get({
         id: docId,
         capability: capabilityDelegation,
-        invocationSigner: testers.bob.verificationKey,
+        invocationSigner: testers.bob.verificationKey
       });
     } catch(e) {
       err = e;

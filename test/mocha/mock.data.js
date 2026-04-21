@@ -26,7 +26,7 @@ mockData.config = {
   sequence: 0,
   keyAgreementKey: {
     id: `${mockData.baseUrl}${keyStore}/keys/z19xp4DANMn8k9Yy8m6ZCE6PV`,
-    type: 'X25519KeyAgreementKey2020',
+    type: 'X25519KeyAgreementKey2020'
   },
   hmac: {
     id: `${mockData.baseUrl}/${keyStore}/keys/z19pHg1APVprWk1ALrcZUnXWL`,
@@ -35,7 +35,7 @@ mockData.config = {
   meterId: 'https://localhost:18443/meters/zLd2ijgM1PoJvvULK9Wwx37'
 };
 
-/* eslint-disable quotes, quote-props, max-len */
+/* eslint-disable @stylistic/quotes, @stylistic/quote-props, @stylistic/max-len */
 mockData.doc1 = {
   "id": "z1ABxUcbcnSyMtnenFmeARhUn",
   "sequence": 0,
@@ -238,7 +238,7 @@ httpDocs.alpha = {
     pears: 3,
     group: 'group1',
     subgroup: 'subgroup1',
-    id: 'alpha',
+    id: 'alpha'
   }
 };
 
@@ -250,7 +250,7 @@ httpDocs.beta = {
     pears: 30,
     group: 'group1',
     subgroup: 'subgroup1',
-    id: 'beta',
+    id: 'beta'
   }
 };
 
@@ -262,7 +262,7 @@ httpDocs.gamma = {
     pears: 300,
     group: 'group1',
     subgroup: 'subgroup2',
-    id: 'gamma',
+    id: 'gamma'
   }
 };
 
@@ -271,7 +271,7 @@ httpDocs.delta = {
   content: {
     apples: 1000,
     oranges: 2000,
-    pears: 3000,
+    pears: 3000
   }
 };
 

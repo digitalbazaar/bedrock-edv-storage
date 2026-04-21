@@ -19,7 +19,7 @@ describe('docs.get API', () => {
     const {doc1: doc} = mockData;
     await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
   });
   it('should get a document', async () => {

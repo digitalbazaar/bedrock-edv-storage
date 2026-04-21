@@ -30,7 +30,7 @@ describe('docs.insert API', () => {
     const {doc1: doc} = mockData;
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
@@ -51,7 +51,7 @@ describe('docs.insert API', () => {
       doc.sequence = test.sequence;
       let record = await brEdvStorage.docs.insert({
         edvId: mockEdvId,
-        doc,
+        doc
       });
       should.exist(record);
       record.localEdvId.should.deep.equal(localMockEdvId);
@@ -74,7 +74,7 @@ describe('docs.insert API', () => {
         doc.sequence = -1;
         record = await brEdvStorage.docs.insert({
           edvId: mockEdvId,
-          doc,
+          doc
         });
       } catch(e) {
         error = e;
@@ -96,7 +96,7 @@ describe('docs.insert API', () => {
         doc.sequence = Number.MAX_SAFE_INTEGER;
         record = await brEdvStorage.docs.insert({
           edvId: mockEdvId,
-          doc,
+          doc
         });
       } catch(e) {
         error = e;
@@ -111,7 +111,7 @@ describe('docs.insert API', () => {
     const {docWithAttributes: doc} = mockData;
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);
@@ -171,7 +171,7 @@ describe('docs.insert API', () => {
     const {docWithUniqueAttributes2: doc} = mockData;
     let record = await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
     should.exist(record);
     record.localEdvId.should.deep.equal(localMockEdvId);

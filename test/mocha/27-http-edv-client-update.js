@@ -47,7 +47,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         doc.sequence = test.sequence;
         const record = await docs.insert({
           edvId: mockEdvId,
-          doc,
+          doc
         });
 
         record.doc.content = {};
@@ -58,7 +58,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         try {
           result = await edvClient.update({
             doc: record.doc,
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -75,7 +75,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         doc.sequence = Number.MAX_SAFE_INTEGER - 1;
         const record = await docs.insert({
           edvId: mockEdvId,
-          doc,
+          doc
         });
 
         record.doc.content = {};
@@ -85,7 +85,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         try {
           await edvClient.update({
             doc: record.doc,
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -98,11 +98,11 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
       async () => {
         await edvClient.insert({
           doc: mockData.httpDocs.alpha,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
         const doc = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
         // delete doc
         await edvClient.delete({
@@ -112,7 +112,7 @@ describe('bedrock-edv-storage HTTP API - edv-client update', () => {
         // get doc
         const record = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
         should.exist(record);
         record.sequence.should.equal(1);

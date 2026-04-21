@@ -179,7 +179,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc: mockData.httpDocs.alpha,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -204,7 +204,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -223,7 +223,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should return error on duplicate document', async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.gamma,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       // attempt to insert gamma again
@@ -232,7 +232,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.insert({
           doc: mockData.httpDocs.gamma,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -263,7 +263,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.update({
           doc: mockData.httpDocs.alpha,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -277,7 +277,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const firstDoc = structuredClone(mockData.httpDocs.beta);
       const insertResult = await edvClient.insert({
         doc: firstDoc,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       insertResult.content.apples = 1000;
@@ -287,7 +287,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.update({
           doc: insertResult,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -317,7 +317,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     before(async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
     });
     it('should get a document', async () => {
@@ -326,7 +326,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -342,7 +342,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.get({
           id: 'does-not-exist',
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -360,7 +360,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result = await edvClient.get({
           // does not exist
           id: 'z1ABxUcbcnSyMtnenFmeARhxx',
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -505,22 +505,22 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
 
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.beta,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.gamma,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.delta,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
     });
 
@@ -534,19 +534,19 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result1 = await edvClient.count({
           has: ['content.apples'],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
 
         result2 = await edvClient.count({
           equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
 
         result3 = await edvClient.count({
           equals: [{'content.foo': 'does-not-exist'}],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -587,22 +587,22 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
 
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.beta,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.gamma,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
 
       await edvClient.insert({
         doc: mockData.httpDocs.delta,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
     });
     it('should get a document by attribute', async () => {
@@ -613,7 +613,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           has: ['content.apples'],
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -644,7 +644,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result = await edvClient.find({
           returnDocuments: false,
           has: ['content.apples'],
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -717,19 +717,19 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         result1 = await edvClient.find({
           has: ['content.apples'],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
 
         result2 = await edvClient.find({
           equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
 
         result3 = await edvClient.find({
           equals: [{'content.foo': 'does-not-exist'}],
           count: true,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -757,7 +757,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         try {
           result = await edvClient.find({
             equals: [{'content.apples': mockData.httpDocs.beta.content.apples}],
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -786,7 +786,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
             equals: [{
               'content.apples': mockData.httpDocs.alpha.content.apples[1]
             }],
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -808,7 +808,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           equals: [{'content.foo': 'does-not-exist'}],
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -827,7 +827,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           has: ['content.group'],
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -854,7 +854,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
         try {
           result = await edvClient.find({
             equals: [{'content.group': 'group1'}],
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -882,7 +882,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         result = await edvClient.find({
           has: ['content.group', 'content.subgroup'],
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -912,7 +912,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
               'content.group': 'group1',
               'content.subgroup': 'subgroup1'
             }],
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -940,7 +940,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
               'content.subgroup': 'subgroup1',
               'content.id': 'alpha'
             }],
-            invocationSigner: capabilityAgent.getSigner(),
+            invocationSigner: capabilityAgent.getSigner()
           });
         } catch(e) {
           err = e;
@@ -972,18 +972,18 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     it('should delete a document', async () => {
       await edvClient.insert({
         doc: mockData.httpDocs.alpha,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
       const doc = await edvClient.get({
         id: mockData.httpDocs.alpha.id,
-        invocationSigner: capabilityAgent.getSigner(),
+        invocationSigner: capabilityAgent.getSigner()
       });
       let result;
       let err;
       try {
         result = await edvClient.delete({
           doc,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;
@@ -998,7 +998,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       try {
         getResult = await edvClient.get({
           id: mockData.httpDocs.alpha.id,
-          invocationSigner: capabilityAgent.getSigner(),
+          invocationSigner: capabilityAgent.getSigner()
         });
       } catch(e) {
         err = e;

@@ -241,11 +241,11 @@ describe('Chunks Database Tests', () => {
       // inserts chunks into database
       chunk = {
         sequence: mockDoc2.sequence,
-        ...value,
+        ...value
       };
       const chunk2 = {
         sequence: mockDoc3.sequence,
-        ...value,
+        ...value
       };
       await brEdvStorage.chunks.update(
         {edvId: mockEdvId, docId: mockDoc2.id, chunk});

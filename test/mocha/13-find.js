@@ -20,7 +20,7 @@ describe('docs.find API', () => {
     const {docWithAttributes: doc} = mockData;
     await brEdvStorage.docs.insert({
       edvId: mockEdvId,
-      doc,
+      doc
     });
   });
   it('should get a document by attribute', async () => {

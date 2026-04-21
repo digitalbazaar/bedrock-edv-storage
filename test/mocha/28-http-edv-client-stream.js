@@ -20,7 +20,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     const {baseUri} = config.server;
     const root = `${baseUri}/edvs`;
     urls = {
-      edvs: root,
+      edvs: root
     };
     const secret = '9c727b65-8553-4275-9ac3-0ac89396efc0';
     const handle = 'testKey3';
@@ -71,7 +71,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       id: doc.id,
       keyAgreementKey: edvClient.keyAgreementKey,
       keyResolver: edvClient.keyResolver,
-      client: edvClient,
+      client: edvClient
     });
     const result = await edvDoc.read();
     result.should.be.an('object');
@@ -112,7 +112,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
       id: doc.id,
       keyAgreementKey: edvClient.keyAgreementKey,
       keyResolver: edvClient.keyResolver,
-      client: edvClient,
+      client: edvClient
     });
     const dataUpdate = helpers.getRandomUint8();
     const stream = new ReadableStream({
