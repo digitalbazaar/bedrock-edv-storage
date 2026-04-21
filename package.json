@@ -30,30 +30,30 @@
   "dependencies": {
     "@digitalbazaar/ed25519-multikey": "^1.3.1",
     "@digitalbazaar/ed25519-signature-2020": "^5.4.0",
-    "@digitalbazaar/ezcap-express": "^7.1.0",
+    "@digitalbazaar/ezcap-express": "^7.2.0",
     "assert-plus": "^1.0.0",
     "base58-universal": "^2.0.0",
-    "body-parser": "^1.20.3",
-    "cidr-regex": "^4.1.3",
-    "cors": "^2.8.5",
+    "body-parser": "^1.20.4",
+    "cidr-regex": "^5.0.4",
+    "cors": "^2.8.6",
     "etag": "^1.8.1",
     "forwarded": "^0.2.0",
-    "ipaddr.js": "^2.2.0",
-    "p-all": "^5.0.0"
+    "ipaddr.js": "^2.3.0",
+    "p-all": "^5.0.1"
   },
   "peerDependencies": {
-    "@bedrock/app-identity": "^4.0.0",
+    "@bedrock/app-identity": "^4.2.0",
     "@bedrock/core": "^6.3.0",
     "@bedrock/did-context": "^6.0.0",
     "@bedrock/did-io": "^10.4.0",
-    "@bedrock/express": "^8.3.1",
-    "@bedrock/jsonld-document-loader": "^5.2.0",
-    "@bedrock/meter-usage-reporter": "^10.0.0",
-    "@bedrock/mongodb": "^11.0.0",
+    "@bedrock/express": "^8.6.3",
+    "@bedrock/jsonld-document-loader": "^5.2.1",
+    "@bedrock/meter-usage-reporter": "^10.1.0",
+    "@bedrock/mongodb": "^11.0.1",
     "@bedrock/security-context": "^9.0.0",
     "@bedrock/validation": "^7.1.1",
     "@bedrock/veres-one-context": "^16.0.0",
-    "@bedrock/zcap-storage": "^9.3.0"
+    "@bedrock/zcap-storage": "^9.6.0"
   },
   "directories": {
     "lib": "./lib"
