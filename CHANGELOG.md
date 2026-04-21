@@ -3,6 +3,9 @@
 ## 21.3.0 - 2026-04-xx
 
 ### Changed
+- Update all dev dependencies.
+  - `@digitalbazaar/eslint-config@8`.
+  - `eslint@9`.
 - **NOTE**: Update supported platforms.
   - Test on Node.js >=20.
   - Update `engines.node` to `>=20`.

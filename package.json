@@ -62,9 +62,7 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "eslint-config-digitalbazaar": "^5.2.0",
-    "eslint-plugin-jsdoc": "^50.6.3",
-    "eslint-plugin-unicorn": "^56.0.1"
+    "@digitalbazaar/eslint-config": "^8.0.1",
+    "eslint": "^9.39.4"
   }
 }
