@@ -1,5 +1,13 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.3.0 - 2026-04-xx
+
+### Changed
+- **NOTE**: Update supported platforms.
+  - Test on Node.js >=20.
+  - Update `engines.node` to `>=20`.
+  - See README requirements section.
+
 ## 21.2.0 - 2025-09-28
 
 ### Changed
