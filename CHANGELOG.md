@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.3.0 - 2026-04-xx
+## 21.3.0 - 2026-04-28
 
 ### Changed
 - Update dependencies.
