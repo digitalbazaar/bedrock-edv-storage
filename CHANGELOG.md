@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.4.0 - 2026-05-dd
+## 21.4.0 - 2026-05-10
 
 ### Changed
 - Use configuration system to set body parser limits for specific routes
