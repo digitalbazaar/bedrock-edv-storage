@@ -33,7 +33,7 @@
     "@bedrock/did-context": "^6.0.0",
     "@bedrock/did-io": "^10.4.0",
     "@bedrock/edv-storage": "file:..",
-    "@bedrock/express": "^8.6.3",
+    "@bedrock/express": "^8.6.4",
     "@bedrock/https-agent": "^4.1.0",
     "@bedrock/jsonld-document-loader": "^5.2.1",
     "@bedrock/kms": "^16.2.0",
