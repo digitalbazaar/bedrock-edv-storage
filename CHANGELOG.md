@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.4.1 - 2026-05-dd
+## 21.4.1 - 2026-05-15
 
 ### Fixed
 - Ensure `@bedrock/express` is imported before setting body parser config.
