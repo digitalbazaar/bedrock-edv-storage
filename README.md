@@ -11,6 +11,7 @@
 - [Security](#security)
 - [Install](#install)
 - [Usage](#usage)
+- [Test](#test)
 - [Contribute](#contribute)
 - [Commercial Support](#commercial-support)
 - [License](#license)
@@ -50,7 +51,115 @@ npm install
 
 ## Usage
 
-TODO
+This is a [Bedrock](https://github.com/digitalbazaar/bedrock) module: it does
+not run standalone. Importing it into a Bedrock application registers the EDV
+HTTP API on the application's Express server and creates the required MongoDB
+collections and indexes on startup.
+
+### Application setup
+
+A minimal application imports this module alongside its peer modules and
+starts Bedrock (see `test/test.js` for a complete working example, including
+the WebKMS and meter services used in development):
+
+```js
+import * as bedrock from '@bedrock/core';
+import '@bedrock/express';
+import '@bedrock/https-agent';
+import '@bedrock/meter-usage-reporter';
+import '@bedrock/mongodb';
+import '@bedrock/server';
+import '@bedrock/edv-storage';
+
+bedrock.start();
+```
+
+Creating an EDV requires a `meterId` referencing a meter the application can
+verify, so a meter service (e.g., `@bedrock/meter` + `@bedrock/meter-http`,
+or a remote equivalent) must be available. EDV clients also need a WebKMS to
+manage their key agreement and HMAC keys; the server itself never sees key
+material.
+
+### Configuration
+
+Defaults live in `lib/config.js` under `bedrock.config['edv-storage']`:
+
+- `routes.basePath`: base path for the HTTP API (default `/edvs`).
+- `authorizeZcapInvocationOptions`: zcap verification limits (max
+  capability chain length 10, max clock skew 300 seconds, max delegation
+  TTL 1 year).
+- `storageCost`: storage units reported to the meter service per EDV and
+  per revocation.
+- `documentCompatibilityVersion`: must be `1`.
+
+The module also seeds a development application identity
+(`bedrock.config['app-identity'].seeds.services.edv`) that **must be
+overridden in production deployments**.
+
+### HTTP API
+
+All endpoints are CORS-enabled and authorized via zcap (Authorization
+Capability) invocation using HTTP signatures; there are no cookies or
+sessions. The API serves EDV configs (`POST`/`GET` on the base path and
+`/edvs/:edvId`), encrypted documents
+(`/edvs/:edvId/documents[/:docId]`), encrypted index queries
+(`POST /edvs/:edvId/query`), binary chunks
+(`/edvs/:edvId/documents/:docId/chunks/:chunkIndex`), and zcap revocations
+(`POST /edvs/:edvId/zcaps/revocations/:revocationId`).
+
+Clients are not expected to call the HTTP API directly; use
+[`@digitalbazaar/edv-client`](https://github.com/digitalbazaar/edv-client),
+which handles encryption, blinded index generation, and zcap invocation.
+
+### Storage API
+
+The module exports its storage layer for programmatic use within the same
+application:
+
+```js
+import {chunks, docs, edvs} from '@bedrock/edv-storage';
+
+const {config} = await edvs.get({id: edvId});
+const {doc} = await docs.get({edvId, id: docId});
+```
+
+Each namespace provides `insert`/`get`/`update` (and related) functions
+operating directly on MongoDB, enforcing the same invariants as the HTTP
+API (sequence numbers, duplicate detection, unique blinded attributes).
+
+## Test
+
+The test suite runs a full Bedrock application -- an HTTPS server (with a
+self-signed certificate) hosting this module's EDV endpoints, plus an
+in-process WebKMS and metering service -- and drives it end to end over HTTP,
+including via the real `edv-client`.
+
+Requirements:
+
+- Node.js >= 20
+- A MongoDB server listening on `localhost:27017` (no authentication). The
+  tests use a `bedrock_edv_storage_test` database and drop its collections
+  on startup. For example, via Docker:
+
+  ```
+  docker run -d -p 27017:27017 mongo:8
+  ```
+
+To run the tests:
+
+```
+npm install
+cd test
+npm install
+npm test
+```
+
+To generate a code coverage report:
+
+```
+cd test
+npm run coverage
+```
 
 ## Contribute
 
