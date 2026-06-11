@@ -136,7 +136,6 @@ including via the real `edv-client`.
 
 Requirements:
 
-- Node.js >= 20
 - A MongoDB server listening on `localhost:27017` (no authentication). The
   tests use a `bedrock_edv_storage_test` database and drop its collections
   on startup. For example, via Docker:
