@@ -101,6 +101,7 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     // ensure decrypted data matches original data
     data.should.eql(streamData);
   });
+
   it('should be able to write a stream to an EdvDocument', async () => {
     edvClient.ensureIndex({attribute: 'content.indexedKey'});
     const docId = 'z1A2my1mru8g7kXxgzMcwbgWL';
@@ -192,5 +193,59 @@ describe('bedrock-edv-storage HTTP API - edv-client chunks', function() {
     should.exist(err);
     err.name.should.equal('NotFoundError');
     err.message.should.equal('Document chunk not found.');
+  });
+
+  it('should delete a document with a stream', async () => {
+    edvClient.ensureIndex({attribute: 'content.indexedKey'});
+    const docId = 'z1ABxUcbcnSyMtnenFmeARhUn';
+    const doc = {id: docId, content: {indexedKey: 'forDeletion1'}};
+    const data = helpers.getRandomUint8();
+    const stream = new ReadableStream({
+      pull(controller) {
+        controller.enqueue(data);
+        controller.close();
+      }
+    });
+    await edvClient.insert({doc, stream, invocationSigner});
+    const edvDoc = new EdvDocument({
+      invocationSigner,
+      id: doc.id,
+      keyAgreementKey: edvClient.keyAgreementKey,
+      keyResolver: edvClient.keyResolver,
+      client: edvClient
+    });
+    const result = await edvDoc.read();
+    result.should.be.an('object');
+    result.content.should.eql({indexedKey: 'forDeletion1'});
+    should.exist(result.stream);
+    result.stream.should.be.an('object');
+    const expectedStream = await edvDoc.getStream({doc: result});
+    const reader = expectedStream.getReader();
+    let streamData = new Uint8Array(0);
+    let done = false;
+    while(!done) {
+      // value is either undefined or a Uint8Array
+      const {value, done: _done} = await reader.read();
+      // if there is a chunk then we need to update the streamData
+      if(value) {
+        // create a new array with the new length
+        const next = new Uint8Array(streamData.length + value.length);
+        // set the first values to the existing chunk
+        next.set(streamData);
+        // set the chunk's values to the rest of the array
+        next.set(value, streamData.length);
+        // update the streamData
+        streamData = next;
+      }
+      done = _done;
+    }
+    // ensure decrypted data matches original data
+    data.should.eql(streamData);
+
+    // FIXME: remove specific chunks over HTTP instead of merely deleting the
+    // document which will leave them in place to be garbage collected
+
+    // now delete the doc and the stream
+    await edvClient.delete({doc: result, invocationSigner});
   });
 });
