@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.4.2 - 2026-06-dd
+## 21.4.2 - 2026-06-15
 
 ### Fixed
 - Parse chunk index to an integer in HTTP chunk removal API.
