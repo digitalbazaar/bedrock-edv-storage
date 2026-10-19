@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.5.0 - 2026-mm-dd
+
+### Added
+- Check storage availability via meter for document and chunk creation.
+
 ## 21.4.2 - 2026-06-15
 
 ### Fixed
