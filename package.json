@@ -58,7 +58,7 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "@digitalbazaar/eslint-config": "^8.0.1",
