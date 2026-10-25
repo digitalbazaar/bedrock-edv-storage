@@ -4,6 +4,7 @@
 
 ### Added
 - Check storage availability via meter for document and chunk creation.
+- Report storage use on resource creation.
 
 ## 21.4.2 - 2026-06-15
 
