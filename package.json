@@ -47,7 +47,7 @@
     "@bedrock/did-io": "^10.4.0",
     "@bedrock/express": "^8.6.4",
     "@bedrock/jsonld-document-loader": "^5.2.1",
-    "@bedrock/meter-usage-reporter": "^10.1.0",
+    "@bedrock/meter-usage-reporter": "^10.3.3",
     "@bedrock/mongodb": "^11.0.1",
     "@bedrock/security-context": "^9.0.0",
     "@bedrock/validation": "^7.1.1",
@@ -58,7 +58,7 @@
     "lib": "./lib"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "devDependencies": {
     "@digitalbazaar/eslint-config": "^8.0.1",
