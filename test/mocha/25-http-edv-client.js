@@ -5,9 +5,12 @@ import * as assertions from './assertions.js';
 import * as helpers from './helpers.js';
 import {CapabilityAgent} from '@digitalbazaar/webkms-client';
 import {config} from '@bedrock/core';
+import delay from 'delay';
 import {EdvClient} from '@digitalbazaar/edv-client';
 import {httpsAgent} from '@bedrock/https-agent';
+import {meters} from '@bedrock/meter-usage-reporter';
 import {mockData} from './mock.data.js';
+import sinon from 'sinon';
 import '@bedrock/edv-storage';
 
 // import to test doc compatibility version
@@ -298,6 +301,165 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       result.content.should.not.eql(mockData.httpDocs.beta.content);
     });
   }); // end `update`
+
+  describe('update with meter limits', () => {
+    let capabilityAgent;
+    let edvClient;
+    let stub;
+
+    before(async () => {
+      const secret = '30f7c4ca-6865-47dd-8436-15614bb351d6';
+      const handle = 'testKeyMeterLimits';
+      capabilityAgent = await CapabilityAgent.fromSecret({secret, handle});
+
+      const keystoreAgent = await helpers.createKeystore({capabilityAgent});
+
+      const createEdvResult = await helpers.createEdv(
+        {capabilityAgent, keystoreAgent, urls});
+      ({edvClient} = createEdvResult);
+      const {edvConfig} = createEdvResult;
+      const {meterId} = edvConfig;
+
+      const docStorageCost = config['edv-storage'].storageCost.document;
+      const twoDocs = docStorageCost * 2;
+
+      // stub response from server using limits for meter
+      const {ZCAP_CLIENTS} = meters._getZcapClients();
+      const zcapClient = ZCAP_CLIENTS.get('edv');
+      stub = sinon.stub(zcapClient, 'read').callsFake(() => {
+        return {
+          data: {
+            id: meterId,
+            controller: capabilityAgent.id,
+            disabled: false,
+            limits: {operations: -1, storage: twoDocs},
+            usage: {operations: 0, storage: 0},
+            serviceId: zcapClient.id
+          }
+        };
+      });
+    });
+    after(() => {
+      stub.restore();
+    })
+    it('should hit document limit', async () => {
+      // update a new doc
+      {
+        let result;
+        let err;
+        try {
+          result = await edvClient.update({
+            doc: mockData.httpDocs.alpha,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        assertions.shouldBeEdvDocument({doc: result});
+        result.sequence.should.equal(0);
+        result.content.should.eql(mockData.httpDocs.alpha.content);
+      }
+
+      // wait and flush use cache
+      await delay(250);
+      await meters._flushUseCache();
+
+      // insert and update an existing doc
+      let updatedDoc;
+      {
+        const firstDoc = structuredClone(mockData.httpDocs.beta);
+        const insertResult = await edvClient.insert({
+          doc: firstDoc,
+          invocationSigner: capabilityAgent.getSigner()
+        });
+
+        // wait and flush use cache
+        await delay(250);
+        await meters._flushUseCache();
+
+        insertResult.content.apples = 1000;
+
+        let result;
+        let err;
+        try {
+          result = await edvClient.update({
+            doc: insertResult,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        assertions.shouldBeEdvDocument({doc: result});
+        result.sequence.should.equal(1);
+        result.content.should.not.eql(mockData.httpDocs.beta.content);
+        updatedDoc = result;
+      }
+
+      // wait and flush use cache
+      await delay(250);
+      await meters._flushUseCache();
+
+      // insert another doc should fail due to meter limits
+      {
+        let result;
+        let err;
+        try {
+          result = await edvClient.insert({
+            doc: mockData.httpDocs.gamma,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(err);
+        should.not.exist(result);
+        should.exist(err.response);
+        err.status.should.equal(403);
+        err.data.type.should.equal('NotAllowedError');
+      }
+
+      // update a new doc should fail due to meter limits
+      {
+        let result;
+        let err;
+        try {
+          result = await edvClient.update({
+            doc: mockData.httpDocs.gamma,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(err);
+        should.not.exist(result);
+        should.exist(err.response);
+        err.status.should.equal(403);
+        err.data.type.should.equal('NotAllowedError');
+      }
+
+      // update an existing doc should still pass with meter limits
+      {
+        updatedDoc.content.apples = 2000;
+
+        let result;
+        let err;
+        try {
+          result = await edvClient.update({
+            doc: updatedDoc,
+            invocationSigner: capabilityAgent.getSigner()
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        assertions.shouldBeEdvDocument({doc: result});
+        result.sequence.should.equal(2);
+        result.content.apples.should.eql(2000);
+      }
+    });
+  }); // end `update with meter limits`
 
   describe('get', () => {
     let capabilityAgent;

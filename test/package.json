@@ -40,7 +40,7 @@
     "@bedrock/kms-http": "^23.2.0",
     "@bedrock/meter": "^6.0.0",
     "@bedrock/meter-http": "^14.0.0",
-    "@bedrock/meter-usage-reporter": "^10.3.1",
+    "@bedrock/meter-usage-reporter": "^10.3.3",
     "@bedrock/mongodb": "^11.0.1",
     "@bedrock/package-manager": "^3.0.0",
     "@bedrock/security-context": "^9.0.0",
@@ -62,7 +62,9 @@
     "base58-universal": "^2.0.0",
     "c8": "^11.0.0",
     "cross-env": "^10.1.0",
-    "jsonld-signatures": "^11.6.0"
+    "delay": "^7.0.0",
+    "jsonld-signatures": "^11.6.0",
+    "sinon": "^22.1.0"
   },
   "c8": {
     "excludeNodeModules": false,
