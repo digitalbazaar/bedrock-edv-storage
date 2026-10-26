@@ -40,7 +40,7 @@
     "@bedrock/kms-http": "^23.2.0",
     "@bedrock/meter": "^6.0.0",
     "@bedrock/meter-http": "^14.0.0",
-    "@bedrock/meter-usage-reporter": "^10.3.0",
+    "@bedrock/meter-usage-reporter": "^10.3.1",
     "@bedrock/mongodb": "^11.0.1",
     "@bedrock/package-manager": "^3.0.0",
     "@bedrock/security-context": "^9.0.0",
