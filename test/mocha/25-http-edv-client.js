@@ -341,7 +341,7 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
     });
     after(() => {
       stub.restore();
-    })
+    });
     it('should hit document limit', async () => {
       // update a new doc
       {
