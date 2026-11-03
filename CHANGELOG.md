@@ -1,6 +1,6 @@
 # bedrock-edv-storage ChangeLog
 
-## 21.5.1 - 2026-11-dd
+## 21.5.1 - 2026-11-03
 
 ### Fixed
 - Remove extra `meters.upsert()` call.
