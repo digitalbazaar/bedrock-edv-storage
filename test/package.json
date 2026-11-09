@@ -37,7 +37,7 @@
     "@bedrock/https-agent": "^4.1.0",
     "@bedrock/jsonld-document-loader": "^5.2.1",
     "@bedrock/kms": "^16.2.0",
-    "@bedrock/kms-http": "^23.2.0",
+    "@bedrock/kms-http": "^23.4.1",
     "@bedrock/meter": "^6.0.0",
     "@bedrock/meter-http": "^14.0.0",
     "@bedrock/meter-usage-reporter": "^10.3.5",
