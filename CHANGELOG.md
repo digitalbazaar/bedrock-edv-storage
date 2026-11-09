@@ -1,5 +1,10 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.5.2 - 2026-11-dd
+
+### Fixed
+- Fix EDV creation meter reporting bug.
+
 ## 21.5.1 - 2026-11-03
 
 ### Fixed
