@@ -320,8 +320,8 @@ describe('bedrock-edv-storage HTTP API - edv-client', () => {
       const {edvConfig} = createEdvResult;
       const {meterId} = edvConfig;
 
-      const docStorageCost = config['edv-storage'].storageCost.document;
-      const twoDocs = docStorageCost * 2;
+      const {storageCost} = config['edv-storage'];
+      const twoDocs = storageCost.edv + storageCost.document * 2;
 
       // stub response from server using limits for meter
       const {ZCAP_CLIENTS} = meters._getZcapClients();
