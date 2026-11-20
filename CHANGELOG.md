@@ -1,5 +1,11 @@
 # bedrock-edv-storage ChangeLog
 
+## 21.5.4 - 2026-11-dd
+
+### Changed
+- Update dependencies:
+  - `@digitalbazaar/ezcap-express@^7.3.2`.
+
 ## 21.5.3 - 2026-11-20
 
 ### Changed
