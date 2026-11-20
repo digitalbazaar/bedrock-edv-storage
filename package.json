@@ -1,6 +1,6 @@
 {
   "name": "@bedrock/edv-storage",
-  "version": "21.5.3",
+  "version": "21.5.4-0",
   "type": "module",
   "description": "Bedrock Encrypted Data Vault Storage",
   "main": "./lib/index.js",
